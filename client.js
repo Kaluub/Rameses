@@ -13,7 +13,7 @@ class DiscordClient extends Client {
 
     async clientLogin() {
         if(!existsSync("./token")) throw "Token file not provided! Please put a bot token in a file named 'token' in this directory.";
-        await this.login(readFileSync("./token", {encoding: "utf8"}));
+        await this.login(readFileSync("./token", {encoding: "utf8"}).trim());
         console.log("Client logged in.")
     }
 
