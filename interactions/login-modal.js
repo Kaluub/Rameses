@@ -16,7 +16,7 @@ class LogalModalInteraction extends DefaultInteraction {
         const password = interaction.fields.getTextInputValue("password");
         if(!username || !password) return "Invalid credentials.";
         const data = await interaction.client.evadesAPI.login(username, password);
-        if(!data[0]) return `Couldn't login! ${data[1]}`;
+        if(!data) return `Couldn't login!`;
         return data;
     }
 }

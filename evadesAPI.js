@@ -134,7 +134,9 @@ class EvadesAPI {
 
     async login(username, password) {
         const request = await fetch(this.fetchURL + "auth/login", {method: "POST", body: {username, password}});
-        return [request.ok, await request.json()];
+        if(!request.ok) return null;
+        console.log(request)
+        return await request.json();
     }
 }
 
