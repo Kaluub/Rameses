@@ -136,6 +136,7 @@ class EvadesAPI {
 async function updateLastSeen(evadesAPI) {
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
     for(const username of onlinePlayers) {
+        if(username.startsWith("Guest")) continue;
         let account = await AccountData.getByUsername(username);
         account.lastSeen = Math.floor(Date.now() / 1000);
         await account.save();
