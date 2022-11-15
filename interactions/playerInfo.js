@@ -34,7 +34,8 @@ class PlayerInfoInteraction extends DefaultInteraction {
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
         if(!playerDetails) return "The player could not be found!";
         const embed = new EmbedBuilder()
-            .setTitle(`Details about ${account.displayName ? account.displayName : username}:`)
+            .setTitle(`Details about ${account?.displayName ?? username}:`)
+            .setURL(`https://evades.io/profile/${account?.displayName ?? username}`)
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
