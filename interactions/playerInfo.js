@@ -39,8 +39,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
-`${account?.discordId ? `**Discord tag**: ${(await interaction.client.users.fetch(account?.discordId)).tag}` : ""}
-**Career VP**: ${playerDetails.stats["highest_area_achieved_counter"]}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**Sum of weeks VP**: ${playerDetails.summedCareerVP}` : ""}
+`**Career VP**: ${playerDetails.stats["highest_area_achieved_counter"]}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**Sum of weeks VP**: ${playerDetails.summedCareerVP}` : ""}
 **Current week VP**: ${playerDetails.stats["highest_area_achieved_resettable_counter"]}
 **Last seen**: ${account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : "Never"}
 **Weeks active**: ${playerDetails.activeWeeks}

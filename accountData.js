@@ -13,7 +13,6 @@ class AccountData {
     constructor(data) {
         this.username = data.username;
         this.displayName = data?.displayName ?? null;
-        this.discordId = data?.discordId ?? null;
         this.lastSeen = data?.lastSeen ?? null;
     }
 
@@ -31,12 +30,6 @@ class AccountData {
         if(!accountData && createIfNonexistant) return new AccountData({username: username.toLowerCase()});
         if(!accountData && !createIfNonexistant) return null;
         AccountData.cache.set(username.toLowerCase(), accountData);
-        return new AccountData(accountData);
-    }
-
-    static async getByDiscordId(discordId) {
-        const accountData = await accounts.findOne({discordId: discordId});
-        if(!accountData) return null;
         return new AccountData(accountData);
     }
 }

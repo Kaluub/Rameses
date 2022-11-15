@@ -1,5 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import AccountData from "../accountData.js";
 
 class DebugInteraction extends DefaultInteraction {
@@ -35,17 +35,6 @@ class DebugInteraction extends DefaultInteraction {
                         .setRequired(true)
                 )
         )
-        .addSubcommand(
-            new SlashCommandSubcommandBuilder()
-                .setName("cleardiscord")
-                .setDescription("Remove in-game link for a user's Discord ID")
-                .addStringOption(
-                    new SlashCommandStringOption()
-                        .setName("id")
-                        .setDescription("The user ID to unlink")
-                        .setRequired(true)
-                )
-        )
 
     constructor() {
         super(DebugInteraction.name, [InteractionType.ApplicationCommand]);
@@ -71,16 +60,6 @@ class DebugInteraction extends DefaultInteraction {
             account.displayName = null;
             await account.save();
             return `Display name cleared from "${account?.displayName ?? account.username}"`;
-        }
-        
-        if(subcommand == "cleardiscord") {
-            const userId = interaction.options.getString("id", false);
-            if(!userId) return "User ID not supplied.";
-            let account = await AccountData.getByDiscordId(userId);
-            if(!account) return "No accounts were linked with this user ID.";
-            account.discordId = null;
-            await account.save();
-            return `Discord unlinked from "${account?.displayName ?? account.username}"`;
         }
         return "How did we get here?";
     }
