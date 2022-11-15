@@ -8,7 +8,7 @@ const database = mongoClient.db("Rameses");
 const accounts = database.collection("accounts");
 
 class AccountData {
-    static cache = {};
+    static cache = new Collection();
 
     constructor(data) {
         this.username = data.username;
@@ -18,15 +18,19 @@ class AccountData {
     }
 
     async save() {
-        AccountData.cache[this.username] = this;
-        await accounts.updateOne({username: this.username}, {$set: this}, {upsert: true});
+        AccountData.cache.set(this.username.toLowerCase(), this);
+        await accounts.updateOne({username: this.username.toLowerCase()}, {$set: this}, {upsert: true});
+    }
+
+    static async count() {
+        return await accounts.estimatedDocumentCount();
     }
 
     static async getByUsername(username, createIfNonexistant = true) {
-        const accountData = this.cache[username] ?? await accounts.findOne({username: username.toLowerCase()});
+        const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({username: username.toLowerCase()});
         if(!accountData && createIfNonexistant) return new AccountData({username: username.toLowerCase()});
         if(!accountData && !createIfNonexistant) return null;
-        this.cache[username] = accountData;
+        AccountData.cache.set(username.toLowerCase(), accountData);
         return new AccountData(accountData);
     }
 

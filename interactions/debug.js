@@ -19,18 +19,27 @@ class DebugInteraction extends DefaultInteraction {
                         .setRequired(true)
                 )
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("checkdb")
+                .setDescription("Count the elements in the database & the amount cached")
+        )
 
     constructor() {
         super(DebugInteraction.name, [InteractionType.ApplicationCommand]);
     }
 
     async execute(interaction) {
-        if(interaction.options.getSubcommand(false) == "check") {
+        const subcommand = interaction.options.getSubcommand(false)
+        if(subcommand == "check") {
             const username = interaction.options.getString("username", false);
             if(!username) return "No user found.";
             const account = await AccountData.getByUsername(username, false);
             if(!account) return "No data stored for this user yet.";
             return `Stored data:\n\`\`\`json\n${JSON.stringify(account, null, 4)}\n\`\`\``;
+        }
+        if(subcommand == "checkdb") {
+            return `Database stats:\nStored users: ${await AccountData.count()}\nCached users: ${AccountData.cache.size}`;
         }
         return "How did we get here?"
     }
