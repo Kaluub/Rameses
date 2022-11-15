@@ -131,6 +131,11 @@ class EvadesAPI {
         }
         return this.cache.hallOfFame.entries;
     }
+
+    async login(username, password) {
+        const request = await fetch(this.fetchURL + "auth/login", {method: "POST", body: {username, password}});
+        return [request.ok, await request.json()];
+    }
 }
 
 async function updateLastSeen(evadesAPI) {

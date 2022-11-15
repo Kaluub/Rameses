@@ -1,4 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
+import AccountData from "../accountData.js";
 import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 
 class LinkInteraction extends DefaultInteraction {
@@ -12,6 +13,8 @@ class LinkInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
+        const account = await AccountData.getByDiscordId(interaction.user.id);
+        if(account) return `Your Discord account is already linked to the in-game account "${account.displayName ?? account.username}"!`;
         const loginModal = new ModalBuilder()
             .setCustomId("login-modal")
             .setTitle("Evades Login")
