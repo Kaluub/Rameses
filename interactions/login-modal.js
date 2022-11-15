@@ -1,5 +1,6 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder } from "discord.js";
+import AccountData from "../accountData.js";
 
 class LogalModalInteraction extends DefaultInteraction {
     static name = "login-modal";
@@ -17,7 +18,10 @@ class LogalModalInteraction extends DefaultInteraction {
         if(!username || !password) return "Invalid credentials.";
         const data = await interaction.client.evadesAPI.login(username, password);
         if(!data) return `Couldn't login!`;
-        return JSON.stringify(data);
+        let account = await AccountData.getByUsername(username);
+        account.discordId = interaction.user.id;
+        await account.save();
+        return `Successfully linked with the account ${account.displayName ?? account.username}`;
     }
 }
 
