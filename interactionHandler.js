@@ -41,6 +41,8 @@ class InteractionHandler {
         if(interactionHandler.defer) await interaction.deferReply();
         interactionHandler.execute(interaction)
             .then(async response => {
+                if(!response)
+                    return
                 if(interaction.deferred && !interaction.replied)
                     await interaction.editReply(response)
                 else if(!interaction.replied)
