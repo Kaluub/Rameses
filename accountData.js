@@ -24,7 +24,7 @@ class AccountData {
 
     static async getByUsername(username, createIfNonexistant = true) {
         const accountData = this.cache[username] ?? await accounts.findOne({username: username.toLowerCase()});
-        if(!accountData && createIfNonexistant) return new AccountData({username});
+        if(!accountData && createIfNonexistant) return new AccountData({username: username.toLowerCase()});
         if(!accountData && !createIfNonexistant) return null;
         this.cache[username] = accountData;
         return new AccountData(accountData);
