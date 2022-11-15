@@ -1,0 +1,14 @@
+{
+  "name": "rameses",
+  "version": "1.0.0",
+  "description": "Discord bot to interact with the Evades.io API",
+  "main": "app.js",
+  "type": "module",
+  "author": "Kaluub",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.6.0",
+    "mongodb": "^4.11.0",
+    "node-fetch": "^3.3.0"
+  }
+}
