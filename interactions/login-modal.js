@@ -10,6 +10,7 @@ class LogalModalInteraction extends DefaultInteraction {
 
     constructor() {
         super(LogalModalInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
+        this.defer = true;
     }
 
     async execute(interaction) {
@@ -21,7 +22,7 @@ class LogalModalInteraction extends DefaultInteraction {
         let account = await AccountData.getByUsername(username);
         account.discordId = interaction.user.id;
         await account.save();
-        return `Successfully linked with the account ${account.displayName ?? account.username}`;
+        return `Successfully linked with the account "${account?.displayName ?? account.username}".`;
     }
 }
 
