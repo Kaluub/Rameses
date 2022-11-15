@@ -35,19 +35,20 @@ class InteractionHandler {
     }
 
     async handleInteraction(interaction) {
-        const interactionHandler = this.interactionHandler.interactions.get(interaction.commandName ?? interaction.customId);
+        const interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId);
+        console.log(interactionHandler)
         if(!interactionHandler) return await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command not found)", ephemeral: true});
         if(interactionHandler.defer) await interaction.deferReply();
         interactionHandler.execute(interaction)
             .then(async response => {
-                if(interaction.deferred)
+                if(interaction.deferred && !interaction.replied)
                     await interaction.editReply(response)
                 else if(!interaction.replied)
                     await interaction.reply(response)
             })
             .catch(async err => {
                 console.error(err)
-                if(interaction.deferred)
+                if(interaction.deferred && !interaction.replied)
                     await interaction.editReply({content: "Something went seriously wrong if you're seeing this! (Command failed)"})
                 if(!interaction.replied)
                     await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command failed)", ephemeral: true});
