@@ -1,5 +1,6 @@
+import { Collection } from "discord.js";
 import fetch from "node-fetch";
-import AccountData from "./accountData.js";
+import { AccountData } from "./data.js";
 
 class CachedData {
     constructor() {
@@ -13,15 +14,15 @@ class CachedData {
 
 class PlayerManager {
     constructor() {
-        this.players = {};
+        this.players = new Collection();
     }
 
     getPlayer(username) {
-        return this.players[username.toLowerCase()] ?? null;
+        return this.players.get(username.toLowerCase()) ?? null;
     }
 
     updatePlayer(username, data) {
-        this.players[username.toLowerCase()] = new PlayerDetailsData(data);
+        this.players.set(username.toLowerCase(), new PlayerDetailsData(data));
     }
 }
 
@@ -74,18 +75,23 @@ class HallOfFameData extends CachedData {
 class EvadesAPI {
     constructor() {
         this.fetchURL = "https://evades.io/api/"
-        this.cache = {
-            playerManager: new PlayerManager(),
-            onlinePlayers: null,
-            hallOfFame: null
-        };
+        this.cache = null;
         this.playerDetailsCacheTime = 300000;
         this.onlinePlayersCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
+        this.resetCache();
         updateLastSeen(this);
         updateDisplayNames(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
         setInterval(updateDisplayNames, this.hallOfFameCacheTime, this);
+    }
+
+    resetCache() {
+        this.cache = {
+            playerManager: new PlayerManager(),
+            onlinePlayers: new OnlinePlayersData(),
+            hallOfFame: new HallOfFameData()
+        }
     }
 
     async get(endpoint) {
@@ -105,10 +111,10 @@ class EvadesAPI {
     }
 
     async getOnlinePlayers(force = false) {
-        if(force || !this.cache.onlinePlayers || this.cache.onlinePlayers.isOutdated(this.onlinePlayersCacheTime)) {
+        if(force || this.cache.onlinePlayers.isOutdated(this.onlinePlayersCacheTime)) {
             const rawPlayers = await this.get("game/usernames");
+            if(!rawPlayers) return null;
             const players = [];
-            if(!this.cache.onlinePlayers) this.cache.onlinePlayers = new OnlinePlayersData();
             for(const username of rawPlayers) {
                 if(username.startsWith("guest")) {
                     let guestName = username.slice(5);
@@ -124,9 +130,9 @@ class EvadesAPI {
     }
 
     async getHallOfFame(force = false) {
-        if(force || !this.cache.hallOfFame || this.cache.hallOfFame.isOutdated(this.hallOfFameCacheTime)) {
+        if(force || this.cache.hallOfFame.isOutdated(this.hallOfFameCacheTime)) {
             const hallOfFame = await this.get("game/hall_of_fame");
-            if(!this.cache.hallOfFame) this.cache.hallOfFame = new HallOfFameData();
+            if(!hallOfFame) return null;
             this.cache.hallOfFame.entries = hallOfFame.players;
         }
         return this.cache.hallOfFame.entries;
@@ -135,6 +141,7 @@ class EvadesAPI {
 
 async function updateLastSeen(evadesAPI) {
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
+    if(!onlinePlayers) return;
     for(const username of onlinePlayers) {
         if(username.startsWith("Guest")) continue;
         let account = await AccountData.getByUsername(username);
@@ -145,6 +152,7 @@ async function updateLastSeen(evadesAPI) {
 
 async function updateDisplayNames(evadesAPI, force = false) {
     const hallOfFame = await evadesAPI.getHallOfFame();
+    if(!hallOfFame) return;
     for(const entry of hallOfFame) {
         const username = entry[0];
         let account = await AccountData.getByUsername(username);

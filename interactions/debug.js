@@ -1,6 +1,6 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
-import AccountData from "../accountData.js";
+import { AccountData } from "../data.js";
 
 class DebugInteraction extends DefaultInteraction {
     static name = "debug";
@@ -35,6 +35,11 @@ class DebugInteraction extends DefaultInteraction {
                         .setRequired(true)
                 )
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("flushcache")
+                .setDescription("Clear the caches")
+        )
 
     constructor() {
         super(DebugInteraction.name, [InteractionType.ApplicationCommand]);
@@ -60,6 +65,12 @@ class DebugInteraction extends DefaultInteraction {
             account.displayName = null;
             await account.save();
             return `Display name cleared from "${account?.displayName ?? account.username}"`;
+        }
+        if(subcommand == "flushcache") {
+            const size = AccountData.cache.size;
+            AccountData.cache.clear();
+            interaction.client.evadesAPI.resetCache();
+            return `Flushed ${size} account caches.`;
         }
         return "How did we get here?";
     }

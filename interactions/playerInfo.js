@@ -1,5 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import AccountData from "../accountData.js";
+import { AccountData } from "../data.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 
 function getHatName(name) {

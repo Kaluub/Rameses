@@ -6,6 +6,7 @@ await mongoClient.connect().catch(err => {throw "Database error!"});
 
 const database = mongoClient.db("Rameses");
 const accounts = database.collection("accounts");
+const tournaments = database.collection("tournaments");
 
 class AccountData {
     static cache = new Collection();
@@ -34,4 +35,24 @@ class AccountData {
     }
 }
 
-export default AccountData;
+class TournamentData {
+    constructor(data) {
+        this.id = data.id;
+    }
+
+    async save() {
+        await tournaments.updateOne({id: this.id}, {$set: this}, {upsert: true});
+    }
+
+    static async count() {
+        return await tournaments.estimatedDocumentCount();
+    }
+
+    static async getByID(id) {
+        const tournamentData = await tournaments.findOne({id});
+        if(!tournamentData) return null;
+        return new TournamentData(tournamentData);
+    }
+}
+
+export default { AccountData, TournamentData };
