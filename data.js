@@ -55,4 +55,4 @@ class TournamentData {
     }
 }
 
-export default { AccountData, TournamentData };
+export { AccountData, TournamentData };
