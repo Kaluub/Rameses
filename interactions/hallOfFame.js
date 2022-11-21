@@ -16,11 +16,11 @@ class HallOfFameInteraction extends DefaultInteraction {
         const hallOfFameEntries = await interaction.client.evadesAPI.getHallOfFame();
         if(!hallOfFameEntries) return "Couldn't connect to Evades!";
         let hallOfFamePlayersString = "Leaderboard:";
-        let ranking = 1;
+        let ranking = 0;
         let totalVP = 0;
         for(const hallOfFameEntry of hallOfFameEntries) {
-            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${hallOfFameEntry[0]} (${hallOfFameEntry[1]} VP)`;
             ranking += 1;
+            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${hallOfFameEntry[0]} (${hallOfFameEntry[1]} VP)`;
             totalVP += parseInt(hallOfFameEntry[1]);
         };
         
@@ -29,7 +29,7 @@ class HallOfFameInteraction extends DefaultInteraction {
             .setTitle("Hall of Fame:")
             .setColor("#FFD700")
             .setTimestamp()
-            .setDescription(hallOfFamePlayersString.length ? hallOfFamePlayersString : "The leaderboard is empty!")
+            .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : "The leaderboard is empty!")
             .setFooter({text: `${ranking} players have collected ${totalVP} VP this week`})
         return { embeds: [embed] }
     }

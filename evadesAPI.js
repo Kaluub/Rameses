@@ -4,7 +4,7 @@ import { AccountData } from "./data.js";
 
 class CachedData {
     constructor() {
-        this.fetched = Date.now();
+        this.fetched = 0;
     }
 
     isOutdated(cacheLifetime) {
@@ -125,6 +125,7 @@ class EvadesAPI {
                 players.push(account.displayName ?? username);
             }
             this.cache.onlinePlayers.players = players;
+            this.cache.onlinePlayers.fetched = Date.now();
         }
         return this.cache.onlinePlayers.players;
     }
@@ -134,6 +135,7 @@ class EvadesAPI {
             const hallOfFame = await this.get("game/hall_of_fame");
             if(!hallOfFame) return null;
             this.cache.hallOfFame.entries = hallOfFame.players;
+            this.cache.hallOfFame.fetched = Date.now();
         }
         return this.cache.hallOfFame.entries;
     }
