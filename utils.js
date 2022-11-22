@@ -1,4 +1,5 @@
 function tournamentSorter(run1, run2) {
+    if(run1.area == "Victory!") return -1;
     if(parseInt(run1.area.split(" ")[1]) > parseInt(run2.area.split(" ")[1])) return -1;
     else if(run1.area == run2.area) {
         if(run1.timeSeconds > run2.timeSeconds) return 1;
