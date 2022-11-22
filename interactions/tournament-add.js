@@ -67,6 +67,8 @@ class TournamentAddInteraction extends DefaultInteraction {
             let time = interaction.fields.getTextInputValue("time");
             if(!player || !area || !time) return {ephemeral: true, content: "Invalid/blank values!"};
             if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
+            if(area.startsWith("Area "))
+                if(isNan(parseInt(area.split(" ")[1]))) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
             if(!area.startsWith("Area ") && area != "Victory!") {
                 if(!parseInt(area))
                     return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
