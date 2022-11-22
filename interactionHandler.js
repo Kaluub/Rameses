@@ -35,7 +35,7 @@ class InteractionHandler {
     }
 
     async handleInteraction(interaction) {
-        const interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId);
+        const interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId?.split("/")[0]);
         if(!interactionHandler) return await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command not found)", ephemeral: true});
         if(interactionHandler.defer) await interaction.deferReply();
         interactionHandler.execute(interaction)

@@ -37,7 +37,13 @@ class AccountData {
 
 class TournamentData {
     constructor(data) {
-        this.id = data.id;
+        this.id = data?.id;
+        this.created = data?.created ?? Date.now();
+        this.leaderboard = data?.leaderboard ?? [];
+        this.format = data?.format ?? "[{position}] [{player}]\n{area} ;; {time} ;; {attempt}"
+        this.maxAttempts = data?.maxAttempts ?? 3;
+        this.teamSize = data?.teamSize ?? 1;
+        this.duration = data?.duration ?? 604800000;
     }
 
     async save() {
