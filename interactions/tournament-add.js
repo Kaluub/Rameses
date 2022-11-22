@@ -67,11 +67,16 @@ class TournamentAddInteraction extends DefaultInteraction {
             let time = interaction.fields.getTextInputValue("time");
             if(!player || !area || !time) return {ephemeral: true, content: "Invalid/blank values!"};
             if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
-            if(area.startsWith("Area "))
-                if(isNan(parseInt(area.split(" ")[1]))) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
+            if(area.startsWith("Area ")) {
+                const aNumber = parseInt(area.split(" ")[1])
+                if(isNan(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
+                if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
+            }
             if(!area.startsWith("Area ") && area != "Victory!") {
-                if(!parseInt(area))
+                const aNumber = parseInt(area);
+                if(!aNumber)
                     return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
+                if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
                 area = `Area ${parseInt(area)}`;
             }
             let timeSegments = time.split(":");
@@ -80,7 +85,8 @@ class TournamentAddInteraction extends DefaultInteraction {
                 if(timeSegments[1] > 59) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
                 timeSeconds += parseInt(timeSegments[0]) * 60 + parseInt(timeSegments[1]);
             } else return {ephemeral: true, content: "The time must be '[Minutes]:[Seconds]' (example: 5:55)"};
-            if (isNaN(timeSeconds)) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
+            if(isNaN(timeSeconds)) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
+            if(timeSeconds < 0) return {ephemeral: true, content: "Negative time doesn't exist! Probably."};
             tournament.leaderboard.push({player, area, time: time.trim(), timeSeconds});
             await tournament.save();
             const channel = interaction.client.channels.cache.get(args[2]);
