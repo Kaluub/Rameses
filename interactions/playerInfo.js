@@ -58,6 +58,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
             new SlashCommandStringOption()
                 .setName("username")
                 .setDescription("The username of the player")
+                .setAutocomplete(true)
                 .setRequired(true)
         )
 

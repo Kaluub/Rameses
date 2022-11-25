@@ -26,6 +26,10 @@ class AccountData {
         return await accounts.estimatedDocumentCount();
     }
 
+    static findMatchingUsernames(username) {
+        return accounts.find({username: new RegExp(`/${username}/`)}).limit(25);
+    }
+
     static async getByUsername(username, createIfNonexistant = true) {
         const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({username: username.toLowerCase()});
         if(!accountData && createIfNonexistant) return new AccountData({username: username.toLowerCase()});

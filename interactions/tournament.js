@@ -1,7 +1,6 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import Config from "../config.js";
-import { TournamentData } from "../data.js";
 
 class TournamentInteraction extends DefaultInteraction {
     static name = "tournament";
