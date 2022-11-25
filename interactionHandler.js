@@ -32,7 +32,7 @@ class InteractionHandler {
                 for(const guildId in InteractionClass.guilds) {
                     const guild = client.guilds.cache.get(guildId);
                     if(!guild) continue;
-                    await guild.commands.create(InteractionClass.applicationCommand.toJSON()).catch();
+                    await guild.commands.create(InteractionClass.applicationCommand.toJSON()).catch(console.error);
                 }
                 continue;
             }
