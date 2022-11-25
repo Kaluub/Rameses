@@ -6,7 +6,7 @@ class UsernameAutofillInteraction extends DefaultInteraction {
     static name = "username";
 
     constructor() {
-        super(TournamentInteraction.name, [InteractionType.ApplicationCommandAutocomplete]);
+        super(UsernameAutofillInteraction.name, [InteractionType.ApplicationCommandAutocomplete]);
     }
 
     async execute(interaction) {
