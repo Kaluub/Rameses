@@ -69,7 +69,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
             if(area.startsWith("Area ")) {
                 const aNumber = parseInt(area.split(" ")[1])
-                if(isNan(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
+                if(isNaN(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
                 if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
             }
             if(!area.startsWith("Area ") && area != "Victory!") {
