@@ -27,8 +27,7 @@ class AccountData {
     }
 
     static findMatchingUsernames(username) {
-        const regexp = new RegExp(username);
-        console.log(regexp)
+        const regexp = new RegExp(username.toLowerCase());
         return accounts.find({username: regexp}).limit(25);
     }
 

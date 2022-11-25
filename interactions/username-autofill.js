@@ -14,7 +14,6 @@ class UsernameAutofillInteraction extends DefaultInteraction {
         const filter = AccountData.findMatchingUsernames(interaction.options.getFocused() ?? "");
         const accounts = await filter.toArray();
         const response = [];
-        console.log(accounts)
         for(const account of accounts) {
             response.push({name: account?.displayName ?? account.username, value: account?.displayName ?? account.username});
         }
