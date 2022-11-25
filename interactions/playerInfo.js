@@ -80,7 +80,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
             .setDescription(
 `**Career VP**: ${playerDetails.stats["highest_area_achieved_counter"] + " VP"}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**Sum of weeks VP**: ${playerDetails.summedCareerVP} VP` : ""}
 **VP this week**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + " VP" : "None"}
-**Last seen**: ${username in onlinePlayers ? "Online now!" : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : "Never"}
+**Last seen**: ${onlinePlayers.some(name => name.toLowerCase() == username.toLowerCase()) ? "Online now!" : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : "Never"}
 **Victory zones reached**: ${getVictoryZonesTouched(playerDetails.stats)} victory zones
 **Weeks active**: ${playerDetails.activeWeeks} weeks
 **First active week**: Week ${playerDetails.firstActiveWeekNumber}
