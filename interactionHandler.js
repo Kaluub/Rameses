@@ -35,8 +35,8 @@ class InteractionHandler {
     }
 
     async handleInteraction(interaction) {
-        console.log(interaction.commandName)
-        const interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId?.split("/")[0]);
+        let interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId?.split("/")[0]);
+        if(interaction.isAutocomplete()) interactionHandler = this.interactionHandler.interactions.get(interaction.options.getFocused(true).name)
         if(!interactionHandler) return await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command not found)", ephemeral: true});
         if(interactionHandler.defer) await interaction.deferReply();
         interactionHandler.execute(interaction)
