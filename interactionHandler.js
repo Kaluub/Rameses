@@ -30,6 +30,7 @@ class InteractionHandler {
             const { default: InteractionClass } = await import(`./interactions/${file}`);
             if(InteractionClass.noGlobalInteraction) {
                 for(const guildId in InteractionClass.guilds) {
+                    console.log("Trying to set guild command for " + InteractionClass.name + " in " + guildId)
                     const guild = client.guilds.cache.get(guildId);
                     if(!guild) continue;
                     await guild.commands.create(InteractionClass.applicationCommand.toJSON()).catch(console.error);
