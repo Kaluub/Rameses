@@ -1,4 +1,4 @@
-import { Collection } from "discord.js";
+import { Collection, InteractionType } from "discord.js";
 import { readdirSync } from "fs";
 
 class InteractionLogger {
@@ -40,17 +40,21 @@ class InteractionHandler {
         if(interactionHandler.defer) await interaction.deferReply();
         interactionHandler.execute(interaction)
             .then(async response => {
+                if(InteractionType.ApplicationCommandAutocomplete in interactionHandler.interactionTypes)
+                    return;
                 if(!response)
-                    return
+                    return;
                 if(interaction.deferred && !interaction.replied)
-                    await interaction.editReply(response)
+                    await interaction.editReply(response);
                 else if(!interaction.replied)
-                    await interaction.reply(response)
+                    await interaction.reply(response);
             })
             .catch(async err => {
-                console.error(err)
+                console.error(err);
+                if(InteractionType.ApplicationCommandAutocomplete in interactionHandler.interactionTypes)
+                    return;
                 if(interaction.deferred && !interaction.replied)
-                    await interaction.editReply({content: "Something went seriously wrong if you're seeing this! (Command failed)"})
+                    await interaction.editReply({content: "Something went seriously wrong if you're seeing this! (Command failed)"});
                 if(!interaction.replied)
                     await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command failed)", ephemeral: true});
             })
