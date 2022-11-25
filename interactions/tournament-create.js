@@ -27,7 +27,8 @@ class TournamentCreateInteraction extends DefaultInteraction {
                     .setStyle(ButtonStyle.Secondary)
             )
 
-        const message = await interaction.channel.send({content: tournamentFormatter({format, attempts, teamSize}), components: [row]})
+        const message = await interaction.channel.send({content: tournamentFormatter({format, attempts, teamSize}), components: [row]}).catch()
+        if(!message) return "I can't send messages in this channel! Please ensure I have the proper permission to do so. Note that while this may look like a message, this is only working because this is a reply to your command."
         const tournament = new TournamentData({id: message.id, format, attempts, teamSize, duration: duration * 86400000});
         await tournament.save();
         return {ephemeral: true, content: "Tournament created!"}
