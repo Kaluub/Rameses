@@ -27,7 +27,9 @@ class AccountData {
     }
 
     static findMatchingUsernames(username) {
-        return accounts.find({username: new RegExp(`/${username}/`)}).limit(25);
+        const regexp = new RegExp(`/${username}/`);
+        console.log(regexp)
+        return accounts.find({username: regexp}).limit(25);
     }
 
     static async getByUsername(username, createIfNonexistant = true) {
