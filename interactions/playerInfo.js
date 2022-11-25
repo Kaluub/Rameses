@@ -77,11 +77,11 @@ class PlayerInfoInteraction extends DefaultInteraction {
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
-`**Career VP**: ${playerDetails.stats["highest_area_achieved_counter"]}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**Sum of weeks VP**: ${playerDetails.summedCareerVP}` : ""}
-**VP this week**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] : "None"}
+`**Career VP**: ${playerDetails.stats["highest_area_achieved_counter"] + " VP"}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**Sum of weeks VP**: ${playerDetails.summedCareerVP} VP` : ""}
+**VP this week**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + " VP" : "None"}
 **Last seen**: ${account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : "Never"}
-**Victory zones reached**: ${getVictoryZonesTouched(playerDetails.stats) || "None"}
-**Weeks active**: ${playerDetails.activeWeeks}
+**Victory zones reached**: ${getVictoryZonesTouched(playerDetails.stats)} victory zones
+**Weeks active**: ${playerDetails.activeWeeks} weeks
 **First active week**: Week ${playerDetails.firstActiveWeekNumber}
 **Last active week**: Week ${playerDetails.lastActiveWeekNumber}
 **Best week**: Week ${playerDetails.highestWeek[0]} with ${playerDetails.highestWeek[1]} VP${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}
