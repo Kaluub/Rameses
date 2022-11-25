@@ -7,6 +7,7 @@ class TournamentInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(TournamentInteraction.name)
         .setDescription("Tournament related commands.")
+        .setDMPermission(false)
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("create")

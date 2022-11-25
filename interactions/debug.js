@@ -4,6 +4,8 @@ import { AccountData } from "../data.js";
 
 class DebugInteraction extends DefaultInteraction {
     static name = "debug";
+    static noGlobalInteraction = true;
+    static guilds = ["1026074983249739829"];
     static applicationCommand = new SlashCommandBuilder()
         .setName(DebugInteraction.name)
         .setDescription("Generic debug data")

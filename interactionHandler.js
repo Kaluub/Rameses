@@ -23,15 +23,24 @@ class InteractionHandler {
         });
     };
 
-    async getApplicationCommands() {
+    async setApplicationCommands(client) {
         const applicationCommands = [];
         const files = readdirSync("./interactions").filter(file => file.endsWith('.js'));
         for(const file of files) {
             const { default: InteractionClass } = await import(`./interactions/${file}`);
+            if(InteractionClass.noGlobalInteraction) {
+                for(const guildId in InteractionClass.guilds) {
+                    const guild = client.guilds.cache.get(guildId);
+                    if(!guild) continue;
+                    await guild.commands.create(InteractionClass.applicationCommand.toJSON()).catch();
+                }
+                continue;
+            }
             if(!InteractionClass.disabled && InteractionClass.applicationCommand)
-                applicationCommands.push(InteractionClass.applicationCommand.toJSON())
+                applicationCommands.push(InteractionClass.applicationCommand.toJSON());
         };
-        return applicationCommands;
+        await client?.application.fetch();
+        await client?.application.commands.set(applicationCommands);
     }
 
     async handleInteraction(interaction) {

@@ -19,7 +19,7 @@ class DiscordClient extends Client {
 
     async updateInteractions() {
         await this.application.fetch();
-        const result = await this.application.commands.set(await this.interactionHandler.getApplicationCommands());
+        await this.interactionHandler.setApplicationCommands(this);
         console.log("Application commands set.");
     }
 }
