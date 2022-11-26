@@ -18,12 +18,13 @@ class DebugInteraction extends DefaultInteraction {
                     new SlashCommandStringOption()
                         .setName("username")
                         .setDescription("The username to search for")
+                        .setAutocomplete(true)
                         .setRequired(true)
                 )
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
-                .setName("checkdb")
+                .setName("stats")
                 .setDescription("Count the elements in the database & the amount cached")
         )
         .addSubcommand(
@@ -34,6 +35,7 @@ class DebugInteraction extends DefaultInteraction {
                     new SlashCommandStringOption()
                         .setName("username")
                         .setDescription("The username to fix")
+                        .setAutocomplete(true)
                         .setRequired(true)
                 )
         )
@@ -56,8 +58,11 @@ class DebugInteraction extends DefaultInteraction {
             if(!account) return "No data stored for this user yet.";
             return `Stored data:\n\`\`\`json\n${JSON.stringify(account, null, 4)}\n\`\`\``;
         }
-        if(subcommand == "checkdb") {
-            return `Database stats:\nStored users: ${await AccountData.count()}\nCached users: ${AccountData.cache.size}`;
+        if(subcommand == "stats") {
+            return `Stats:
+Stored users: ${await AccountData.count()}
+Cached users: ${AccountData.cache.size}
+Users online in the last 24 hours: ${await AccountData.find({"lastSeen": {"$gt": Date.now() - 1000*60*60*24}}).count()}`;
         }
         if(subcommand == "fixusername") {
             const username = interaction.options.getString("username", false);

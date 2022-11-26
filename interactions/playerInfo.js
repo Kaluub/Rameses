@@ -1,6 +1,6 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { AccountData } from "../data.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { EmbedBuilder, escapeMarkdown, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 
 const emojiHats = {
     "autumn-wreath": "<:autumnwreath:1045570375788019793>",
@@ -74,7 +74,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
         if(!playerDetails) return "The player could not be found!";
         const embed = new EmbedBuilder()
-            .setTitle(`Details about ${account?.displayName ?? username}:`)
+            .setTitle(`Details about ${escapeMarkdown(account?.displayName ?? username)}:`)
             .setURL(`https://evades.io/profile/${account?.displayName ?? username}`)
             .setColor("#884422")
             .setTimestamp()

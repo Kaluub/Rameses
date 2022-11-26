@@ -1,5 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import { EmbedBuilder, escapeMarkdown, InteractionType, SlashCommandBuilder } from "discord.js";
 
 class HallOfFameInteraction extends DefaultInteraction {
     static name = "hall-of-fame";
@@ -20,7 +20,7 @@ class HallOfFameInteraction extends DefaultInteraction {
         let totalVP = 0;
         for(const hallOfFameEntry of hallOfFameEntries) {
             ranking += 1;
-            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${hallOfFameEntry[0]} (${hallOfFameEntry[1]} VP)`;
+            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${escapeMarkdown(hallOfFameEntry[0])} (${hallOfFameEntry[1]} VP)`;
             totalVP += parseInt(hallOfFameEntry[1]);
         };
         

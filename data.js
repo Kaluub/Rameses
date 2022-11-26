@@ -26,6 +26,10 @@ class AccountData {
         return await accounts.estimatedDocumentCount();
     }
 
+    static find(filter, options) {
+        return accounts.find(filter, options);
+    }
+
     static findMatchingUsernames(username) {
         const regexp = new RegExp(username.toLowerCase());
         return accounts.find({username: regexp}).limit(25);
