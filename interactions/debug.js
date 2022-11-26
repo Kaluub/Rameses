@@ -62,7 +62,7 @@ class DebugInteraction extends DefaultInteraction {
             return `Stats:
 Stored users: ${await AccountData.count()}
 Cached users: ${AccountData.cache.size}
-Users online in the last 24 hours: ${await AccountData.find({"lastSeen": {"$gt": Date.now() - 1000*60*60*24}}).count()}`;
+Users online in the last 24 hours: ${await AccountData.find({"lastSeen": {"$gt": Math.floor(Date.now() / 1000) - 1000*60*60*24}}).count()}`;
         }
         if(subcommand == "fixusername") {
             const username = interaction.options.getString("username", false);

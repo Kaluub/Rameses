@@ -1,5 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, escapeMarkdown } from "discord.js";
+import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
 
 class OnlinePlayersInteraction extends DefaultInteraction {
     static name = "online-players";
@@ -15,7 +15,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
     async execute(interaction) {
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
         if(!onlinePlayers) return "Couldn't connect to Evades!";
-        let onlinePlayersString = escapeMarkdown(onlinePlayers.join("; "));
+        let onlinePlayersString = onlinePlayers.join("; ").replaceAll("_", "\\_").replaceAll("*", "\\*").replaceAll("|", "\\|");
         if(onlinePlayersString.length > 1900) onlinePlayersString = onlinePlayersString.substring(0, 1900) + "...";
         const embed = new EmbedBuilder()
             .setTitle("Players currently online:")
