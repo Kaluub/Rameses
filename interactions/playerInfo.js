@@ -88,7 +88,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
 **Best week**: Week ${playerDetails.highestWeek[0]} with ${playerDetails.highestWeek[1]} VP${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}
 **Current hat**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}`
 //**Victory zones reached**: ${getVictoryZonesTouched(playerDetails.stats)} victory zones
-//**Hat collection**: ${getHatEmojis(playerDetails.accessories.hat_collection)}`
+**Hat collection**: ${getHatEmojis(playerDetails.accessories.hat_collection)}`
         )
         return { embeds: [embed] }
     }
