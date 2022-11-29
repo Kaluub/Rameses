@@ -1,6 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { AccountData } from "../data.js";
-import { EmbedBuilder, escapeMarkdown, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { hasPermission } from "../utils.js";
+import { EmbedBuilder, escapeMarkdown, InteractionType, PermissionsBitField, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 
 const emojiHats = {
     "autumn-wreath": "<:autumnwreath:1045570375788019793>",
@@ -86,8 +87,8 @@ class PlayerInfoInteraction extends DefaultInteraction {
 **First active week**: Week ${playerDetails.firstActiveWeekNumber}
 **Last active week**: Week ${playerDetails.lastActiveWeekNumber}
 **Best week**: Week ${playerDetails.highestWeek[0]} with ${playerDetails.highestWeek[1]} VP${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}
-**Current hat**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}`
-//**Hat collection**: ${getHatEmojis(playerDetails.accessories.hat_collection)}`
+**Current hat**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}
+**Hat collection**: ${hasPermission(interaction, PermissionsBitField.Flags.UseExternalEmojis) ? getHatEmojis(playerDetails.accessories.hat_collection) : "No emoji permissions!"}`
         )
         return { embeds: [embed] }
     }

@@ -44,4 +44,11 @@ function tournamentFormatter(tournament) {
     return tournamentString;
 }
 
-export { tournamentSorter, tournamentFormatter }
+function hasPermission(interaction, permission) {
+    if(!interaction) return false;
+    if(!interaction.guild) return true;
+    if(interaction.channel.permissionsFor(interaction.client.user).has(permission)) return true;
+    return false;
+}
+
+export { tournamentSorter, tournamentFormatter, hasPermission }
