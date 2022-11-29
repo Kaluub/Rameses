@@ -45,8 +45,10 @@ function tournamentFormatter(tournament) {
 }
 
 function hasPermission(interaction, permission) {
+    console.log(interaction.channel.permissionsFor(interaction.client.user))
     if(!interaction) return false;
     if(!interaction.guild) return true;
+    console.log("reached")
     if(interaction.channel.permissionsFor(interaction.client.user).has(permission)) return true;
     return false;
 }
