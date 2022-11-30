@@ -30,9 +30,10 @@ class AccountData {
         return accounts.find(filter, options);
     }
 
-    static findMatchingUsernames(username) {
+    static findMatchingUsernames(username, maxDocuments = 25) {
+        if(!username.length) return accounts.aggregate([{$sample: {size: maxDocuments}}]);
         const regexp = new RegExp(username.toLowerCase());
-        return accounts.find({username: regexp}).limit(25);
+        return accounts.find({username: regexp}).limit(maxDocuments);
     }
 
     static async getByUsername(username, createIfNonexistant = true) {
