@@ -95,8 +95,8 @@ class EvadesAPI {
     }
 
     async get(endpoint) {
-        const data = await fetch(this.fetchURL + endpoint)
-            .catch(console.error)
+        const data = await fetch(this.fetchURL + endpoint).catch();
+        // Sometimes, internet freaks out and doesn't fetch. God knows why. This prevents error spam.
         if(!data || !data.ok) return null;
         return await data.json();
     }

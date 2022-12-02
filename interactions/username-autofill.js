@@ -7,7 +7,6 @@ class UsernameAutofillInteraction extends DefaultInteraction {
 
     constructor() {
         super(UsernameAutofillInteraction.name, [InteractionType.ApplicationCommandAutocomplete]);
-        this.defer = false;
     }
 
     async execute(interaction) {

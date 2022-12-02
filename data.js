@@ -1,4 +1,5 @@
 import { Collection } from "discord.js";
+import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
 
 const mongoClient = new MongoClient("mongodb://localhost:27017");
@@ -7,6 +8,7 @@ await mongoClient.connect().catch(err => {throw "Database error!"});
 const database = mongoClient.db("Rameses");
 const accounts = database.collection("accounts");
 const tournaments = database.collection("tournaments");
+const wikiPages = database.collection("wiki");
 
 class AccountData {
     static cache = new Collection();
@@ -71,4 +73,44 @@ class TournamentData {
     }
 }
 
-export { AccountData, TournamentData };
+class WikiPageData {
+    static cache = new Collection();
+
+    constructor(data) {
+        this.title = data.title;
+        this.uuid = data?.uuid ?? uuid();
+        this.created = data?.created ?? Date.now();
+        this.edited = data?.edited ?? Date.now();
+        this.authors = data?.authors ?? [];
+        this.content = data?.content ?? "";
+    }
+
+    async save() {
+        AccountData.cache.set(this.title, this);
+        await wikiPages.updateOne({username: this.title}, {$set: this}, {upsert: true});
+    }
+
+    static async count() {
+        return await wikiPages.estimatedDocumentCount();
+    }
+
+    static async getByTitle(title) {
+        const page = this.cache.get(title) ?? await wikiPages.findOne({title});
+        if(!page) return null;
+        return new WikiPageData(page);
+    }
+
+    static async getByUUID(id) {
+        const page = await wikiPages.findOne({uuid: id});
+        if(!page) return null;
+        return new WikiPageData(page);
+    }
+
+    static findMatchingPages(title, maxDocuments = 25) {
+        if(!title.length) return wikiPages.aggregate([{$sample: {size: maxDocuments}}]);
+        const regexp = new RegExp(title);
+        return wikiPages.find({title: regexp}).limit(maxDocuments);
+    }
+}
+
+export { AccountData, TournamentData, WikiPageData };
