@@ -17,6 +17,7 @@ class WikiPageAutofillInteraction extends DefaultInteraction {
             if(page.private) continue;
             response.push({name: page.title, value: page.uuid ?? page.title});
         }
+        console.log(response)
         await interaction.respond(response);
     }
 }

@@ -83,6 +83,7 @@ class WikiPageData {
         this.edited = data?.edited ?? Date.now();
         this.authors = data?.authors ?? [];
         this.content = data?.content ?? "";
+        this.private = data?.private ?? false;
     }
 
     async save() {
