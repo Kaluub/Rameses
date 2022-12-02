@@ -28,6 +28,18 @@ class WikiAdminInteraction extends DefaultInteraction {
                         .setRequired(true)
                 )
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("remove")
+                .setDescription("Private a page")
+                .addStringOption(
+                    new SlashCommandStringOption()
+                        .setName("wiki-page")
+                        .setDescription("The page to private")
+                        .setAutocomplete(true)
+                        .setRequired(true)
+                )
+        )
 
     constructor() {
         super(WikiAdminInteraction.name, [InteractionType.ApplicationCommand]);
@@ -95,6 +107,16 @@ class WikiAdminInteraction extends DefaultInteraction {
                             )
                     )
                 await interaction.showModal(modal);
+            }
+            if(subcommand == "remove") {
+                if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
+                const pageIdentifier = interaction.options.getString("wiki-page", false);
+                if(!pageIdentifier) return {content: "Please provide a page title!", ephemeral: true};
+                let page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
+                if(!page) return {content: "The page was not found!", ephemeral: true};
+                page.private = true;
+                await page.save();
+                return {content: "The page was privated.", ephemeral: true};
             }
             return "How did we get here?";
         } else if(interaction.isModalSubmit()) {

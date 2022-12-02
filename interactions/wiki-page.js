@@ -14,6 +14,7 @@ class WikiPageAutofillInteraction extends DefaultInteraction {
         const pages = await filter.toArray();
         const response = [];
         for(const page of pages) {
+            if(page.private) continue;
             response.push({name: page.title, value: page.uuid ?? page.title});
         }
         await interaction.respond(response);

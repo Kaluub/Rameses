@@ -60,8 +60,12 @@ class DebugInteraction extends DefaultInteraction {
         }
         if(subcommand == "stats") {
             return `Stats:
-Stored users: ${await AccountData.count()}
-Cached users: ${AccountData.cache.size}
+Guilds cached: ${interaction.client.guilds.cache.size}
+Users cached: ${interaction.client.users.cache.size}
+Channels cached: ${interaction.client.channels.cache.size}
+
+Stored accounts: ${await AccountData.count()}
+Cached accounts: ${AccountData.cache.size}
 Users online in the last 24 hours: ${await AccountData.find({"lastSeen": {"$gt": Math.floor(Date.now() / 1000) - 1000*60*60*24}}).count()}`;
         }
         if(subcommand == "fixusername") {
