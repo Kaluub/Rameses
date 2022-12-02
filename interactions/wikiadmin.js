@@ -2,7 +2,13 @@ import DefaultInteraction from "../defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { WikiPageData } from "../data.js";
 
-const wikiadmins = ["461564949768962048"];
+const wikiadmins = [
+    "461564949768962048", // Kaluub
+    "474088900953112576", // Piger
+    "291543872666861568", // Dep
+    "325966339904897026", // Jackal
+    "834685352417558579", // Nick
+];
 
 class WikiAdminInteraction extends DefaultInteraction {
     static name = "wikiadmin";
