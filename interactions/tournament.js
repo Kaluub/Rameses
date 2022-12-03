@@ -19,7 +19,7 @@ class TournamentInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const subcommand = interaction.options.getSubcommand(false)
+        const subcommand = interaction.options.getSubcommand(false);
         if(subcommand == "create") {
             if(!interaction.member) return "Please use this in the Discord server.";
             if(!interaction.member.roles.cache.has(Config.TOURNAMENT_ORGANIZER_ROLE)) return "You need to be a Tournament Organizer to use this tool!";

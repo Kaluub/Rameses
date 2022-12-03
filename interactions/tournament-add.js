@@ -87,7 +87,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             } else return {ephemeral: true, content: "The time must be '[Minutes]:[Seconds]' (example: 5:55)"};
             if(isNaN(timeSeconds)) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
             if(timeSeconds < 0) return {ephemeral: true, content: "Negative time doesn't exist! Probably."};
-            tournament.leaderboard.push({player, area, time: time.trim(), timeSeconds});
+            tournament.leaderboard.push({player, area, time: time.trim(), timeSeconds, spectator: interaction.user.id });
             await tournament.save();
             const channel = interaction.client.channels.cache.get(args[2]);
             if(!channel) return {content: "The tournament channel could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
