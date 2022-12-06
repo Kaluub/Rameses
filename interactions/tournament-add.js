@@ -62,17 +62,17 @@ class TournamentAddInteraction extends DefaultInteraction {
                 // Remove button or something later
                 return {ephemeral: true, content: "This tournament is over!"};
             }
-            let player = interaction.fields.getTextInputValue("player");
-            let area = interaction.fields.getTextInputValue("area");
-            let time = interaction.fields.getTextInputValue("time");
+            let player = interaction.fields.getTextInputValue("player").trim().normalize();
+            let area = interaction.fields.getTextInputValue("area").toLowerCase().trim().normalize();
+            let time = interaction.fields.getTextInputValue("time").trim().normalize();
             if(!player || !area || !time) return {ephemeral: true, content: "Invalid/blank values!"};
             if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
-            if(area.startsWith("Area ")) {
+            if(area.startsWith("area ")) {
                 const aNumber = parseInt(area.split(" ")[1])
                 if(isNaN(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
                 if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
             }
-            if(!area.startsWith("Area ") && area != "Victory!") {
+            if(!area.startsWith("area ") && area != "Victory!") {
                 const aNumber = parseInt(area);
                 if(!aNumber)
                     return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
