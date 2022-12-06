@@ -79,6 +79,7 @@ class TournamentAddInteraction extends DefaultInteraction {
                 if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
                 area = `Area ${parseInt(area)}`;
             }
+            if(area.startsWith("a")) area = area.replace("a", "A");
             let timeSegments = time.split(":");
             let timeSeconds = 0;
             if(timeSegments.length == 2) {
