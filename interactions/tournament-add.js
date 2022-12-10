@@ -13,7 +13,7 @@ class TournamentAddInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         if(!interaction.member) return "Please use this in the Discord server.";
-        if(!interaction.member.roles.cache.hasAny(Config.TOURNAMENT_SPECTATOR_ROLE, Config.TOURNAMENT_ORGANIZER_ROLE, Config.MODERATOR_ROLE)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
+        if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
         if(interaction.isMessageComponent()) {
             const tournament = await TournamentData.getByID(interaction.message.id);
             if(!tournament) return {content: "The tournament data could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
@@ -54,7 +54,7 @@ class TournamentAddInteraction extends DefaultInteraction {
         }
         if(interaction.isModalSubmit()) {
             if(!interaction.member) return "Please use this in the Discord server.";
-            if(!interaction.member.roles.cache.hasAny(Config.TOURNAMENT_SPECTATOR_ROLE, Config.TOURNAMENT_ORGANIZER_ROLE, Config.MODERATOR_ROLE)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
+            if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
             const args = interaction.customId.split("/");
             const tournament = await TournamentData.getByID(args[1]);
             if(!tournament) return {content: "The tournament data could not be found! Contact a Tournament Organizer about this!", ephemeral: true};

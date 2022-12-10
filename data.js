@@ -3,9 +3,9 @@ import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
 
 const mongoClient = new MongoClient("mongodb://localhost:27017");
-await mongoClient.connect().catch(err => {throw "Database error!"});
-
+await mongoClient.connect().catch(err => {throw "Database error!\n" + err});
 const database = mongoClient.db("Rameses");
+
 const accounts = database.collection("accounts");
 const tournaments = database.collection("tournaments");
 const wikiPages = database.collection("wiki");

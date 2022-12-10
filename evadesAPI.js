@@ -81,9 +81,7 @@ class EvadesAPI {
         this.hallOfFameCacheTime = 60000;
         this.resetCache();
         updateLastSeen(this);
-        updateDisplayNames(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
-        setInterval(updateDisplayNames, this.hallOfFameCacheTime, this);
     }
 
     resetCache() {
@@ -115,14 +113,18 @@ class EvadesAPI {
             const rawPlayers = await this.get("game/usernames");
             if(!rawPlayers) return null;
             const players = [];
-            for(const username of rawPlayers) {
-                if(username.startsWith("guest")) {
-                    let guestName = username.slice(5);
-                    players.push("Guest" + guestName[0].toUpperCase() + guestName.slice(1));
+            for(const displayName of rawPlayers) {
+                const username = displayName.toLowerCase()
+                if(username.startsWith("Guest")) {
+                    players.push(displayName);
                     continue;
                 }
-                const account = await AccountData.getByUsername(username);
-                players.push(account.displayName ?? username);
+                let account = await AccountData.getByUsername(username);
+                if(!account.displayName) {
+                    account.displayName = displayName;
+                    await account.save()
+                }
+                players.push(displayName);
             }
             this.cache.onlinePlayers.players = players;
             this.cache.onlinePlayers.fetched = Date.now();
@@ -148,18 +150,6 @@ async function updateLastSeen(evadesAPI) {
         if(username.startsWith("Guest")) continue;
         let account = await AccountData.getByUsername(username);
         account.lastSeen = Math.floor(Date.now() / 1000);
-        await account.save();
-    }
-}
-
-async function updateDisplayNames(evadesAPI, force = false) {
-    const hallOfFame = await evadesAPI.getHallOfFame();
-    if(!hallOfFame) return;
-    for(const entry of hallOfFame) {
-        const username = entry[0];
-        let account = await AccountData.getByUsername(username);
-        if(account.displayName && !force) continue;
-        account.displayName = username;
         await account.save();
     }
 }

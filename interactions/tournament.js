@@ -22,7 +22,7 @@ class TournamentInteraction extends DefaultInteraction {
         const subcommand = interaction.options.getSubcommand(false);
         if(subcommand == "create") {
             if(!interaction.member) return "Please use this in the Discord server.";
-            if(!interaction.member.roles.cache.has(Config.TOURNAMENT_ORGANIZER_ROLE)) return "You need to be a Tournament Organizer to use this tool!";
+            if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_ORGANIZER_ROLES)) return "You need to be a Tournament Organizer to use this tool!";
             const modal = new ModalBuilder()
                 .setCustomId("tournament-create")
                 .setTitle("Create tournament")
