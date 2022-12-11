@@ -9,7 +9,7 @@ const database = mongoClient.db("Rameses");
 const accounts = database.collection("accounts");
 const tournaments = database.collection("tournaments");
 const wikiPages = database.collection("wiki");
-const discordUsers = database.collection("wiki");
+const discordUsers = database.collection("discord");
 
 class AccountData {
     static cache = new Collection();
