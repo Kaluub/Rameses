@@ -115,7 +115,7 @@ class EvadesAPI {
             const players = [];
             for(const displayName of rawPlayers) {
                 const username = displayName.toLowerCase()
-                if(username.startsWith("Guest")) {
+                if(username.startsWith("guest")) {
                     players.push(displayName);
                     continue;
                 }

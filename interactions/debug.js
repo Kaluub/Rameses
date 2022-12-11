@@ -50,7 +50,7 @@ class DebugInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const subcommand = interaction.options.getSubcommand(false)
+        const subcommand = interaction.options.getSubcommand(false);
         if(subcommand == "check") {
             const username = interaction.options.getString("username", false);
             if(!username) return "No user found.";

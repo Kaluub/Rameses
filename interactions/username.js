@@ -2,11 +2,11 @@ import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType } from "discord.js";
 import { AccountData } from "../data.js";
 
-class UsernameAutofillInteraction extends DefaultInteraction {
+class UsernameInteraction extends DefaultInteraction {
     static name = "username";
 
     constructor() {
-        super(UsernameAutofillInteraction.name, [InteractionType.ApplicationCommandAutocomplete]);
+        super(UsernameInteraction.name, [InteractionType.ApplicationCommandAutocomplete]);
     }
 
     async execute(interaction) {
@@ -20,4 +20,4 @@ class UsernameAutofillInteraction extends DefaultInteraction {
     }
 }
 
-export default UsernameAutofillInteraction;
+export default UsernameInteraction;

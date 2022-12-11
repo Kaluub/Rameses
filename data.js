@@ -9,6 +9,7 @@ const database = mongoClient.db("Rameses");
 const accounts = database.collection("accounts");
 const tournaments = database.collection("tournaments");
 const wikiPages = database.collection("wiki");
+const discordUsers = database.collection("wiki");
 
 class AccountData {
     static cache = new Collection();
@@ -39,6 +40,7 @@ class AccountData {
     }
 
     static async getByUsername(username, createIfNonexistant = true) {
+        if(username.toLowerCase().startsWith("guest")) return null;
         const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({username: username.toLowerCase()});
         if(!accountData && createIfNonexistant) return new AccountData({username: username.toLowerCase()});
         if(!accountData && !createIfNonexistant) return null;
@@ -114,4 +116,25 @@ class WikiPageData {
     }
 }
 
-export { AccountData, TournamentData, WikiPageData };
+class DiscordUserData {
+    static cache = new Collection();
+
+    constructor(data) {
+        this.id = data.id;
+        this.friends = data?.friends ?? [];
+        this.created = data?.created ?? Date.now();
+    }
+
+    async save() {
+        DiscordUserData.cache.set(this.id, this);
+        await discordUsers.updateOne({id: this.id}, {$set: this}, {upsert: true});
+    }
+
+    static async getByID(id) {
+        const userData = this.cache.get(id) ?? await discordUsers.findOne({id});
+        if(!userData) return new DiscordUserData({id});
+        return new DiscordUserData(userData);
+    }
+}
+
+export { AccountData, TournamentData, WikiPageData, DiscordUserData };

@@ -1,6 +1,6 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import { tournamentFormatter } from "../utils.js";
+import { sanitizeUsername, tournamentFormatter } from "../utils.js";
 import Config from "../config.js";
 import { TournamentData } from "../data.js";
 
@@ -67,6 +67,8 @@ class TournamentAddInteraction extends DefaultInteraction {
             let time = interaction.fields.getTextInputValue("time").trim().normalize();
             if(!player || !area || !time) return {ephemeral: true, content: "Invalid/blank values!"};
             if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
+            const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(player);
+            if(!playerDetails) return {ephemeral: true, content: `Who is ${sanitizeUsername(player)}? They don't exist!`};
             if(area.startsWith("area ")) {
                 const aNumber = parseInt(area.split(" ")[1])
                 if(isNaN(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};

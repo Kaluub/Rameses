@@ -1,5 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import { sanitizeUsername } from "../utils.js";
+import { DiscordUserData } from "../data.js";
 
 const staff = [
     "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", // Developer role
@@ -12,14 +14,6 @@ const staff = [
 
 function sortUsernamesAlphabetically(username1, username2) {
     return username1.localeCompare(username2);
-}
-
-function sanitizeUsername(username) {
-    return username
-        .replaceAll("_", "\\_")
-        .replaceAll("*", "\\*")
-        .replaceAll("|", "\\|")
-        .replaceAll("`", "\\`")
 }
 
 class OnlinePlayersInteraction extends DefaultInteraction {
@@ -38,24 +32,33 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         if(!onlinePlayers) return "Couldn't connect to Evades!";
         if(!onlinePlayers.length) return "No players are online!";
 
+        const userData = await DiscordUserData.getByID(interaction.user.id);
+
+        const onlineFriends = [];
         const onlineStaff = [];
         const onlineRegistered = [];
-        const onlineGuests = []
+        const onlineGuests = [];
         for(const username of onlinePlayers) {
             if(username.startsWith("Guest")) {
-                if(onlineGuests.join("; ").length > 1000) continue;
+                if(onlineGuests.join("; ").length > 980) continue;
                 onlineGuests.push(username);
                 continue;
             }
+            if(userData.friends.includes(username.toLowerCase())) {
+                if(onlineFriends.join("; ").length > 980) continue;
+                onlineFriends.push(sanitizeUsername(username));
+                continue;
+            }
             if(staff.includes(username)) {
-                if(onlineStaff.join("; ").length > 1000) continue;
+                if(onlineStaff.join("; ").length > 980) continue;
                 onlineStaff.push(sanitizeUsername(username));
                 continue;
             }
-            if(onlineRegistered.join("; ").length > 1000) continue;
+            if(onlineRegistered.join("; ").length > 980) continue;
             onlineRegistered.push(sanitizeUsername(username))
         }
 
+        onlineFriends.sort(sortUsernamesAlphabetically);
         onlineStaff.sort(sortUsernamesAlphabetically);
         onlineRegistered.sort(sortUsernamesAlphabetically);
         onlineGuests.sort(sortUsernamesAlphabetically);
@@ -66,6 +69,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             .setTimestamp()
             .setFooter({text: `${onlinePlayers.length} players online`})
         
+        if(onlineFriends.length) embed.addFields({name: "Online friends:", value: onlineFriends.join("; ") || "None!"});
         if(onlineStaff.length) embed.addFields({name: "Online staff:", value: onlineStaff.join("; ") || "None!"});
         if(onlineRegistered.length) embed.addFields({name: "Online players:", value: onlineRegistered.join("; ") || "None!"});
         if(onlineGuests.length) embed.addFields({name: "Online guests:", value: onlineGuests.join("; ") || "None!"});

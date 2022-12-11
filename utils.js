@@ -30,7 +30,7 @@ function tournamentFormatter(tournament, full = false) {
     for(const run of tournament.leaderboard.sort(tournamentSorter)) {
         if(usersAdded.includes(run.player.toLowerCase())) continue;
         position += 1;
-        if(position > 30 && !full) continue;
+        if(tournamentString.length >= 1900 && !full) continue;
         tournamentString += tournament.format.toLowerCase()
             .replaceAll("{position}", position.toString())
             .replaceAll("{player}", run.player)
@@ -51,4 +51,12 @@ function hasPermission(interaction, permission) {
     return false;
 }
 
-export { tournamentSorter, tournamentFormatter, hasPermission }
+function sanitizeUsername(username) {
+    return username
+        .replaceAll("_", "\\_")
+        .replaceAll("*", "\\*")
+        .replaceAll("|", "\\|")
+        .replaceAll("`", "\\`")
+}
+
+export { tournamentSorter, tournamentFormatter, hasPermission, sanitizeUsername }

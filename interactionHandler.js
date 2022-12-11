@@ -50,7 +50,7 @@ class InteractionHandler {
         if(interactionHandler.defer) await interaction.deferReply({ephemeral: interactionHandler.ephemeral ? true : false});
         interactionHandler.execute(interaction)
             .then(async response => {
-                if(InteractionType.ApplicationCommandAutocomplete in interactionHandler.interactionTypes)
+                if(interaction.isAutocomplete())
                     return;
                 if(!response)
                     return;
@@ -61,7 +61,7 @@ class InteractionHandler {
             })
             .catch(async err => {
                 console.error(err);
-                if(InteractionType.ApplicationCommandAutocomplete in interactionHandler.interactionTypes)
+                if(interaction.isAutocomplete())
                     return;
                 if(interaction.deferred && !interaction.replied)
                     await interaction.editReply({content: "Something went seriously wrong if you're seeing this! (Command failed)"});
