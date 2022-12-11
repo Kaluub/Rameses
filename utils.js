@@ -14,7 +14,7 @@ function tournamentSorter(run1, run2) {
     else return 1;
 }
 
-function tournamentFormatter(tournament) {
+function tournamentFormatter(tournament, full = false) {
     if(!tournament.leaderboard) {
         return "```asciidoc\n= Leaderboard =\n" + tournament.format.toLowerCase()
             .replaceAll("{position}", "1")
@@ -30,7 +30,7 @@ function tournamentFormatter(tournament) {
     for(const run of tournament.leaderboard.sort(tournamentSorter)) {
         if(usersAdded.includes(run.player.toLowerCase())) continue;
         position += 1;
-        if(position > 15) continue;
+        if(position > 30 && !full) continue;
         tournamentString += tournament.format.toLowerCase()
             .replaceAll("{position}", position.toString())
             .replaceAll("{player}", run.player)
