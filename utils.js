@@ -30,24 +30,25 @@ function tournamentFormatter(tournament, full = false) {
     for(const run of tournament.leaderboard.sort(tournamentSorter)) {
         if(usersAdded.includes(run.player.toLowerCase())) continue;
         position += 1;
-        if(tournamentString.length >= 1900 && !full) continue;
-        tournamentString += tournament.format.toLowerCase()
+        const runString = tournament.format.toLowerCase()
             .replaceAll("{position}", position.toString())
             .replaceAll("{player}", run.player)
             .replaceAll("{area}", run.area)
             .replaceAll("{time}", run.time)
             .replaceAll("{attempt}", `(${tournament.leaderboard.filter(r => run.player.toLowerCase() == r.player.toLowerCase()).length}/${tournament.maxAttempts})`)
-            + "\n\n"
+            + "\n\n";
+        if((tournamentString + runString).length > 1997 && !full) break;
+        tournamentString += runString;
         usersAdded.push(run.player.toLowerCase());
     }
-    tournamentString += "```"
+    tournamentString += "```";
     return tournamentString;
 }
 
-function hasPermission(interaction, permission) {
+function hasPermission(interaction, permission, user = interaction.user) {
     if(!interaction) return false;
     if(!interaction.guild) return true;
-    if(interaction.channel.permissionsFor(interaction.client.user).has(permission)) return true;
+    if(interaction.channel.permissionsFor(user).has(permission)) return true;
     return false;
 }
 

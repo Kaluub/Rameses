@@ -22,13 +22,13 @@ class TournamentStatsInteraction extends DefaultInteraction {
             let value = spectators.get(run.spectator) ?? 0;
             spectators.set(run.spectator, value + 1);
         }
-        spectators.sort((spec1, spec2) => spec1 - spec2);
+        spectators.sort((spec1, spec2) => spec2 - spec1);
         let string =
 `Tournament stats:
 Created: <t:${Math.floor(tournament.created / 1000)}>
 Runs: ${tournament.leaderboard.length} runs
 Top spectators:`;
-        for(const spectator of spectators.firstKey(3)) {
+        for(const spectator of spectators.firstKey(5)) {
             const runs = spectators.get(spectator)
             string += `\n${(await interaction.client.users.fetch(spectator)).tag} spectated ${runs} runs`
         }

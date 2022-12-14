@@ -2,7 +2,7 @@ import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { sanitizeUsername, tournamentFormatter } from "../utils.js";
 import Config from "../config.js";
-import { TournamentData } from "../data.js";
+import { DiscordGuildData, TournamentData } from "../data.js";
 
 class TournamentAddInteraction extends DefaultInteraction {
     static name = "tournament-add";
@@ -12,8 +12,9 @@ class TournamentAddInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(!interaction.member) return "Please use this in the Discord server.";
-        if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
+        if(!interaction.guild) return "Please use this in a Discord server.";
+        const guildData = await DiscordGuildData.getByID(interaction.guild.id);
+        if(!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
         if(interaction.isMessageComponent()) {
             const tournament = await TournamentData.getByID(interaction.message.id);
             if(!tournament) return {content: "The tournament data could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
@@ -31,6 +32,8 @@ class TournamentAddInteraction extends DefaultInteraction {
                                 .setCustomId("player")
                                 .setLabel("Player(s):")
                                 .setStyle(TextInputStyle.Short)
+                                .setMaxLength(64)
+                                .setRequired(true)
                                 .setPlaceholder("Name the player(s) you spectated! Exact usernames, please.")
                         ),
                     new ActionRowBuilder()
@@ -39,6 +42,7 @@ class TournamentAddInteraction extends DefaultInteraction {
                                 .setCustomId("area")
                                 .setLabel("Area:")
                                 .setStyle(TextInputStyle.Short)
+                                .setRequired(true)
                                 .setPlaceholder("The area the player(s) made it to. Example: 'Area 35'.")
                         ),
                     new ActionRowBuilder()
@@ -47,14 +51,16 @@ class TournamentAddInteraction extends DefaultInteraction {
                                 .setCustomId("time")
                                 .setLabel("Time:")
                                 .setStyle(TextInputStyle.Short)
+                                .setRequired(true)
                                 .setPlaceholder("The time it took to reach the area above. Example: '5:04'.")
                         )
                 )
             return await interaction.showModal(modal);
         }
         if(interaction.isModalSubmit()) {
-            if(!interaction.member) return "Please use this in the Discord server.";
-            if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
+            if(!interaction.guild) return "Please use this in a Discord server.";
+            const guildData = await DiscordGuildData.getByID(interaction.guild.id);
+            if(!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
             const args = interaction.customId.split("/");
             const tournament = await TournamentData.getByID(args[1]);
             if(!tournament) return {content: "The tournament data could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
@@ -66,9 +72,10 @@ class TournamentAddInteraction extends DefaultInteraction {
             let area = interaction.fields.getTextInputValue("area").toLowerCase().trim().normalize();
             let time = interaction.fields.getTextInputValue("time").trim().normalize();
             if(!player || !area || !time) return {ephemeral: true, content: "Invalid/blank values!"};
+            if(player.length > 64) return {ephemeral: true, content: "That player name is far too long."};
             if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
             const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(player);
-            if(!playerDetails) return {ephemeral: true, content: `Who is ${sanitizeUsername(player)}? They don't exist!`};
+            if(!playerDetails && guildData.forceAccountExistence) return {ephemeral: true, content: `Who is ${sanitizeUsername(player)}? They don't exist!`};
             if(area.startsWith("area ")) {
                 const aNumber = parseInt(area.split(" ")[1])
                 if(isNaN(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
@@ -90,6 +97,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             } else return {ephemeral: true, content: "The time must be '[Minutes]:[Seconds]' (example: 5:55)"};
             if(isNaN(timeSeconds)) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
             if(timeSeconds < 0) return {ephemeral: true, content: "Negative time doesn't exist! Probably."};
+            if(tournament.leaderboard.length >= 10000) return {ephemeral: true, content: "That's enough! There's too many runs in this tournament!"};
             tournament.leaderboard.push({player, area, time: time.trim(), timeSeconds, spectator: interaction.user.id });
             await tournament.save();
             const channel = interaction.client.channels.cache.get(args[2]);

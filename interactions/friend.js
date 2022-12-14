@@ -65,7 +65,7 @@ class FriendInteraction extends DefaultInteraction {
                 await userData.save();
                 return "You've removed them as a friend!";
             }
-            return "How did we get here?"
+            return "How did we get here?";
         }
     }
 }

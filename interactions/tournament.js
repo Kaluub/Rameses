@@ -1,6 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import Config from "../config.js";
+import { DiscordGuildData } from "../data.js";
 
 class TournamentInteraction extends DefaultInteraction {
     static name = "tournament";
@@ -21,8 +22,9 @@ class TournamentInteraction extends DefaultInteraction {
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand(false);
         if(subcommand == "create") {
-            if(!interaction.member) return "Please use this in the Discord server.";
-            if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_ORGANIZER_ROLES)) return "You need to be a Tournament Organizer to use this tool!";
+            if(!interaction.guild) return "Please use this in a server.";
+            const guildData = await DiscordGuildData.getByID(interaction.guild.id);
+            if(!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return "You need to be a Tournament Organizer to use this tool!";
             const modal = new ModalBuilder()
                 .setCustomId("tournament-create")
                 .setTitle("Create tournament")

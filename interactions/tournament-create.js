@@ -2,7 +2,7 @@ import DefaultInteraction from "../defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType } from "discord.js";
 import { tournamentFormatter } from "../utils.js";
 import Config from "../config.js";
-import { TournamentData } from "../data.js";
+import { DiscordGuildData, TournamentData } from "../data.js";
 
 class TournamentCreateInteraction extends DefaultInteraction {
     static name = "tournament-create";
@@ -12,8 +12,9 @@ class TournamentCreateInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(!interaction.member) return "Please use this in the Discord server.";
-        if(!interaction.member.roles.cache.hasAny(...Config.TOURNAMENT_ORGANIZER_ROLES)) return "You need to be a Tournament Organizer to use this tool!";
+        if(!interaction.guild) return "Please use this in a Discord server.";
+        const guildData = await DiscordGuildData.getByID(interaction.guild.id);
+        if(!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return "You need to be a Tournament Organizer to use this tool!";
         const format = interaction.fields.getTextInputValue("format") || "[{position}] [{player}]\n{area} ;; {time} ;; {attempt}";
         const attempts = parseInt(interaction.fields.getTextInputValue("attempts")) || 3;
         const teamSize = parseInt(interaction.fields.getTextInputValue("team-size")) || 1;

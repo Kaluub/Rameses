@@ -10,6 +10,7 @@ const accounts = database.collection("accounts");
 const tournaments = database.collection("tournaments");
 const wikiPages = database.collection("wiki");
 const discordUsers = database.collection("discord");
+const discordGuilds = database.collection("guilds");
 
 class AccountData {
     static cache = new Collection();
@@ -137,4 +138,27 @@ class DiscordUserData {
     }
 }
 
-export { AccountData, TournamentData, WikiPageData, DiscordUserData };
+class DiscordGuildData {
+    static cache = new Collection();
+
+    constructor(data) {
+        this.id = data.id;
+        this.tournamentOrganizerRole = data?.tournamentOrganizerRole ?? null;
+        this.tournamentSpectatorRole = data?.tournamentSpectatorRole ?? null;
+        this.forceAccountExistence = data?.forceAccountExistence ?? true;
+        this.created = data?.created ?? Date.now();
+    }
+
+    async save() {
+        DiscordGuildData.cache.set(this.id, this);
+        await discordGuilds.updateOne({id: this.id}, {$set: this}, {upsert: true});
+    }
+
+    static async getByID(id) {
+        const guildData = this.cache.get(id) ?? await discordGuilds.findOne({id});
+        if(!guildData) return new DiscordGuildData({id});
+        return new DiscordGuildData(guildData);
+    }
+}
+
+export { AccountData, TournamentData, WikiPageData, DiscordUserData, DiscordGuildData };
