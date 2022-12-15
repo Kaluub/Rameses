@@ -1,3 +1,5 @@
+import { readFileSync } from "fs";
+
 function tournamentSorter(run1, run2) {
     if(run1.area == "Victory!") {
         if(run2.area == "Victory!") {
@@ -60,4 +62,8 @@ function sanitizeUsername(username) {
         .replaceAll("`", "\\`")
 }
 
-export { tournamentSorter, tournamentFormatter, hasPermission, sanitizeUsername }
+function readJSON(path) {
+    return JSON.parse(readFileSync(path))
+}
+
+export { tournamentSorter, tournamentFormatter, hasPermission, sanitizeUsername, readJSON }

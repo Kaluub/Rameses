@@ -2,11 +2,12 @@ import DefaultInteraction from "../defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
 import { sanitizeUsername } from "../utils.js";
 import { DiscordUserData } from "../data.js";
+import Locale from "../locale.js";
 
 const staff = [
     "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", // Developer role
     "extirpater", "Exoriz", "Jackal", // Head mods
-    // This is where Sr. mods would go, if any existed
+    // This is where Sr. mods would go, if any existed.
     "Dittoblob", "Gianni", "LightY", "Bluemonkey14", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv", "asdfasdfasdf1234",
     "Vikenti", "Mel", "«Ƥħǿēƞɨx»", "Amasterclasher", "Invi", // Mods
     "hula", "Ram", "basti", "Androoh", "lindsay", "ThatHodgeGuy", "Kaluub", "Zxynn", "Angel🌸" // Jr mods
@@ -15,6 +16,9 @@ const staff = [
 function sortUsernamesAlphabetically(username1, username2) {
     return username1.localeCompare(username2);
 }
+
+const JOINER = "; ";
+const MAX_CHARACTER_COUNT = 1000;
 
 class OnlinePlayersInteraction extends DefaultInteraction {
     static name = "online-players";
@@ -29,8 +33,8 @@ class OnlinePlayersInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
-        if(!onlinePlayers) return "Couldn't connect to Evades!";
-        if(!onlinePlayers.length) return "No players are online!";
+        if(!onlinePlayers) return Locale.text(interaction, "EVADES_ERROR");
+        if(!onlinePlayers.length) return Locale.text(interaction, "NOBODY_ONLINE");
 
         const userData = await DiscordUserData.getByID(interaction.user.id);
 
@@ -39,23 +43,30 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         const onlineRegistered = [];
         const onlineGuests = [];
         for(const username of onlinePlayers) {
+            // Filter guests into their own category first.
             if(username.startsWith("Guest")) {
-                if(onlineGuests.join("; ").length > 980) continue;
+                if((onlineGuests.join(JOINER) + `${JOINER}${username}`).length > MAX_CHARACTER_COUNT) continue;
                 onlineGuests.push(username);
                 continue;
             }
+            // Friends are next priority (you can't befriend a guest, sadly. Social norms, man)
             if(userData.friends.includes(username.toLowerCase())) {
-                if(onlineFriends.join("; ").length > 980) continue;
-                onlineFriends.push(sanitizeUsername(username));
+                const nextFriend = sanitizeUsername(username);
+                if((onlineFriends.join(JOINER) + `${JOINER}${nextFriend}`).length > MAX_CHARACTER_COUNT) continue;
+                onlineFriends.push(nextFriend);
                 continue;
             }
+            // Put any staff members in a separate category
             if(staff.includes(username)) {
-                if(onlineStaff.join("; ").length > 980) continue;
-                onlineStaff.push(sanitizeUsername(username));
+                const nextStaff = sanitizeUsername(username);
+                if((onlineStaff.join(JOINER) + `${JOINER}${nextStaff}`).length > MAX_CHARACTER_COUNT) continue;
+                onlineStaff.push(nextStaff);
                 continue;
             }
-            if(onlineRegistered.join("; ").length > 980) continue;
-            onlineRegistered.push(sanitizeUsername(username))
+            // Handle anyone else not in the above conditions
+            const nextRegistered = sanitizeUsername(username);
+            if((onlineRegistered.join(JOINER) + `${JOINER}${nextRegistered}`).length > MAX_CHARACTER_COUNT) continue;
+            onlineRegistered.push(nextRegistered);
         }
 
         onlineFriends.sort(sortUsernamesAlphabetically);
@@ -64,15 +75,16 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         onlineGuests.sort(sortUsernamesAlphabetically);
 
         const embed = new EmbedBuilder()
-            .setTitle("Players currently online:")
+            .setTitle(Locale.text(interaction, "PLAYERS_ONLINE"))
             .setColor("#11aa33")
             .setTimestamp()
-            .setFooter({text: `${onlinePlayers.length} players online`})
+            .setFooter({text: Locale.text(interaction, "PLAYERS_ONLINE_COUNT", [onlinePlayers.length])})
         
-        if(onlineFriends.length) embed.addFields({name: "Online friends:", value: onlineFriends.join("; ") || "None!"});
-        if(onlineStaff.length) embed.addFields({name: "Online staff:", value: onlineStaff.join("; ") || "None!"});
-        if(onlineRegistered.length) embed.addFields({name: "Online players:", value: onlineRegistered.join("; ") || "None!"});
-        if(onlineGuests.length) embed.addFields({name: "Online guests:", value: onlineGuests.join("; ") || "None!"});
+        // Put them all on display.
+        if(onlineFriends.length) embed.addFields({name: Locale.text(interaction, "ONLINE_FRIENDS"), value: onlineFriends.join(JOINER) || "None!"});
+        if(onlineStaff.length) embed.addFields({name: Locale.text(interaction, "ONLINE_STAFF"), value: onlineStaff.join(JOINER) || "None!"});
+        if(onlineRegistered.length) embed.addFields({name: Locale.text(interaction, "ONLINE_PLAYERS"), value: onlineRegistered.join(JOINER) || "None!"});
+        if(onlineGuests.length) embed.addFields({name: Locale.text(interaction, "ONLINE_GUESTS"), value: onlineGuests.join(JOINER) || "None!"});
         
         return { embeds: [embed] }
     }

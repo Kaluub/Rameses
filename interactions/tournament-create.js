@@ -3,6 +3,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType } from "d
 import { tournamentFormatter } from "../utils.js";
 import Config from "../config.js";
 import { DiscordGuildData, TournamentData } from "../data.js";
+import Locale from "../locale.js";
 
 class TournamentCreateInteraction extends DefaultInteraction {
     static name = "tournament-create";
@@ -12,9 +13,9 @@ class TournamentCreateInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(!interaction.guild) return "Please use this in a Discord server.";
+        if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
         const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-        if(!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return "You need to be a Tournament Organizer to use this tool!";
+        if(!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return Locale.text(interaction, "TOURNAMENT_ORGANIZERS_ONLY");
         const format = interaction.fields.getTextInputValue("format") || "[{position}] [{player}]\n{area} ;; {time} ;; {attempt}";
         const attempts = parseInt(interaction.fields.getTextInputValue("attempts")) || 3;
         const teamSize = parseInt(interaction.fields.getTextInputValue("team-size")) || 1;
@@ -28,11 +29,11 @@ class TournamentCreateInteraction extends DefaultInteraction {
                     .setStyle(ButtonStyle.Secondary)
             )
 
-        const message = await interaction.channel.send({content: tournamentFormatter({format, attempts, teamSize}), components: [row]}).catch()
-        if(!message) return "I can't send messages in this channel! Please ensure I have the proper permission to do so. Note that while this may look like a message, this is only working because this is a reply to your command."
+        const message = await interaction.channel.send({content: tournamentFormatter({format, attempts, teamSize}), components: [row]}).catch();
+        if(!message) return Locale.text(interaction, "TOURNAMENT_CANNOT_SEND_MESSAGE");
         const tournament = new TournamentData({id: message.id, format, attempts, teamSize, duration: duration * 86400000});
         await tournament.save();
-        return {ephemeral: true, content: "Tournament created!"}
+        return {ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_CREATED")}
     }
 }
 

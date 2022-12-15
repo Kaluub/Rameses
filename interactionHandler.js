@@ -1,5 +1,6 @@
-import { Collection, InteractionType } from "discord.js";
+import { Collection } from "discord.js";
 import { readdirSync } from "fs";
+import Locale from "./locale.js";
 
 class InteractionLogger {
     constructor(path) {
@@ -10,7 +11,7 @@ class InteractionLogger {
 class InteractionHandler {
     constructor() {
         this.interactions = new Collection();
-        this.logger = new InteractionLogger("./logs");
+        this.logger = new InteractionLogger("./logs"); // Does nothing right now!
         this.loadInteractions("./interactions");
     };
 
@@ -46,7 +47,7 @@ class InteractionHandler {
     async handleInteraction(interaction) {
         let interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId?.split("/")[0]);
         if(interaction.isAutocomplete()) interactionHandler = this.interactionHandler.interactions.get(interaction.options.getFocused(true).name)
-        if(!interactionHandler) return await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command not found)", ephemeral: true});
+        if(!interactionHandler) return await interaction.reply({content: Locale.text(interaction, "COMMAND_ERROR_NOT_FOUND"), ephemeral: true});
         if(interactionHandler.defer) await interaction.deferReply({ephemeral: interactionHandler.ephemeral ? true : false});
         interactionHandler.execute(interaction)
             .then(async response => {
@@ -64,9 +65,9 @@ class InteractionHandler {
                 if(interaction.isAutocomplete())
                     return;
                 if(interaction.deferred && !interaction.replied)
-                    await interaction.editReply({content: "Something went seriously wrong if you're seeing this! (Command failed)"});
+                    await interaction.editReply({content: Locale.text(interaction, "COMMAND_ERROR")});
                 if(!interaction.replied)
-                    await interaction.reply({content: "Something went seriously wrong if you're seeing this! (Command failed)", ephemeral: true});
+                    await interaction.reply({content: Locale.text(interaction, "COMMAND_ERROR"), ephemeral: true});
             })
 
     }

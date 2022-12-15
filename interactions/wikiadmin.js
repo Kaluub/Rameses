@@ -1,6 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { WikiPageData } from "../data.js";
+import Config from "../config.js";
 
 const wikiadmins = [
     "461564949768962048", // Kaluub
@@ -13,7 +14,7 @@ const wikiadmins = [
 class WikiAdminInteraction extends DefaultInteraction {
     static name = "wikiadmin";
     static noGlobalInteraction = true;
-    static guilds = ["1026074983249739829"];
+    static guilds = [Config.DEVELOPMENT_SERVER];
     static applicationCommand = new SlashCommandBuilder()
         .setName(WikiAdminInteraction.name)
         .setDescription("Wiki admin commands")
@@ -53,7 +54,7 @@ class WikiAdminInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         if(interaction.isChatInputCommand()) {
-            const subcommand = interaction.options.getSubcommand(false)
+            const subcommand = interaction.options.getSubcommand(false);
             if(subcommand == "create") {
                 if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
                 const modal = new ModalBuilder()

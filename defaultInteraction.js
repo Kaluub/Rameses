@@ -1,3 +1,5 @@
+import Locale from "./locale.js";
+
 class DefaultInteraction {
     static disabled = false;
     static applicationCommand = null;
@@ -13,7 +15,7 @@ class DefaultInteraction {
     }
 
     async execute(interaction) {
-        return "Default value";
+        return Locale.text(interaction, "DEFAULT_COMMAND");
     }
 }
 

@@ -1,7 +1,8 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { AccountData } from "../data.js";
-import { hasPermission } from "../utils.js";
-import { EmbedBuilder, escapeMarkdown, InteractionType, PermissionsBitField, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { sanitizeUsername } from "../utils.js";
+import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import Locale from "../locale.js";
 
 const emojiHats = {
     "autumn-wreath": "<:autumnwreath:1045570375788019793>",
@@ -73,21 +74,21 @@ class PlayerInfoInteraction extends DefaultInteraction {
         const account = await AccountData.getByUsername(username);
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
-        if(!playerDetails) return "The player could not be found!";
+        if(!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
         const embed = new EmbedBuilder()
-            .setTitle(`Details about ${escapeMarkdown(account?.displayName ?? username)}:`)
+            .setTitle(Locale.text(interaction, "PLAYER_DETAILS_TITLE", [sanitizeUsername(account?.displayName ?? username)]))
             .setURL(`https://evades.io/profile/${account?.displayName ?? username}`)
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
-`**Career VP**: ${playerDetails.stats["highest_area_achieved_counter"] + " VP"}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**Sum of weeks VP**: ${playerDetails.summedCareerVP} VP` : ""}
-**VP this week**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + " VP" : "None"}
-**Last seen**: ${onlinePlayers.some(name => name.toLowerCase() == username.toLowerCase()) ? "Online now!" : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : "Never"}
-**Weeks active**: ${playerDetails.activeWeeks} weeks
-${playerDetails.firstActiveWeekNumber ? `**First active week**: Week ${playerDetails.firstActiveWeekNumber}
-**Last active week**: Week ${playerDetails.lastActiveWeekNumber}
-**Best week**: Week ${playerDetails.highestWeek[0]} with ${playerDetails.highestWeek[1]} VP${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}` : ""}
-**Current hat**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}`
+`**${Locale.text(interaction, "CAREER_VP")}**: ${playerDetails.stats["highest_area_achieved_counter"]} ${Locale.text(interaction, "VICTORY_POINTS")}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**${Locale.text(interaction, "REAL_CAREER_VP")}**: ${playerDetails.summedCareerVP} ${Locale.text(interaction, "VICTORY_POINTS")}` : ""}
+**${Locale.text(interaction, "WEEKLY_VP")}**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + ` ${Locale.text(interaction, "VICTORY_POINTS")}` : Locale.text(interaction, "NONE")}
+**${Locale.text(interaction, "LAST_SEEN")}**: ${onlinePlayers.some(name => name.toLowerCase() == username.toLowerCase()) ? Locale.text(interaction, "ONLINE_NOW") : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : Locale.text(interaction, "NEVER")}
+**${Locale.text(interaction, "WEEKS_ACTIVE")}**: ${playerDetails.activeWeeks} ${Locale.text(interaction, "WEEKS_UNIT")}
+${playerDetails.firstActiveWeekNumber ? `**${Locale.text(interaction, "FIRST_ACTIVE_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.firstActiveWeekNumber}
+**${Locale.text(interaction, "LAST_ACTIVE_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.lastActiveWeekNumber}
+**${Locale.text(interaction, "BEST_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.highestWeek[0]} ${Locale.text(interaction, "WITH")} ${playerDetails.highestWeek[1]} ${Locale.text(interaction, "VICTORY_POINTS")}${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}` : ""}
+**${Locale.text(interaction, "CURRENT_HAT")}**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}`
 //**Hat collection**: ${hasPermission(interaction, PermissionsBitField.Flags.UseExternalEmojis) ? getHatEmojis(playerDetails.accessories.hat_collection) : "No emoji permissions!"}`
         )
         return { embeds: [embed] }

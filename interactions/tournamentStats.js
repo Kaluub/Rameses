@@ -1,6 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { ApplicationCommandType, Collection, ContextMenuCommandBuilder, InteractionType } from "discord.js";
 import { TournamentData } from "../data.js";
+import Locale from "../locale.js";
 
 class TournamentStatsInteraction extends DefaultInteraction {
     static name = "Tournament Stats";
@@ -16,7 +17,7 @@ class TournamentStatsInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const tournament = await TournamentData.getByID(interaction.targetMessage.id);
-        if(!tournament) return {ephemeral: true, content: "This isn't a tournament message!"};
+        if(!tournament) return {ephemeral: true, content: Locale.text(interaction, "NOT_A_TOURNAMENT")};
         let spectators = new Collection();
         for(const run of tournament.leaderboard) {
             let value = spectators.get(run.spectator) ?? 0;

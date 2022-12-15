@@ -1,11 +1,12 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { AccountData } from "../data.js";
+import Config from "../config.js";
 
 class DebugInteraction extends DefaultInteraction {
     static name = "debug";
     static noGlobalInteraction = true;
-    static guilds = ["1026074983249739829"];
+    static guilds = [Config.DEVELOPMENT_SERVER];
     static applicationCommand = new SlashCommandBuilder()
         .setName(DebugInteraction.name)
         .setDescription("Generic debug data")
@@ -65,8 +66,7 @@ Users cached: ${interaction.client.users.cache.size}
 Channels cached: ${interaction.client.channels.cache.size}
 
 Stored accounts: ${await AccountData.count()}
-Cached accounts: ${AccountData.cache.size}
-Users online in the last 24 hours: ${await AccountData.find({"lastSeen": {"$gt": Math.floor(Date.now() / 1000) - 1000*60*60*24}}).count()}`;
+Cached accounts: ${AccountData.cache.size}`;
         }
         if(subcommand == "fixusername") {
             const username = interaction.options.getString("username", false);

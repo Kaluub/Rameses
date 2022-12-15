@@ -2,11 +2,12 @@ import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandRoleOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "discord.js";
 import { DiscordGuildData } from "../data.js";
 import { hasPermission } from "../utils.js";
+import Locale from "../locale.js";
 
-class ConfigInteraction extends DefaultInteraction {
+class GuildConfigInteraction extends DefaultInteraction {
     static name = "configure";
     static applicationCommand = new SlashCommandBuilder()
-        .setName(ConfigInteraction.name)
+        .setName(GuildConfigInteraction.name)
         .setDescription("Configure some guild-related settings here.")
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild)
@@ -44,41 +45,41 @@ class ConfigInteraction extends DefaultInteraction {
         )
 
     constructor() {
-        super(ConfigInteraction.name, [InteractionType.ApplicationCommand]);
+        super(GuildConfigInteraction.name, [InteractionType.ApplicationCommand]);
     }
 
     async execute(interaction) {
         const subcommandGroup = interaction.options.getSubcommandGroup(false);
         const subcommand = interaction.options.getSubcommand(false);
         if(subcommandGroup == "tournament") {
-            if(!hasPermission(interaction, PermissionsBitField.Flags.ManageGuild, interaction.user)) return "You need to have the permission to manage this server to make this change!"
-            if(!interaction.guild) return "Only in servers.";
+            if(!hasPermission(interaction, PermissionsBitField.Flags.ManageGuild, interaction.user)) return Locale.text(interaction, "MANAGE_GUILD_PERMISSION_REQUIRED")
+            if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
             if(subcommand == "spectators") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const role = interaction.options.getRole("role");
-                if(guildData.tournamentSpectatorRole == role.id) return "Your server already has this as the spectators role!";
+                if(guildData.tournamentSpectatorRole == role.id) return Locale.text(interaction, "SPECTATOR_ROLE_ALREADY");
                 guildData.tournamentSpectatorRole = role.id;
                 await guildData.save();
-                return "The tournament spectators role has been set!";
+                return Locale.text(interaction, "SPECTATOR_ROLE_SET");
             }
             if(subcommand == "organizers") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const role = interaction.options.getRole("role");
-                if(guildData.tournamentOrganizerRole == role.id) return "Your server already has this as the organizers role!";
+                if(guildData.tournamentOrganizerRole == role.id) return Locale.text(interaction, "ORGANIZER_ROLE_ALREADY");
                 guildData.tournamentOrganizerRole = role.id;
                 await guildData.save();
-                return "The tournament organizers role has been set!";
+                return Locale.text(interaction, "ORGANIZER_ROLE_SET");
             }
             if(subcommand == "check-names") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const shouldCheck = interaction.options.getBoolean("should-check");
                 guildData.forceAccountExistence = shouldCheck;
                 await guildData.save();
-                return "Your changes were stored!";
+                return Locale.text(interaction, "CHANGES_STORED");
             }
         }
-        return "How did we get here?";
+        return Locale.text(interaction, "HOW_DID_WE_GET_HERE");
     }
 }
 
-export default ConfigInteraction;
+export default GuildConfigInteraction;

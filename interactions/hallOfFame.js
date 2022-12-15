@@ -1,5 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import { EmbedBuilder, escapeMarkdown, InteractionType, SlashCommandBuilder } from "discord.js";
+import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import Locale from "../locale.js";
+import { sanitizeUsername } from "../utils.js";
 
 class HallOfFameInteraction extends DefaultInteraction {
     static name = "hall-of-fame";
@@ -14,23 +16,23 @@ class HallOfFameInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const hallOfFameEntries = await interaction.client.evadesAPI.getHallOfFame();
-        if(!hallOfFameEntries) return "Couldn't connect to Evades!";
-        let hallOfFamePlayersString = "Leaderboard:";
+        if(!hallOfFameEntries) return Locale.text(interaction, "EVADES_ERROR");
+        let hallOfFamePlayersString = Locale.text(interaction, "LEADERBOARD");
         let ranking = 0;
         let totalVP = 0;
         for(const hallOfFameEntry of hallOfFameEntries) {
             ranking += 1;
-            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${escapeMarkdown(hallOfFameEntry[0])} (${hallOfFameEntry[1]} VP)`;
+            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${sanitizeUsername(hallOfFameEntry[0])} (${hallOfFameEntry[1]} ${Locale.text(interaction, "VICTORY_POINTS")})`;
             totalVP += parseInt(hallOfFameEntry[1]);
         };
         
         if(hallOfFamePlayersString.length > 1900) hallOfFamePlayersString = hallOfFamePlayersString.substring(0, 1900) + "...";
         const embed = new EmbedBuilder()
-            .setTitle("Hall of Fame:")
+            .setTitle(Locale.text(interaction, "HALL_OF_FAME"))
             .setColor("#FFD700")
             .setTimestamp()
-            .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : "The leaderboard is empty!")
-            .setFooter({text: `${ranking} players have collected ${totalVP} VP this week`})
+            .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : Locale.text())
+            .setFooter({text: Locale.text(interaction, "LEADERBOARD_FOOTER", [ranking, totalVP])})
         return { embeds: [embed] }
     }
 }

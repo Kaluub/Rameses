@@ -1,6 +1,7 @@
 import DefaultInteraction from "../defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { DiscordUserData } from "../data.js";
+import Locale from "../locale.js";
 
 class FriendInteraction extends DefaultInteraction {
     static name = "friend";
@@ -52,20 +53,20 @@ class FriendInteraction extends DefaultInteraction {
             if(subcommand == "add") {
                 const userData = await DiscordUserData.getByID(interaction.user.id);
                 const username = interaction.options.getString("username").toLowerCase();
-                if(userData.friends.includes(username)) return "You're already friends with them.";
+                if(userData.friends.includes(username)) return Locale.text(interaction, "FRIENDS_ALREADY");
                 userData.friends.push(username);
                 await userData.save();
-                return "You've added them as a friend!";
+                return Locale.text(interaction, "FRIEND_ADDED");
             }
             if(subcommand == "remove") {
                 let userData = await DiscordUserData.getByID(interaction.user.id);
                 const username = interaction.options.getString("friend").toLowerCase();
-                if(!userData.friends.includes(username)) return "You're not friends with them.";
+                if(!userData.friends.includes(username)) return Locale.text(interaction, "NOT_FRIENDS");
                 userData.friends = userData.friends.filter(friend => friend !== username)
                 await userData.save();
-                return "You've removed them as a friend!";
+                return Locale.text(interaction, "FRIEND_REMOVED");
             }
-            return "How did we get here?";
+            return Locale.text(interaction, "HOW_DID_WE_GET_HERE");
         }
     }
 }

@@ -3,6 +3,7 @@ import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, Text
 import { sanitizeUsername, tournamentFormatter } from "../utils.js";
 import Config from "../config.js";
 import { DiscordGuildData, TournamentData } from "../data.js";
+import Locale from "../locale.js";
 
 class TournamentAddInteraction extends DefaultInteraction {
     static name = "tournament-add";
@@ -12,101 +13,101 @@ class TournamentAddInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(!interaction.guild) return "Please use this in a Discord server.";
+        if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
         const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-        if(!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
+        if(!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true};
         if(interaction.isMessageComponent()) {
             const tournament = await TournamentData.getByID(interaction.message.id);
-            if(!tournament) return {content: "The tournament data could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
+            if(!tournament) return {content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true};
             if(Date.now() > tournament.created + tournament.duration) {
                 // Remove button or something later
-                return {ephemeral: true, content: "This tournament is over!"};
+                return {ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER")};
             }
             const modal = new ModalBuilder()
                 .setCustomId(`tournament-add/${tournament.id}/${interaction.channel.id}`)
-                .setTitle("Add tournament run")
+                .setTitle(Locale.text(interaction, "ADD_TOURNAMENT_RUN"))
                 .addComponents(
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
                                 .setCustomId("player")
-                                .setLabel("Player(s):")
+                                .setLabel(Locale.text(interaction, "PLAYERS"))
                                 .setStyle(TextInputStyle.Short)
                                 .setMaxLength(64)
                                 .setRequired(true)
-                                .setPlaceholder("Name the player(s) you spectated! Exact usernames, please.")
+                                .setPlaceholder(Locale.text(interaction, "PLAYERS_ERROR"))
                         ),
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
                                 .setCustomId("area")
-                                .setLabel("Area:")
+                                .setLabel(Locale.text(interaction, "AREA"))
                                 .setStyle(TextInputStyle.Short)
                                 .setRequired(true)
-                                .setPlaceholder("The area the player(s) made it to. Example: 'Area 35'.")
+                                .setPlaceholder(Locale.text(interaction, "AREA_ERROR"))
                         ),
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
                                 .setCustomId("time")
-                                .setLabel("Time:")
+                                .setLabel(Locale.text(interaction, "TIME"))
                                 .setStyle(TextInputStyle.Short)
                                 .setRequired(true)
-                                .setPlaceholder("The time it took to reach the area above. Example: '5:04'.")
+                                .setPlaceholder(Locale.text(interaction, "TIME_ERROR"))
                         )
                 )
             return await interaction.showModal(modal);
         }
         if(interaction.isModalSubmit()) {
-            if(!interaction.guild) return "Please use this in a Discord server.";
+            if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
             const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-            if(!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: "You need to be a Tournament Spectator to use this tool!", ephemeral: true};
+            if(!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return {content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true};
             const args = interaction.customId.split("/");
             const tournament = await TournamentData.getByID(args[1]);
-            if(!tournament) return {content: "The tournament data could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
+            if(!tournament) return {content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true};
             if(Date.now() > tournament.created + tournament.duration) {
                 // Remove button or something later
-                return {ephemeral: true, content: "This tournament is over!"};
+                return {ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER")};
             }
             let player = interaction.fields.getTextInputValue("player").trim().normalize();
             let area = interaction.fields.getTextInputValue("area").toLowerCase().trim().normalize();
             let time = interaction.fields.getTextInputValue("time").trim().normalize();
-            if(!player || !area || !time) return {ephemeral: true, content: "Invalid/blank values!"};
-            if(player.length > 64) return {ephemeral: true, content: "That player name is far too long."};
-            if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: `${player} has already done the maximum amount of runs this tournament!`}
+            if(!player || !area || !time) return {ephemeral: true, content: Locale.text(interaction, "INVALID_VALUES")};
+            if(player.length > 64) return {ephemeral: true, content: Locale.text(interaction, "USERNAME_LONG")};
+            if(tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return {ephemeral: true, content: Locale.text(interaction, "ATTEMPTS_USED", sanitizeUsername(player))}
             const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(player);
-            if(!playerDetails && guildData.forceAccountExistence) return {ephemeral: true, content: `Who is ${sanitizeUsername(player)}? They don't exist!`};
+            if(!playerDetails && guildData.forceAccountExistence) return {ephemeral: true, content: Locale.text(interaction, "PLAYER_NOT_FOUND")};
             if(area.startsWith("area ")) {
                 const aNumber = parseInt(area.split(" ")[1])
-                if(isNaN(aNumber)) return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
-                if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
+                if(isNaN(aNumber)) return {ephemeral: true, content: Locale.text(interaction, "AREA_IS_NAN")};
+                if(aNumber < 1) return {ephemeral: true, content: Locale.text(interaction, "AREA_IS_TOO_LOW")};
             }
             if(!area.startsWith("area ") && area != "Victory!") {
                 const aNumber = parseInt(area);
                 if(!aNumber)
-                    return {ephemeral: true, content: "The area must be either 'Area [Number]' or 'Victory!'"};
-                if(aNumber < 1) return {ephemeral: true, content: "The area must be 1 or higher!"};
+                    return {ephemeral: true, content: Locale.text(interaction, "AREA_IS_NAN")};
+                if(aNumber < 1) return {ephemeral: true, content: Locale.text(interaction, "AREA_IS_TOO_LOW")};
                 area = `Area ${parseInt(area)}`;
             }
             if(area.startsWith("a")) area = area.replace("a", "A");
             let timeSegments = time.split(":");
             let timeSeconds = 0;
             if(timeSegments.length == 2) {
-                if(timeSegments[1] > 59) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
+                if(timeSegments[1] > 59) return {ephemeral: true, content: Locale.text(interaction, "TIME_FORMAT_ERROR")};
                 timeSeconds += parseInt(timeSegments[0]) * 60 + parseInt(timeSegments[1]);
-            } else return {ephemeral: true, content: "The time must be '[Minutes]:[Seconds]' (example: 5:55)"};
-            if(isNaN(timeSeconds)) return {ephemeral: true, content: "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)"};
-            if(timeSeconds < 0) return {ephemeral: true, content: "Negative time doesn't exist! Probably."};
-            if(tournament.leaderboard.length >= 10000) return {ephemeral: true, content: "That's enough! There's too many runs in this tournament!"};
+            } else return {ephemeral: true, content: Locale.text(interaction, "TIME_FORMAT_ERROR")};
+            if(isNaN(timeSeconds)) return {ephemeral: true, content: Locale.text(interaction, "TIME_FORMAT_ERROR")};
+            if(timeSeconds < 0) return {ephemeral: true, content: Locale.text(interaction, "NEGATIVE_TIME")};
+            if(tournament.leaderboard.length >= 10000) return {ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_FULL")};
             tournament.leaderboard.push({player, area, time: time.trim(), timeSeconds, spectator: interaction.user.id });
             await tournament.save();
             const channel = interaction.client.channels.cache.get(args[2]);
-            if(!channel) return {content: "The tournament channel could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
+            if(!channel) return {content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true};
             const message = await channel.messages.fetch(tournament.id);
-            if(!message) return {content: "The tournament message could not be found! Contact a Tournament Organizer about this!", ephemeral: true};
-            if(!message.editable) return {content: "The tournament message could not be edited! Contact a Tournament Organizer about this!", ephemeral: true};
+            if(!message) return {content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true};
+            if(!message.editable) return {content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true};
             await message.edit({content: tournamentFormatter(tournament)});
-            return {content: "Added the run successfully.", ephemeral: true};
+            return {content: Locale.text(interaction, "TOURNAMENT_RUN_ADDED"), ephemeral: true};
         }
     }
 }
