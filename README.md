@@ -23,4 +23,4 @@ DEVELOPMENT_SERVER=<Put a server ID here.>
 Usually, just stopping the bot, running `git pull` or managing it through your favourite GitHub tool, then restarting the bot is enough. If not, there's probably some massive change made that requires specific database changes or something.
 
 **Contributing to the bot:**
-Glad you're interested! If you'd like to, 
+Glad you're interested! If you'd like to, consider looking through the code and finding bugs, missing features, or otherwise familiarize yourself with the code itself. If you'd like a task, feel free to send me a message (preferably through Discord: Kaluub#1527)
