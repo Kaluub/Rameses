@@ -35,7 +35,7 @@ class TournamentAddInteraction extends DefaultInteraction {
                                 .setStyle(TextInputStyle.Short)
                                 .setMaxLength(64)
                                 .setRequired(true)
-                                .setPlaceholder(Locale.text(interaction, "PLAYERS_ERROR"))
+                                .setPlaceholder(Locale.text(interaction, "PLAYERS_DESCRIPTION"))
                         ),
                     new ActionRowBuilder()
                         .addComponents(
@@ -44,7 +44,7 @@ class TournamentAddInteraction extends DefaultInteraction {
                                 .setLabel(Locale.text(interaction, "AREA"))
                                 .setStyle(TextInputStyle.Short)
                                 .setRequired(true)
-                                .setPlaceholder(Locale.text(interaction, "AREA_ERROR"))
+                                .setPlaceholder(Locale.text(interaction, "AREA_DESCRIPTION"))
                         ),
                     new ActionRowBuilder()
                         .addComponents(
@@ -53,7 +53,7 @@ class TournamentAddInteraction extends DefaultInteraction {
                                 .setLabel(Locale.text(interaction, "TIME"))
                                 .setStyle(TextInputStyle.Short)
                                 .setRequired(true)
-                                .setPlaceholder(Locale.text(interaction, "TIME_ERROR"))
+                                .setPlaceholder(Locale.text(interaction, "TIME_DESCRIPTION"))
                         )
                 )
             return await interaction.showModal(modal);
