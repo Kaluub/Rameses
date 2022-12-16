@@ -1,5 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, StringSelectMenuBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import Config from "../config.js";
 import { DiscordGuildData } from "../data.js";
 import Locale from "../locale.js";
@@ -33,16 +33,6 @@ class TournamentInteraction extends DefaultInteraction {
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
-                                .setCustomId("team-size")
-                                .setLabel(Locale.text(interaction, "TEAM_SIZE"))
-                                .setMaxLength(1)
-                                .setStyle(TextInputStyle.Short)
-                                .setRequired(false)
-                                .setPlaceholder(Locale.text(interaction, "TEAM_SIZE_DESCRIPTION"))
-                        ),
-                    new ActionRowBuilder()
-                        .addComponents(
-                            new TextInputBuilder()
                                 .setCustomId("attempts")
                                 .setLabel(Locale.text(interaction, "ATTEMPTS"))
                                 .setStyle(TextInputStyle.Short)
@@ -61,11 +51,29 @@ class TournamentInteraction extends DefaultInteraction {
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
-                                .setCustomId("format")
-                                .setLabel(Locale.text(interaction, "FORMAT"))
+                                .setCustomId("topFormat")
+                                .setLabel(Locale.text(interaction, "TOP_FORMAT"))
                                 .setStyle(TextInputStyle.Paragraph)
                                 .setRequired(false)
-                                .setPlaceholder(Locale.text(interaction, "FORMAT_DESCRIPTION"))
+                                .setPlaceholder(Locale.text(interaction, "TOP_FORMAT_DESCRIPTION"))
+                        ),
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new TextInputBuilder()
+                                .setCustomId("bottomFormat")
+                                .setLabel(Locale.text(interaction, "BOTTON_FORMAT"))
+                                .setStyle(TextInputStyle.Paragraph)
+                                .setRequired(false)
+                                .setPlaceholder(Locale.text(interaction, "BOTTON_FORMAT_DESCRIPTION"))
+                        ),
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new TextInputBuilder()
+                                .setCustomId("type")
+                                .setLabel(Locale.text(interaction, "TYPE"))
+                                .setStyle(TextInputStyle.Short)
+                                .setRequired(false)
+                                .setPlaceholder(Locale.text(interaction, "TYPE_DESCRIPTION"))
                         )
                 )
             await interaction.showModal(modal);

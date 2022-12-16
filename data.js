@@ -2,7 +2,7 @@ import { Collection } from "discord.js";
 import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
 
-const mongoClient = new MongoClient("mongodb://localhost:27017");
+const mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
 await mongoClient.connect().catch(err => {throw "Database error!\n" + err});
 const database = mongoClient.db("Rameses");
 
@@ -55,10 +55,11 @@ class TournamentData {
         this.id = data?.id;
         this.created = data?.created ?? Date.now();
         this.leaderboard = data?.leaderboard ?? [];
-        this.format = data?.format ?? "[{position}] [{player}]\n{area} ;; {time} ;; {attempt}"
+        this.topFormat = data?.topFormat ?? data?.format?.split("\n")[0] ?? "[{position}] [{player}]";
+        this.bottomFormat = data?.bottomFormat ?? data?.format?.split("\n")[1] ?? "- {area} ;; {time} ;; {attempt}";
         this.maxAttempts = data?.maxAttempts ?? 3;
-        this.teamSize = data?.teamSize ?? 1;
         this.duration = data?.duration ?? 604800000;
+        this.type = data?.type ?? "best";
     }
 
     async save() {

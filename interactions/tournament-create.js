@@ -16,10 +16,12 @@ class TournamentCreateInteraction extends DefaultInteraction {
         if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
         const guildData = await DiscordGuildData.getByID(interaction.guild.id);
         if(!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return Locale.text(interaction, "TOURNAMENT_ORGANIZERS_ONLY");
-        const format = interaction.fields.getTextInputValue("format") || "[{position}] [{player}]\n{area} ;; {time} ;; {attempt}";
-        const attempts = parseInt(interaction.fields.getTextInputValue("attempts")) || 3;
-        const teamSize = parseInt(interaction.fields.getTextInputValue("team-size")) || 1;
+        const topFormat = interaction.fields.getTextInputValue("topFormat") || "[{position}] [{player}]";
+        const bottomFormat = interaction.fields.getTextInputValue("bottomFormat") || "- {area} ;; {time} ;; {attempt}";
+        const maxAttempts = parseInt(interaction.fields.getTextInputValue("attempts")) || 3;
         const duration = parseInt(interaction.fields.getTextInputValue("duration")) || 7;
+        let type = interaction.fields.getTextInputValue("type") || "best"; // "best", "sum"
+        if(!["best", "sum"].includes(type)) type = "best";
 
         const row = new ActionRowBuilder()
             .addComponents(
@@ -29,9 +31,10 @@ class TournamentCreateInteraction extends DefaultInteraction {
                     .setStyle(ButtonStyle.Secondary)
             )
 
-        const message = await interaction.channel.send({content: tournamentFormatter({format, attempts, teamSize}), components: [row]}).catch();
+        const tournament = new TournamentData({id: -1, topFormat, bottomFormat, type, maxAttempts, duration: duration * 86400000});
+        const message = await interaction.channel.send({content: tournamentFormatter(tournament), components: [row]}).catch();
         if(!message) return Locale.text(interaction, "TOURNAMENT_CANNOT_SEND_MESSAGE");
-        const tournament = new TournamentData({id: message.id, format, attempts, teamSize, duration: duration * 86400000});
+        tournament.id = message.id;
         await tournament.save();
         return {ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_CREATED")}
     }
