@@ -1,5 +1,5 @@
 import DefaultInteraction from "../defaultInteraction.js";
-import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, StringSelectMenuBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import Config from "../config.js";
 import { DiscordGuildData } from "../data.js";
 import Locale from "../locale.js";
@@ -61,12 +61,37 @@ class TournamentInteraction extends DefaultInteraction {
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
-                                .setCustomId("format")
-                                .setLabel(Locale.text(interaction, "FORMAT"))
+                                .setCustomId("topFormat")
+                                .setLabel(Locale.text(interaction, "TOP_FORMAT"))
                                 .setStyle(TextInputStyle.Paragraph)
                                 .setRequired(false)
-                                .setPlaceholder(Locale.text(interaction, "FORMAT_DESCRIPTION"))
-                        )
+                                .setPlaceholder(Locale.text(interaction, "TOP_FORMAT_DESCRIPTION"))
+                        ),
+                    new ActionRowBuilder()
+                        .addComponents(
+                            new TextInputBuilder()
+                                .setCustomId("bottomFormat")
+                                .setLabel(Locale.text(interaction, "BOTTON_FORMAT"))
+                                .setStyle(TextInputStyle.Paragraph)
+                                .setRequired(false)
+                                .setPlaceholder(Locale.text(interaction, "BOTTON_FORMAT_DESCRIPTION"))
+                        ),
+                    /*new ActionRowBuilder()
+                        .addComponents(
+                            new StringSelectMenuBuilder()
+                            .setCustomId("type")
+                            //.setLabel(Locale.text(interaction, "TYPE"))
+                            .setPlaceholder(Locale.text(interaction, "TYPE_DESCRIPTION"))
+                            .addOptions({
+                                label: 'TYPE_BEST',
+                                description: 'TYPE_BEST_DESCRIPTION',
+                                value: 'best',
+                            },{
+                                label: 'TYPE_SUM',
+                                description: 'TYPE_SUM_DESCRIPTION',
+                                value: 'sum',
+                            })
+                        )*/
                 )
             await interaction.showModal(modal);
         }

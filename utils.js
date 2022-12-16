@@ -1,49 +1,45 @@
 import { readFileSync } from "fs";
-
-function tournamentSorter(run1, run2) {
-    if(run1.area == "Victory!") {
-        if(run2.area == "Victory!") {
-            if(run1.timeSeconds > run2.timeSeconds) return 1;
-            else return -1;
-        }
-        return -1;
-    }
-    if(parseInt(run1.area.split(" ")[1]) > parseInt(run2.area.split(" ")[1])) return -1;
-    else if(run1.area == run2.area) {
-        if(run1.timeSeconds > run2.timeSeconds) return 1;
-        else return -1;
-    }
-    else return 1;
-}
+import { TournamentPlayerRunData } from "./data.js";
 
 function tournamentFormatter(tournament, full = false) {
     if(!tournament.leaderboard) {
-        return "```asciidoc\n= Leaderboard =\n" + tournament.format.toLowerCase()
-            .replaceAll("{position}", "1")
-            .replaceAll("{player}", "Player" + " & Player".repeat(Math.max(tournament.teamSize - 1, 0)))
-            .replaceAll("{area}", "Area")
-            .replaceAll("{time}", "Time")
-            .replaceAll("{attempt}", `(0/${tournament.attempts})`)
-        + "\n```";
+        const fakeRun = new TournamentPlayerRunData();
+        fakeRun.push({
+            player:"Player" + " & Player".repeat(Math.max(tournament.teamSize - 1, 0)),
+            area: "Area 0",
+            timeSeconds: 0,
+            time: "0:00",
+        });
+
+        return "```asciidoc\n= Leaderboard =\n\n" + fakeRun.getString(tournament, 0) + "\n```";
     }
-    let tournamentString = "```asciidoc\n= Leaderboard =\n";
+    
+    let tournamentString = "```asciidoc\n= Leaderboard =";
     let position = 0;
-    const usersAdded = [];
-    for(const run of tournament.leaderboard.sort(tournamentSorter)) {
-        if(usersAdded.includes(run.player.toLowerCase())) continue;
+    let sortedArray = [];
+    const usersRuns = {};
+
+    for(const run of tournament.leaderboard){
+        const lowerName = run.player.toLowerCase();
+        if(!usersRuns[lowerName]){
+            usersRuns[lowerName] = new TournamentPlayerRunData();
+        }
+        usersRuns[lowerName].list.push(run);
+    }
+
+    if(tournament.type == "sum"){
+        sortedArray = Object.values(usersRuns).sort((e1,e2)=>TournamentPlayerRunData.sortElements(e1.total, e2.total));
+    }else{//best
+        sortedArray = Object.values(usersRuns).sort((e1,e2)=>TournamentPlayerRunData.sortElements(e1.best, e2.best));
+    }
+
+    for(const run of sortedArray) {
         position += 1;
-        const runString = tournament.format.toLowerCase()
-            .replaceAll("{position}", position.toString())
-            .replaceAll("{player}", run.player)
-            .replaceAll("{area}", run.area)
-            .replaceAll("{time}", run.time)
-            .replaceAll("{attempt}", `(${tournament.leaderboard.filter(r => run.player.toLowerCase() == r.player.toLowerCase()).length}/${tournament.maxAttempts})`)
-            + "\n\n";
+        const runString = "\n\n"+run.getString(tournament, position);
         if((tournamentString + runString).length > 1997 && !full) break;
         tournamentString += runString;
-        usersAdded.push(run.player.toLowerCase());
     }
-    tournamentString += "```";
+    tournamentString += "\n```";
     return tournamentString;
 }
 
@@ -66,4 +62,4 @@ function readJSON(path) {
     return JSON.parse(readFileSync(path))
 }
 
-export { tournamentSorter, tournamentFormatter, hasPermission, sanitizeUsername, readJSON }
+export { tournamentFormatter, hasPermission, sanitizeUsername, readJSON }
