@@ -1,11 +1,11 @@
 import { readFileSync } from "fs";
-import { TournamentPlayerRunData } from "./data.js";
+import TournamentPlayerRunData from "./classes/tournamentRun.js";
 
 function tournamentFormatter(tournament, full = false) {
     if(!tournament.leaderboard) {
         const fakeRun = new TournamentPlayerRunData();
-        fakeRun.push({
-            player:"Player" + " & Player".repeat(Math.max(tournament.teamSize - 1, 0)),
+        fakeRun.list.push({
+            player: "Player",
             area: "Area 0",
             timeSeconds: 0,
             time: "0:00",
@@ -27,11 +27,10 @@ function tournamentFormatter(tournament, full = false) {
         usersRuns[lowerName].list.push(run);
     }
 
-    if(tournament.type == "sum"){
-        sortedArray = Object.values(usersRuns).sort((e1,e2)=>TournamentPlayerRunData.sortElements(e1.total, e2.total));
-    }else{//best
-        sortedArray = Object.values(usersRuns).sort((e1,e2)=>TournamentPlayerRunData.sortElements(e1.best, e2.best));
-    }
+    // Sum
+    if(tournament.type == "sum") sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.total, e2.total));
+    // Best
+    else sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.best, e2.best));
 
     for(const run of sortedArray) {
         position += 1;

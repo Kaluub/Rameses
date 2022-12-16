@@ -33,16 +33,6 @@ class TournamentInteraction extends DefaultInteraction {
                     new ActionRowBuilder()
                         .addComponents(
                             new TextInputBuilder()
-                                .setCustomId("team-size")
-                                .setLabel(Locale.text(interaction, "TEAM_SIZE"))
-                                .setMaxLength(1)
-                                .setStyle(TextInputStyle.Short)
-                                .setRequired(false)
-                                .setPlaceholder(Locale.text(interaction, "TEAM_SIZE_DESCRIPTION"))
-                        ),
-                    new ActionRowBuilder()
-                        .addComponents(
-                            new TextInputBuilder()
                                 .setCustomId("attempts")
                                 .setLabel(Locale.text(interaction, "ATTEMPTS"))
                                 .setStyle(TextInputStyle.Short)
@@ -76,22 +66,15 @@ class TournamentInteraction extends DefaultInteraction {
                                 .setRequired(false)
                                 .setPlaceholder(Locale.text(interaction, "BOTTON_FORMAT_DESCRIPTION"))
                         ),
-                    /*new ActionRowBuilder()
+                    new ActionRowBuilder()
                         .addComponents(
-                            new StringSelectMenuBuilder()
-                            .setCustomId("type")
-                            //.setLabel(Locale.text(interaction, "TYPE"))
-                            .setPlaceholder(Locale.text(interaction, "TYPE_DESCRIPTION"))
-                            .addOptions({
-                                label: 'TYPE_BEST',
-                                description: 'TYPE_BEST_DESCRIPTION',
-                                value: 'best',
-                            },{
-                                label: 'TYPE_SUM',
-                                description: 'TYPE_SUM_DESCRIPTION',
-                                value: 'sum',
-                            })
-                        )*/
+                            new TextInputBuilder()
+                                .setCustomId("type")
+                                .setLabel(Locale.text(interaction, "TYPE"))
+                                .setStyle(TextInputStyle.Short)
+                                .setRequired(false)
+                                .setPlaceholder(Locale.text(interaction, "TYPE_DESCRIPTION"))
+                        )
                 )
             await interaction.showModal(modal);
         }

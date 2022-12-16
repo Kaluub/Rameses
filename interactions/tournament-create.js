@@ -19,9 +19,9 @@ class TournamentCreateInteraction extends DefaultInteraction {
         const topFormat = interaction.fields.getTextInputValue("topFormat") || "[{position}] [{player}]";
         const bottomFormat = interaction.fields.getTextInputValue("bottomFormat") || "- {area} ;; {time} ;; {attempt}";
         const attempts = parseInt(interaction.fields.getTextInputValue("attempts")) || 3;
-        const teamSize = parseInt(interaction.fields.getTextInputValue("team-size")) || 1;
         const duration = parseInt(interaction.fields.getTextInputValue("duration")) || 7;
-        const type = /*interaction.fields.getTextInputValue("type") || */"best";//"best", "sum"
+        let type = interaction.fields.getTextInputValue("type") || "best"; // "best", "sum"
+        if(!["best", "sum"].includes(type)) type = "best";
 
         const row = new ActionRowBuilder()
             .addComponents(
@@ -31,7 +31,7 @@ class TournamentCreateInteraction extends DefaultInteraction {
                     .setStyle(ButtonStyle.Secondary)
             )
 
-        const tournament = new TournamentData({id: -1, topFormat, bottomFormat, type, attempts, teamSize, duration: duration * 86400000});
+        const tournament = new TournamentData({id: -1, topFormat, bottomFormat, type, attempts, duration: duration * 86400000});
         const message = await interaction.channel.send({content: tournamentFormatter(tournament), components: [row]}).catch();
         if(!message) return Locale.text(interaction, "TOURNAMENT_CANNOT_SEND_MESSAGE");
         tournament.id = message.id;
