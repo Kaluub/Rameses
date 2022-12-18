@@ -1,8 +1,8 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
 import { sanitizeUsername } from "../utils.js";
-import { DiscordUserData } from "../data.js";
-import Locale from "../locale.js";
+import { DiscordUserData } from "../classes/data.js";
+import Locale from "../classes/locale.js";
 
 const staff = [
     "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", // Developer role

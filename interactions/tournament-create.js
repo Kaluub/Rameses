@@ -1,9 +1,9 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType } from "discord.js";
 import { tournamentFormatter } from "../utils.js";
 import Config from "../config.js";
-import { DiscordGuildData, TournamentData } from "../data.js";
-import Locale from "../locale.js";
+import { DiscordGuildData, TournamentData } from "../classes/data.js";
+import Locale from "../classes/locale.js";
 
 class TournamentCreateInteraction extends DefaultInteraction {
     static name = "tournament-create";

@@ -1,7 +1,7 @@
 import { Client, IntentsBitField } from "discord.js";
 import { readFileSync, existsSync } from "fs";
 import EvadesAPI from "./evadesAPI.js";
-import InteractionHandler from "./interactionHandler.js";
+import InteractionHandler from "../interactionHandler.js";
 
 class DiscordClient extends Client {
     constructor() {

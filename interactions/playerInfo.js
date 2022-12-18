@@ -1,8 +1,8 @@
-import DefaultInteraction from "../defaultInteraction.js";
-import { AccountData } from "../data.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
+import { AccountData } from "../classes/data.js";
 import { sanitizeUsername } from "../utils.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import Locale from "../locale.js";
+import Locale from "../classes/locale.js";
 
 const emojiHats = {
     "autumn-wreath": "<:autumnwreath:1045570375788019793>",

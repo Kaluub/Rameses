@@ -1,4 +1,4 @@
-import { readJSON } from "./utils.js";
+import { readJSON } from "../utils.js";
 
 class Locale {
     static map = {

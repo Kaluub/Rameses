@@ -1,8 +1,8 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandRoleOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "discord.js";
-import { DiscordGuildData } from "../data.js";
+import { DiscordGuildData } from "../classes/data.js";
 import { hasPermission } from "../utils.js";
-import Locale from "../locale.js";
+import Locale from "../classes/locale.js";
 
 class GuildConfigInteraction extends DefaultInteraction {
     static name = "configure";

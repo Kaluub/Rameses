@@ -1,6 +1,6 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType } from "discord.js";
-import { WikiPageData } from "../data.js";
+import { WikiPageData } from "../classes/data.js";
 
 class WikiPageAutofillInteraction extends DefaultInteraction {
     static name = "wiki-page";
