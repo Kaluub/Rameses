@@ -1,5 +1,5 @@
-import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, StringSelectMenuBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import DefaultInteraction from "../defaultInteraction.js";
+import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import Config from "../config.js";
 import { DiscordGuildData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
