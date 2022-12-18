@@ -1,6 +1,6 @@
 import { Collection } from "discord.js";
 import { readdirSync } from "fs";
-import Locale from "./locale.js";
+import Locale from "./classes/locale.js";
 
 class InteractionLogger {
     constructor(path) {
@@ -17,7 +17,7 @@ class InteractionHandler {
 
     loadInteractions(path) {
         this.interactions.clear();
-        const files = readdirSync(path).filter(file => file.endsWith('.js'));
+        const files = readdirSync(path).filter(file => file.endsWith(".js"));
         files.forEach(async file => {
             const { default: InteractionClass } = await import(`${path}/${file}`);
             if(!InteractionClass.disabled) this.interactions.set(InteractionClass.name, new InteractionClass());

@@ -75,7 +75,7 @@
     "ATTEMPTS_DESCRIPTION": "Default: 3 (three attempts)",
     "DURATION_DESCRIPTION": "Default: 7 (seven days)",
     "TOP_FORMAT_DESCRIPTION": "Default: [{position}] [{player}]",
-    "BOTTON_FORMAT_DESCRIPTION": "Default: - {area} ;; {time} ;; {attempt}",
+    "BOTTON_FORMAT_DESCRIPTION": "Default: - {area} ;; {time} ;; {attempt}. If empty, aggregates runs.",
     "TYPE_DESCRIPTION": "Default: best. Options: best, sum",
     "NOT_A_TOURNAMENT": "This isn't a tournament message!"
 }

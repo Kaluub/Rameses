@@ -1,6 +1,6 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
-import { WikiPageData } from "../data.js";
+import { WikiPageData } from "../classes/data.js";
 
 class WikiInteraction extends DefaultInteraction {
     static name = "wiki";

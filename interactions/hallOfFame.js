@@ -1,6 +1,6 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
-import Locale from "../locale.js";
+import Locale from "../classes/locale.js";
 import { sanitizeUsername } from "../utils.js";
 
 class HallOfFameInteraction extends DefaultInteraction {

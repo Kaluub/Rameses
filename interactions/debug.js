@@ -1,6 +1,6 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
-import { AccountData } from "../data.js";
+import { AccountData } from "../classes/data.js";
 import Config from "../config.js";
 
 class DebugInteraction extends DefaultInteraction {

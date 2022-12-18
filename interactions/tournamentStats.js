@@ -1,7 +1,7 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ApplicationCommandType, Collection, ContextMenuCommandBuilder, InteractionType } from "discord.js";
-import { TournamentData } from "../data.js";
-import Locale from "../locale.js";
+import { TournamentData } from "../classes/data.js";
+import Locale from "../classes/locale.js";
 
 class TournamentStatsInteraction extends DefaultInteraction {
     static name = "Tournament Stats";

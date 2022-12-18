@@ -1,7 +1,7 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
-import { DiscordUserData } from "../data.js";
-import Locale from "../locale.js";
+import { DiscordUserData } from "../classes/data.js";
+import Locale from "../classes/locale.js";
 
 class FriendInteraction extends DefaultInteraction {
     static name = "friend";

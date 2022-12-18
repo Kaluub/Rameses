@@ -1,6 +1,6 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import { WikiPageData } from "../data.js";
+import { WikiPageData } from "../classes/data.js";
 import Config from "../config.js";
 
 const wikiadmins = [

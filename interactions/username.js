@@ -1,6 +1,6 @@
-import DefaultInteraction from "../defaultInteraction.js";
+import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType } from "discord.js";
-import { AccountData } from "../data.js";
+import { AccountData } from "../classes/data.js";
 
 class UsernameInteraction extends DefaultInteraction {
     static name = "username";
