@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import TournamentPlayerRunData from "./classes/tournamentRun.js";
 
 function tournamentFormatter(tournament, full = false) {
-    if(!tournament.leaderboard) {
+    if(tournament.leaderboard?.length <= 0) {
         const fakeRun = new TournamentPlayerRunData();
         fakeRun.list.push({
             player: "Player",
@@ -57,8 +57,12 @@ function sanitizeUsername(username) {
         .replaceAll("`", "\\`")
 }
 
+function timeSecondsToTime(t){
+    return `${Math.floor(t/60)}:${t%60 < 10 ? "0":""}${t%60}`;
+}
+
 function readJSON(path) {
     return JSON.parse(readFileSync(path))
 }
 
-export { tournamentFormatter, hasPermission, sanitizeUsername, readJSON }
+export { tournamentFormatter, hasPermission, sanitizeUsername, timeSecondsToTime, readJSON }

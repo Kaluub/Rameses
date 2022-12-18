@@ -1,3 +1,5 @@
+import { timeSecondsToTime } from "../utils.js";
+
 class TournamentPlayerRunData {
     constructor() {
         this.list = [];
@@ -11,10 +13,10 @@ class TournamentPlayerRunData {
         res += tournament.topFormat.replaceAll("{position}", position.toString())
         .replaceAll("{player}", best.player)
         .replaceAll("{area}", total.area)
-        .replaceAll("{time}", total.time)
+        .replaceAll("{time}", timeSecondsToTime(total.timeSeconds))
         .replaceAll("{attempt}", `(${this.list.length}/${tournament.maxAttempts})`);
 
-        for(let i = 0; i < this.list.length; i++){
+        if(tournament.bottomFormat != " ") for(let i = 0; i < this.list.length; i++){
             const run = this.list[i];
 
             res += "\n"+tournament.bottomFormat
@@ -44,7 +46,7 @@ class TournamentPlayerRunData {
     }
 
     get best() {
-        return this.list.sort(TournamentPlayerRunData.sortElements)[0];
+        return [...this.list].sort(TournamentPlayerRunData.sortElements)[0];
     }
 
     static sortElements(run1, run2) {
