@@ -1,6 +1,7 @@
 import { Collection } from "discord.js";
 import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
+import { readJSON } from "../utils.js";
 
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
 await mongoClient.connect().catch(err => {throw "Database error!\n" + err});
@@ -19,10 +20,11 @@ class AccountData {
         this.username = data.username;
         this.displayName = data?.displayName ?? null;
         this.lastSeen = data?.lastSeen ?? null;
+        this.vpPos = data?.vpPos ?? null;
     }
 
-    async save() {
-        AccountData.cache.set(this.username.toLowerCase(), this);
+    async save(noCache = false) {
+        if(!noCache) AccountData.cache.set(this.username.toLowerCase(), this);
         await accounts.updateOne({username: this.username.toLowerCase()}, {$set: this}, {upsert: true});
     }
 
@@ -40,13 +42,25 @@ class AccountData {
         return accounts.find({username: regexp}).limit(maxDocuments);
     }
 
-    static async getByUsername(username, createIfNonexistant = true) {
-        if(username.toLowerCase().startsWith("guest")) return null;
+    static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
+        if(ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
         const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({username: username.toLowerCase()});
         if(!accountData && createIfNonexistant) return new AccountData({username: username.toLowerCase()});
         if(!accountData && !createIfNonexistant) return null;
         AccountData.cache.set(username.toLowerCase(), accountData);
         return new AccountData(accountData);
+    }
+
+    static async loadTopVP() {
+        console.log("Loading VP leaderboard from file... This will take a while!")
+        const accounts = readJSON("VP.json");
+        for (const name in accounts) {
+            const data = accounts[name];
+            let acc = await AccountData.getByUsername(data.name, true, false);
+            acc.vpPos = data.pos;
+            await acc.save(true);
+        }
+        console.log("Loaded VP leaderboard from file!")
     }
 }
 
