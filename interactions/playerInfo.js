@@ -71,17 +71,19 @@ class PlayerInfoInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const username = interaction.options.getString("username");
-        const account = await AccountData.getByUsername(username);
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
         if(!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
+        let account = await AccountData.getByUsername(username);
+        account.careerVP = playerDetails.stats["highest_area_achieved_counter"];
+        await account.save();
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "PLAYER_DETAILS_TITLE", [sanitizeUsername(account?.displayName ?? username)]))
             .setURL(`https://evades.io/profile/${account?.displayName ?? username}`)
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
-`**${Locale.text(interaction, "CAREER_VP")}**: ${playerDetails.stats["highest_area_achieved_counter"]} ${Locale.text(interaction, "VICTORY_POINTS")}${account.vpPos ? account.vpPos <= 100 ? ` (#${account.vpPos})` : ` (Top ${(account.vpPos / await AccountData.count()).toFixed(3)}%)` : ""}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**${Locale.text(interaction, "REAL_CAREER_VP")}**: ${playerDetails.summedCareerVP} ${Locale.text(interaction, "VICTORY_POINTS")}` : ""}
+`**${Locale.text(interaction, "CAREER_VP")}**: ${playerDetails.stats["highest_area_achieved_counter"]} ${Locale.text(interaction, "VICTORY_POINTS")}${account.careerVP ? ` (Top ${(await AccountData.count({"careerVP": {"$gt": account.careerVP}}) / await AccountData.count()).toFixed(5)}%)` : ""}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**${Locale.text(interaction, "REAL_CAREER_VP")}**: ${playerDetails.summedCareerVP} ${Locale.text(interaction, "VICTORY_POINTS")}` : ""}
 **${Locale.text(interaction, "WEEKLY_VP")}**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + ` ${Locale.text(interaction, "VICTORY_POINTS")}` : Locale.text(interaction, "NONE")}
 **${Locale.text(interaction, "LAST_SEEN")}**: ${onlinePlayers.some(name => name.toLowerCase() == username.toLowerCase()) ? Locale.text(interaction, "ONLINE_NOW") : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : Locale.text(interaction, "NEVER")}
 **${Locale.text(interaction, "WEEKS_ACTIVE")}**: ${playerDetails.activeWeeks} ${Locale.text(interaction, "WEEKS_UNIT")}${playerDetails.firstActiveWeekNumber ? `\n**${Locale.text(interaction, "FIRST_ACTIVE_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.firstActiveWeekNumber}

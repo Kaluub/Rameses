@@ -8,7 +8,7 @@ const staff = [
     "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", // Developer role
     "extirpater", "Exoriz", "Jackal", // Head mods
     // This is where Sr. mods would go, if any existed.
-    "Dittoblob", "Gianni", "LightY", "Bluemonkey14", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv", "asdfasdfasdf1234",
+    "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv", "asdfasdfasdf1234",
     "Vikenti", "Mel", "«Ƥħǿēƞɨx»", "Amasterclasher", "Invi", // Mods
     "hula", "Ram", "basti", "Androoh", "lindsay", "ThatHodgeGuy", "Kaluub", "Zxynn", "Angel🌸" // Jr mods
 ]

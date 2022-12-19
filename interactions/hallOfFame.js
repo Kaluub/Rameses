@@ -22,7 +22,7 @@ class HallOfFameInteraction extends DefaultInteraction {
         let totalVP = 0;
         for(const hallOfFameEntry of hallOfFameEntries) {
             ranking += 1;
-            if(ranking < 11) hallOfFamePlayersString += `\n${ranking}. ${sanitizeUsername(hallOfFameEntry[0])} (${hallOfFameEntry[1]} ${Locale.text(interaction, "VICTORY_POINTS")})`;
+            if(ranking < 31) hallOfFamePlayersString += `\n${ranking <= 3 ? "🥇" : ranking <= 10 ? "🥈" : ranking <= 30 ? "🥉" : ""} ${ranking}. ${sanitizeUsername(hallOfFameEntry[0])} (${hallOfFameEntry[1]} ${Locale.text(interaction, "VICTORY_POINTS")})`;
             totalVP += parseInt(hallOfFameEntry[1]);
         };
         
@@ -31,7 +31,7 @@ class HallOfFameInteraction extends DefaultInteraction {
             .setTitle(Locale.text(interaction, "HALL_OF_FAME"))
             .setColor("#FFD700")
             .setTimestamp()
-            .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : Locale.text())
+            .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : Locale.text(interaction, "LEADERBOARD_EMPTY"))
             .setFooter({text: Locale.text(interaction, "LEADERBOARD_FOOTER", [ranking, totalVP])})
         return { embeds: [embed] }
     }

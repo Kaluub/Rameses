@@ -20,7 +20,7 @@ class AccountData {
         this.username = data.username;
         this.displayName = data?.displayName ?? null;
         this.lastSeen = data?.lastSeen ?? null;
-        this.vpPos = data?.vpPos ?? null;
+        this.careerVP = data?.careerVP ?? null;
     }
 
     async save(noCache = false) {
@@ -28,8 +28,8 @@ class AccountData {
         await accounts.updateOne({username: this.username.toLowerCase()}, {$set: this}, {upsert: true});
     }
 
-    static async count() {
-        return await accounts.estimatedDocumentCount();
+    static async count(filter = {}) {
+        return await accounts.countDocuments(filter);
     }
 
     static find(filter, options) {
@@ -57,7 +57,8 @@ class AccountData {
         for (const name in accounts) {
             const data = accounts[name];
             let acc = await AccountData.getByUsername(data.name, true, false);
-            acc.vpPos = data.pos;
+            acc.careerVP = data.vp;
+            acc.displayName = data.name;
             await acc.save(true);
         }
         console.log("Loaded VP leaderboard from file!")
