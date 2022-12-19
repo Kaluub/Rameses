@@ -16,10 +16,10 @@ class TournamentPlayerRunData {
         .replaceAll("{time}", timeSecondsToTime(total.timeSeconds))
         .replaceAll("{attempt}", `(${this.list.length}/${tournament.maxAttempts})`);
 
-        if(tournament.bottomFormat != " ") for(let i = 0; i < this.list.length; i++){
+        if(tournament.bottomFormat != " ") for(let i = 0; i < this.list.length; i++) {
             const run = this.list[i];
 
-            res += "\n"+tournament.bottomFormat
+            res += "\n" + tournament.bottomFormat
             .replaceAll("{player}", run.player)
             .replaceAll("{area}", run.area)
             .replaceAll("{time}", run.time)
