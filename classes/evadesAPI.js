@@ -1,5 +1,6 @@
 import { Collection } from "discord.js";
 import fetch from "node-fetch";
+import Changelog from "./changelog.js";
 import { AccountData } from "./data.js";
 
 class CachedData {
@@ -77,7 +78,7 @@ class EvadesAPI {
         this.fetchURL = "https://evades.io/api/"
         this.cache = null;
         this.playerDetailsCacheTime = 300000;
-        this.onlinePlayersCacheTime = 10000;
+        this.onlinePlayersCacheTime = 12000;
         this.hallOfFameCacheTime = 60000;
         this.resetCache();
         updateLastSeen(this);
@@ -143,9 +144,19 @@ class EvadesAPI {
     }
 }
 
+let failedToConnect = true;
 async function updateLastSeen(evadesAPI) {
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
-    if(!onlinePlayers) return;
+
+    if(!onlinePlayers) {
+        failedToConnect = true;
+        return;
+    } else if(failedToConnect) {
+        // Fetch changelog after being unable to connect.
+        failedToConnect = false;
+        await Changelog.updateChangelog();
+    }
+
     for(const username of onlinePlayers) {
         if(username.startsWith("Guest")) continue;
         let account = await AccountData.getByUsername(username);

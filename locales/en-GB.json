@@ -77,5 +77,8 @@
     "TOP_FORMAT_DESCRIPTION": "Default: [{position}] [{player}]",
     "BOTTON_FORMAT_DESCRIPTION": "Default: - {area} ;; {time} ;; {attempt}. If empty, aggregates runs.",
     "TYPE_DESCRIPTION": "Default: best. Options: best, sum",
-    "NOT_A_TOURNAMENT": "This isn't a tournament message!"
+    "NOT_A_TOURNAMENT": "This isn't a tournament message!",
+    "CHANGELOG_UNAVAILABLE": "The changelog is not available!",
+    "CREDITS_TITLE": "Credits:",
+    "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Kaluub\n\nSpecial thanks to all who've helped with testing & finding issues!"
 }
