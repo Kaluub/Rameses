@@ -1,5 +1,7 @@
 import puppeteer from "puppeteer";
-const browser = await puppeteer.launch();
+import Config from "../config.js";
+
+const browser = await puppeteer.launch({executablePath: Config.CHROMIUM_EXECUTABLE, headless: true});
 
 class Changelog {
     static cache = null;

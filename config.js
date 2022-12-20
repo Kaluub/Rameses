@@ -9,6 +9,7 @@ class Config {
     static MODERATOR_ROLES = Config.parseList(process.env.MODERATOR_ROLES, ["410499884550979594", "666388658114396170", "437333322247569410", "437333568683769866", "566679508640595978"]);
     static REPOSITORY_LINK = process.env.REPOSITORY_LINK ?? "https://github.com/Kaluub/Rameses/";
     static SERVER_INVITE = process.env.SERVER_INVITE ?? "https://discord.gg/j7fPN2xqBp";
+    static CHROMIUM_EXECUTABLE = process.env.CHROMIUM_EXECUTABLE ?? undefined;
 
     static parseBoolean(arg, def = false) {
         return arg?.toUpperCase() === "TRUE" ?? def;
