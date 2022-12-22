@@ -44,11 +44,21 @@ class InteractionHandler {
         await client?.application.commands.set(applicationCommands);
     }
 
+    async handleDefer(interaction, interactionHandler) {
+        if(interaction.isAutocomplete()) return;
+        try {
+            if(interactionHandler.updateIfComponent && interaction.isMessageComponent()) await interaction.deferUpdate({ephemeral: interactionHandler.ephemeral ? true : false})
+            else await interaction.deferReply({ephemeral: interactionHandler.ephemeral ? true : false});
+        } catch {
+            return;
+        }
+    }
+
     async handleInteraction(interaction) {
         let interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId?.split("/")[0]);
         if(interaction.isAutocomplete()) interactionHandler = this.interactionHandler.interactions.get(interaction.options.getFocused(true).name)
         if(!interactionHandler) return await interaction.reply({content: Locale.text(interaction, "COMMAND_ERROR_NOT_FOUND"), ephemeral: true});
-        if(interactionHandler.defer) await interaction.deferReply({ephemeral: interactionHandler.ephemeral ? true : false});
+        if(interactionHandler.defer) await this.interactionHandler.handleDefer(interaction, interactionHandler);
         interactionHandler.execute(interaction)
             .then(async response => {
                 if(interaction.isAutocomplete())

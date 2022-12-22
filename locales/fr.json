@@ -80,5 +80,7 @@
     "NOT_A_TOURNAMENT": "Ce n'est pas une message des tournois.",
     "CHANGELOG_UNAVAILABLE": "Les changes ne sont pas publique maintenant!",
     "CREDITS_TITLE": "Crédits:",
-    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTranslations en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!"
+    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTranslations en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!",
+    "NEWER": "Jeune",
+    "OLDER": "Agée"
 }

@@ -56,10 +56,11 @@ class AccountData {
         const accounts = readJSON("VP.json");
         for (const name in accounts) {
             const data = accounts[name];
-            let acc = await AccountData.getByUsername(data.name, true, false);
-            acc.careerVP = data.vp;
-            acc.displayName = data.name;
-            await acc.save(true);
+            AccountData.getByUsername(data.name, true, false).then((acc) => {
+                acc.careerVP = data.vp;
+                acc.displayName = data.name;
+                acc.save(true);
+            });
         }
         console.log("Loaded VP leaderboard from file!")
     }

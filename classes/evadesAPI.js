@@ -159,9 +159,10 @@ async function updateLastSeen(evadesAPI) {
 
     for(const username of onlinePlayers) {
         if(username.startsWith("Guest")) continue;
-        let account = await AccountData.getByUsername(username);
-        account.lastSeen = Math.floor(Date.now() / 1000);
-        await account.save();
+        AccountData.getByUsername(username).then((account) => {
+            account.lastSeen = Math.floor(Date.now() / 1000);
+            account.save();
+        });
     }
 }
 
