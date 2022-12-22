@@ -75,8 +75,10 @@ class PlayerInfoInteraction extends DefaultInteraction {
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
         if(!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
         let account = await AccountData.getByUsername(username);
-        account.careerVP = playerDetails.stats["highest_area_achieved_counter"];
-        await account.save();
+        if(account) {
+            account.careerVP = playerDetails.stats["highest_area_achieved_counter"];
+            await account.save();
+        }
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "PLAYER_DETAILS_TITLE", [sanitizeUsername(account?.displayName ?? username)]))
             .setURL(`https://evades.io/profile/${account?.displayName ?? username}`)
