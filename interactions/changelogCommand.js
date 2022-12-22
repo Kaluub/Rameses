@@ -62,6 +62,7 @@ class ChangelogInteraction extends DefaultInteraction {
                 .setColor("#887711")
                 .setDescription(string)
                 .setURL("https://evades.io/")
+                .setFooter({text: `Update ${changelogNumber} of ${Changelog.cache.length}`})
                 .setTimestamp()
 
             if(interaction.isMessageComponent()) return await interaction.editReply({embeds: [embed], components: [actionRow]});
