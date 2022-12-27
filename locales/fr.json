@@ -57,7 +57,7 @@
     "INVALID_VALUES": "Votre entrée manque d'information!",
     "LONG_USERNAME": "Cette nom est trop longue.",
     "ATTEMPTS_USED": "{0} avait déja completer leur essais!",
-    "AREA_IS_NAN": "La région devrait être 'Area [Nombre]' ou 'Victory!'",
+    "AREA_IS_NAN": "La région devrait être 'Area [Nombre]'!",
     "AREA_IS_TOO_LOW": "La région devrait être plus haut que une!",
     "TIME_FORMAT_ERROR": "La temps devrait utiliser un format comme '[Minutes]:[Secondes]' (exemple: 5:55)",
     "TIME_IS_NEGATIVE": "La temps négatif n'existe pas, je crois.",

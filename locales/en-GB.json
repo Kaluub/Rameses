@@ -57,7 +57,7 @@
     "INVALID_VALUES": "Invalid/blank values!",
     "LONG_USERNAME": "That player name is far too long.",
     "ATTEMPTS_USED": "{0} has already done the maximum amount of runs this tournament!",
-    "AREA_IS_NAN": "The area must be either 'Area [Number]' or 'Victory!'",
+    "AREA_IS_NAN": "The area must be either 'Area [Number]'",
     "AREA_IS_TOO_LOW": "The area must be 1 or higher!",
     "TIME_FORMAT_ERROR": "The time must follow the format '[Minutes]:[Seconds]' (example: 5:55)",
     "TIME_IS_NEGATIVE": "Negative time doesn't exist! Probably.",
