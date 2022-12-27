@@ -82,5 +82,6 @@
     "CREDITS_TITLE": "Credits:",
     "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Kaluub\n\nSpecial thanks to all who've helped with testing & finding issues!",
     "NEWER": "Newer",
-    "OLDER": "Older"
+    "OLDER": "Older",
+    "TIME_PLAYED": "Time played"
 }

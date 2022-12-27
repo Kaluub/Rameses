@@ -26,7 +26,6 @@ class Changelog {
         };
         // Store it to cache
         Changelog.cache = data;
-        console.log("Changelogs fetched...")
         browser.close();
     }
 }

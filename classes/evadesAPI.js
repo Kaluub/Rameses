@@ -78,7 +78,7 @@ class EvadesAPI {
         this.fetchURL = "https://evades.io/api/"
         this.cache = null;
         this.playerDetailsCacheTime = 300000;
-        this.onlinePlayersCacheTime = 12000;
+        this.onlinePlayersCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
         this.resetCache();
         updateLastSeen(this);
@@ -157,10 +157,15 @@ async function updateLastSeen(evadesAPI) {
         await Changelog.updateChangelog();
     }
 
+    const hour = new Date().getUTCHours().toString();
     for(const username of onlinePlayers) {
         if(username.startsWith("Guest")) continue;
         AccountData.getByUsername(username).then((account) => {
+            // Collect data regarding active times.
             account.lastSeen = Math.floor(Date.now() / 1000);
+            if(!account.activity[hour]) account.activity[hour] = 0;
+            account.activity[hour] += 1;
+            account.playTime += Math.floor(evadesAPI.onlinePlayersCacheTime / 1000);
             account.save();
         });
     }

@@ -19,8 +19,10 @@ class AccountData {
     constructor(data) {
         this.username = data.username;
         this.displayName = data?.displayName ?? null;
-        this.lastSeen = data?.lastSeen ?? null;
         this.careerVP = data?.careerVP ?? null;
+        this.lastSeen = data?.lastSeen ?? null;
+        this.playTime = data?.playTime ?? 0; // In SECONDS.
+        this.activity = data?.activity ?? {};
     }
 
     async save(noCache = false) {
@@ -54,6 +56,7 @@ class AccountData {
     static async loadTopVP() {
         console.log("Loading VP leaderboard from file... This will take a while!")
         const accounts = readJSON("VP.json");
+        if(!accounts) return console.log("There is no file data!");
         for (const name in accounts) {
             const data = accounts[name];
             AccountData.getByUsername(data.name, true, false).then((acc) => {

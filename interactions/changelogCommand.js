@@ -28,7 +28,7 @@ class ChangelogInteraction extends DefaultInteraction {
             const response = [];
             for(const page of Changelog.cache.filter(cl => cl.title.includes(interaction.options.getFocused() ?? ""))) {
                 if(response.length >= 25) break;
-                response.push({name: page.title, value: Changelog.cache.indexOf(page).toString()});
+                response.push({name: page.title, value: (Changelog.cache.indexOf(page) + 1).toString()});
             }
             return await interaction.respond(response);
         } else {
@@ -36,7 +36,9 @@ class ChangelogInteraction extends DefaultInteraction {
             if(!Changelog.cache) await Changelog.updateChangelog();
             if(!Changelog.cache) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
 
-            const changelogNumber = parseInt(interaction?.options?.getString("changelog")) || parseInt(interaction?.customId?.split("/")[1]) || 0;
+            const changelogNumber = parseInt(interaction?.options?.getString("changelog")) - 1 || parseInt(interaction?.customId?.split("/")[1]) || 0;
+            if(!Changelog.cache[changelogNumber]) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+
             let string = `**__${Changelog.cache[changelogNumber]?.title}__**:`;
             for(const segment of Changelog.cache[changelogNumber]?.content ?? []) {
                 const toAdd = `\n• ${segment}\n`;
@@ -62,7 +64,7 @@ class ChangelogInteraction extends DefaultInteraction {
                 .setColor("#887711")
                 .setDescription(string)
                 .setURL("https://evades.io/")
-                .setFooter({text: `Update ${changelogNumber} of ${Changelog.cache.length}`})
+                .setFooter({text: `Update ${changelogNumber + 1} of ${Changelog.cache.length}`})
                 .setTimestamp()
 
             if(interaction.isMessageComponent()) return await interaction.editReply({embeds: [embed], components: [actionRow]});

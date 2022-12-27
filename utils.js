@@ -58,7 +58,7 @@ function sanitizeUsername(username) {
 }
 
 function timeSecondsToTime(t){
-    return `${Math.floor(t/60)}:${t%60 < 10 ? "0":""}${t%60}`;
+    return `${Math.floor(t / 60)}:${t % 60 < 10 ? "0" : ""}${t % 60}`;
 }
 
 function readJSON(path) {

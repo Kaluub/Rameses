@@ -24,7 +24,7 @@
     "PLAYERS_ONLINE_COUNT": "{0} jouers en ligne",
     "ONLINE_FRIENDS": "Amis en ligne:",
     "ONLINE_STAFF": "L'équipe en ligne:",
-    "ONLINE_PLAYERS": "Jouers en ligne:",
+    "ONLINE_PLAYERS": "Joueurs en ligne:",
     "ONLINE_GUESTS": "Visiteurs en ligne:",
     "PLAYER_NOT_FOUND": "La jouer n'était pas trouvée!",
     "PLAYER_DETAILS_TITLE": "Détails a propos {0}:",
@@ -80,7 +80,8 @@
     "NOT_A_TOURNAMENT": "Ce n'est pas une message des tournois.",
     "CHANGELOG_UNAVAILABLE": "Les changes ne sont pas publique maintenant!",
     "CREDITS_TITLE": "Crédits:",
-    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTranslations en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!",
+    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!",
     "NEWER": "Jeune",
-    "OLDER": "Agée"
+    "OLDER": "Agée",
+    "TIME_PLAYED": "Temps en jouent"
 }

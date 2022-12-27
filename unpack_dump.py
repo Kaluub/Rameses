@@ -1,3 +1,4 @@
+# Interprets a database dump (username, vp) received from the game and put it into a better format
 import json
 
 try:
