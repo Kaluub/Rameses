@@ -8,7 +8,7 @@ const wikiadmins = [
     "474088900953112576", // Piger
     "291543872666861568", // Dep
     "325966339904897026", // Jackal
-    "834685352417558579", // Nick
+    "512215933155016724", // Invi
 ];
 
 class WikiAdminInteraction extends DefaultInteraction {
