@@ -49,7 +49,7 @@ class ActivityInteraction extends DefaultInteraction {
         const detail = barValue.length > 1 ? Math.min(interaction.options.getInteger("graph-detail"), 40) || 30 : interaction.options.getInteger("graph-detail") || 30;
         const highestValue = Math.max(...Object.values(account.activity));
 
-        let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${formatSeconds(account.playTime)}\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
+        let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${formatSeconds(account.playTime)} (#${await AccountData.count({"playTime": {"$gte": account.playTime}})}, top ${(await AccountData.count({"playTime": {"$gte": account.playTime}}) / await AccountData.count({"playTime": {"$gte": 0}}) * 100).toFixed(5)}%)\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
         string += "```";
         for (let h = 0; h < 24; h++) {
             const hour = h.toString();
