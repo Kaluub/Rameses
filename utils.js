@@ -57,12 +57,19 @@ function sanitizeUsername(username) {
         .replaceAll("`", "\\`")
 }
 
-function timeSecondsToTime(t){
+function timeSecondsToTime(t) {
     return `${Math.floor(t / 60)}:${t % 60 < 10 ? "0" : ""}${t % 60}`;
+}
+
+function formatSeconds(seconds) {
+    const hours = Math.floor(seconds / (60*60));
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${hours > 0 ? `${hours}h ` : ""}${minutes > 0 ? `${minutes}m ` : ""}${remainingSeconds}s`;
 }
 
 function readJSON(path) {
     return JSON.parse(readFileSync(path))
 }
 
-export { tournamentFormatter, hasPermission, sanitizeUsername, timeSecondsToTime, readJSON }
+export { tournamentFormatter, hasPermission, sanitizeUsername, timeSecondsToTime, formatSeconds, readJSON }

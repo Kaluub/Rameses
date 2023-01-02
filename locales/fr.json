@@ -83,5 +83,8 @@
     "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!",
     "NEWER": "Jeune",
     "OLDER": "Agée",
-    "TIME_PLAYED": "Temps en jouent"
+    "TIME_PLAYED": "Temps en jouent",
+    "PLAYER_INACTIVE": "Je n'ai pas d'information d'activité de {0}!",
+    "ACTIVITY_FORMAT": "Heure (UTC) | Pourcentage de temps",
+    "ACTIVITY_TITLE": "L'activité de {0}:"
 }

@@ -2,16 +2,9 @@ import { Collection } from "discord.js";
 import { readdirSync } from "fs";
 import Locale from "./classes/locale.js";
 
-class InteractionLogger {
-    constructor(path) {
-        this.path = path;
-    }
-}
-
 class InteractionHandler {
     constructor() {
         this.interactions = new Collection();
-        this.logger = new InteractionLogger("./logs"); // Does nothing right now!
         this.loadInteractions("./interactions");
     };
 

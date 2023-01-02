@@ -1,6 +1,6 @@
 {
   "name": "rameses",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "Discord bot to interact with the Evades.io API",
   "main": "app.js",
   "type": "module",

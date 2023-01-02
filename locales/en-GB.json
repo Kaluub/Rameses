@@ -83,5 +83,8 @@
     "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Kaluub\n\nSpecial thanks to all who've helped with testing & finding issues!",
     "NEWER": "Newer",
     "OLDER": "Older",
-    "TIME_PLAYED": "Time played"
+    "TIME_PLAYED": "Time played",
+    "PLAYER_INACTIVE": "I have no data regarding the activity of {0}!",
+    "ACTIVITY_FORMAT": "Hour (UTC) | Overall time spent",
+    "ACTIVITY_TITLE": "Activity of {0}:"
 }
