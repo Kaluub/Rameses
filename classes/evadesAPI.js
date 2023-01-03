@@ -1,4 +1,4 @@
-import { Collection } from "discord.js";
+import { Collection, time } from "discord.js";
 import fetch from "node-fetch";
 import Changelog from "./changelog.js";
 import { AccountData } from "./data.js";
@@ -80,6 +80,7 @@ class EvadesAPI {
         this.playerDetailsCacheTime = 300000;
         this.onlinePlayersCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
+        this.requestTimeout = 5000;
         this.resetCache();
         updateLastSeen(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
@@ -94,10 +95,17 @@ class EvadesAPI {
     }
 
     async get(endpoint) {
-        const data = await fetch(this.fetchURL + endpoint).catch();
-        // Sometimes, internet freaks out and doesn't fetch. God knows why. This prevents error spam.
-        if(!data || !data.ok) return null;
-        return await data.json();
+        const controller = new AbortController();
+        try {
+            const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
+            const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
+            clearTimeout(timeoutId);
+            if(!data || !data.ok) return null;
+            return await data.json();
+        }
+        catch {
+            return null;
+        }
     }
 
     async getPlayerDetails(username, force = false) {
