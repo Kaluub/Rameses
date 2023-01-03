@@ -72,7 +72,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
     async execute(interaction) {
         const username = interaction.options.getString("username");
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
-        const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
+        const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers() ?? [];
         if(!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
         let account = await AccountData.getByUsername(username);
         if(account) {
