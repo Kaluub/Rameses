@@ -18,8 +18,8 @@ class CreditsInteraction extends DefaultInteraction {
             .setTitle(Locale.text(interaction, "CREDITS_TITLE"))
             .setDescription(Locale.text(interaction, "CREDITS"))
             .setColor("#77BBAA")
-            .setURL(Config.REPOSITORY_LINK)
-            .setAuthor({iconURL: interaction.client.user.avatarURL({size: 128}), name: "Discord server", url: Config.SERVER_INVITE})
+            .setURL(Config.SERVER_INVITE)
+            .setAuthor({iconURL: interaction.client.user.avatarURL({size: 128}), name: "GitHub", url: Config.REPOSITORY_LINK})
             .setTimestamp()
         
         return {embeds: [embed]};
