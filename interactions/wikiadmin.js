@@ -78,6 +78,16 @@ class WikiAdminInteraction extends DefaultInteraction {
                                 .setMaxLength(1900)
                                 .setPlaceholder("Put the details here. Due to Discord limitations, maximum of 1900 characters.")
                                 .setStyle(TextInputStyle.Paragraph)
+                            ),
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new TextInputBuilder()
+                                .setCustomId("image")
+                                .setLabel("Image URL:")
+                                .setMaxLength(1900)
+                                .setPlaceholder("Feel free to add an image URL here if needed.")
+                                .setStyle(TextInputStyle.Short)
+                                .setRequired(false)
                             )
                     )
                 await interaction.showModal(modal);
@@ -111,6 +121,17 @@ class WikiAdminInteraction extends DefaultInteraction {
                                 .setPlaceholder("Put the details here. Due to Discord limitations, maximum of 1900 characters.")
                                 .setStyle(TextInputStyle.Paragraph)
                                 .setValue(page.content ?? "")
+                            ),
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new TextInputBuilder()
+                                .setCustomId("image")
+                                .setLabel("Image URL:")
+                                .setMaxLength(1900)
+                                .setPlaceholder("Feel free to add an image URL here if needed.")
+                                .setStyle(TextInputStyle.Short)
+                                .setRequired(false)
+                                .setValue(page.imageURL ?? "")
                             )
                     )
                 await interaction.showModal(modal);
@@ -132,8 +153,9 @@ class WikiAdminInteraction extends DefaultInteraction {
                 if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
+                const imageURL = interaction.fields.getTextInputValue("image") ?? null;
                 if(await WikiPageData.getByTitle(title)) return {content: "There is already a page with this title! Save your content!\n\n" + content, ephemeral: true};
-                const wikiPage = new WikiPageData({title, content, authors: [interaction.user.id]});
+                const wikiPage = new WikiPageData({title, content, imageURL, authors: [interaction.user.id]});
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()
                     .addComponents(
@@ -149,9 +171,11 @@ class WikiAdminInteraction extends DefaultInteraction {
                 const uuid = interaction.customId.split("/")[2];
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
+                const imageURL = interaction.fields.getTextInputValue("image") ?? null;
                 let wikiPage = await WikiPageData.getByUUID(uuid);
                 wikiPage.title = title;
                 wikiPage.content = content;
+                if(imageURL) wikiPage.imageURL = imageURL;
                 if(!wikiPage.authors.includes(interaction.user.id)) wikiPage.authors.push(interaction.user.id);
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()

@@ -37,6 +37,7 @@ class WikiInteraction extends DefaultInteraction {
                 .setTimestamp(page.edited ?? Date.now())
                 .setFooter({text: "Last edited"})
                 .setDescription(page.content ?? "This page is empty!")
+            if(page.imageURL) embed.setImage(page.imageURL);
             return { embeds: [embed] };
         }
         return "How did we get here?";

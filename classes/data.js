@@ -106,6 +106,7 @@ class WikiPageData {
         this.edited = data?.edited ?? Date.now();
         this.authors = data?.authors ?? [];
         this.content = data?.content ?? "";
+        this.imageURL = data?.imageURL ?? null;
         this.private = data?.private ?? false;
     }
 
