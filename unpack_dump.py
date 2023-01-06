@@ -2,7 +2,7 @@
 import json
 
 try:
-    file = open("AccountDump.txt", "r", encoding="UTF-8")
+    file = open("./secrets/AccountDump.txt", "r", encoding="UTF-8")
     lines = file.readlines()
     players = {}
     count = 1
@@ -19,7 +19,7 @@ try:
         if vp == 0: break
         players[name] = {"name": name, "vp": vp, "pos": count}
         count += 1
-    json.dump(players, open("VP.json", "w"), indent = 4)
+    json.dump(players, open("./secrets/VP.json", "w"), indent = 4)
     print("Done.")
 except OSError:
     print("You are lacking the file needed to use this script!")

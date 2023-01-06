@@ -55,7 +55,7 @@ class AccountData {
 
     static async loadTopVP() {
         console.log("Loading VP leaderboard from file... This will take a while!")
-        const accounts = readJSON("VP.json");
+        const accounts = readJSON("./secrets/VP.json");
         if(!accounts) return console.log("There is no file data!");
         for (const name in accounts) {
             const data = accounts[name];
