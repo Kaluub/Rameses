@@ -3,6 +3,7 @@ dotenv.config();
 
 class Config {
     static DEBUG = Config.parseBoolean(process.env.DEBUG);
+    static GOOGLE_API_ENABLED = Config.parseBoolean(process.env.GOOGLE_API_ENABLED)
     static DEVELOPMENT_SERVER = process.env.DEVELOPMENT_SERVER ?? null;
     static TOURNAMENT_ORGANIZER_ROLES = Config.parseList(process.env.TOURNAMENT_ORGANIZER_ROLES, ["644345517693861888"]);
     static TOURNAMENT_SPECTATOR_ROLES = Config.parseList(process.env.TOURNAMENT_SPECTATOR_ROLES, ["617185571252600961"]);

@@ -2,18 +2,21 @@ import { Client, IntentsBitField } from "discord.js";
 import { readFileSync, existsSync } from "fs";
 import EvadesAPI from "./evadesAPI.js";
 import InteractionHandler from "../interactionHandler.js";
+import Config from "../config.js";
+import Sheets from "./sheets.js";
 
 class DiscordClient extends Client {
     constructor() {
         super({intents: [IntentsBitField.Flags.Guilds]});
         this.evadesAPI = new EvadesAPI();
         this.interactionHandler = new InteractionHandler();
+        if(Config.GOOGLE_API_ENABLED) this.sheets = new Sheets();
         this.on("interactionCreate", this.interactionHandler.handleInteraction);
     }
 
     async clientLogin() {
-        if(!existsSync("./token")) throw "Token file not provided! Please put a bot token in a file named 'token' in this directory.";
-        await this.login(readFileSync("./token", {encoding: "utf8"}).trim());
+        if(!existsSync("./secrets/token")) throw "Token file not provided! Please put a bot token in a file named 'token' in the './secrets' directory.";
+        await this.login(readFileSync("./secrets/token", {encoding: "utf8"}).trim());
         console.log("Client logged in.")
     }
 

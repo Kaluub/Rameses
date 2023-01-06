@@ -7,7 +7,7 @@ cd Rameses/
 ```
 3. Install the dependancies using this command: `npm ci`
 4. Create your own Discord bot yourself, and invite it to your server. You can do this by going to the [Discord developer portal](https://discord.com/developers/applications) and creating a new application. Under the "bot" tab, create a new bot. You'll need to copy the token of the bot. To invite the bot to your server, you can go to the Oauth2 -> URL generator tab, then select the "bot" and "applications.commands" scopes, then use the URL generated. The bot shouldn't need any extra permissions, but giving it the Administrator permission to prevent those headaches isn't a bad idea. If you'd also like to have the live Rameses bot in your server, [click here](https://discord.com/api/oauth2/authorize?client_id=1041182147924467762&permissions=2147805248&scope=applications.commands%20bot).
-5. Create the token file. A helpful error will appear if you don't, but you'll need to create a file named "token" (no file extensions) and copy in your token from the developer portal.
+5. Create the token file. A helpful error will appear if you don't, but you'll need to create a folder named "secrets" and in there make a file named "token" (no file extensions). Paste in your token from the developer portal.
 6. For your first run, and any time you modify the application commands (slash commands, context menus, etc.), you should use `node app.js -i`. This will reset them all.
 7. To start the bot otherwise, run `node app.js`. To stop the bot, press CTRL+C in the console.
 
