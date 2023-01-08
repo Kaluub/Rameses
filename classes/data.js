@@ -44,6 +44,14 @@ class AccountData {
         return accounts.find({username: regexp}).limit(maxDocuments);
     }
 
+    static getTopVP(maxDocuments = 25, offset = 0) {
+        return accounts.find().sort({careerVP: -1}).skip(offset).limit(maxDocuments);
+    }
+
+    static getTopActivity(maxDocuments = 25, offset = 0) {
+        return accounts.find().sort({playTime: -1}).skip(offset).limit(maxDocuments);
+    }
+
     static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
         if(ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
         const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({username: username.toLowerCase()});

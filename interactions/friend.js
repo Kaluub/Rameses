@@ -8,7 +8,6 @@ class FriendInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(FriendInteraction.name)
         .setDescription("Friend management. Hard, I know.")
-        .setDMPermission(false)
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("add")
