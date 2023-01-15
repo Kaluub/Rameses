@@ -119,8 +119,8 @@ class WikiPageData {
     }
 
     async save() {
-        AccountData.cache.set(this.title, this);
-        await wikiPages.updateOne({username: this.title}, {$set: this}, {upsert: true});
+        AccountData.cache.set(this.uuid, this);
+        await wikiPages.updateOne({uuid: this.uuid}, {$set: this}, {upsert: true});
     }
 
     static async count() {

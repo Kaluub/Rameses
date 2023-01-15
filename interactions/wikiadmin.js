@@ -173,9 +173,10 @@ class WikiAdminInteraction extends DefaultInteraction {
                 const content = interaction.fields.getTextInputValue("content");
                 const imageURL = interaction.fields.getTextInputValue("image") ?? null;
                 let wikiPage = await WikiPageData.getByUUID(uuid);
+                wikiPage.edited = Date.now();
                 wikiPage.title = title;
                 wikiPage.content = content;
-                if(imageURL) wikiPage.imageURL = imageURL;
+                if(imageURL != wikiPage.imageURL) wikiPage.imageURL = imageURL;
                 if(!wikiPage.authors.includes(interaction.user.id)) wikiPage.authors.push(interaction.user.id);
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()
