@@ -53,15 +53,15 @@ class LeaderboardInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand(false);
-        if(subcommand == "vp") {
+        if (subcommand == "vp") {
             const limit = interaction.options.getInteger("limit") ?? 25;
             const offset = interaction.options.getInteger("offset") ?? 0;
             const accounts = await AccountData.getTopVP(limit, offset).toArray();
-            if(!accounts.length) return Locale.text(interaction, "NO_MATCHES");
+            if (!accounts.length) return Locale.text(interaction, "NO_MATCHES");
             const total = await AccountData.count();
             let string = Locale.text(interaction, "TOP_VP");
             let i = 0 + offset;
-            for(const account of accounts) {
+            for (const account of accounts) {
                 i += 1;
                 string += `\n${i}. ${sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP} VP`;
             }
@@ -71,15 +71,15 @@ class LeaderboardInteraction extends DefaultInteraction {
                 .setTimestamp()
             return { embeds: [embed] };
         }
-        if(subcommand == "activity") {
+        if (subcommand == "activity") {
             const limit = interaction.options.getInteger("limit") ?? 25;
             const offset = interaction.options.getInteger("offset") ?? 0;
             const accounts = await AccountData.getTopActivity(limit, offset).toArray();
-            if(!accounts.length) return Locale.text(interaction, "NO_MATCHES");
+            if (!accounts.length) return Locale.text(interaction, "NO_MATCHES");
             const total = await AccountData.count();
             let string = Locale.text(interaction, "TOP_PLAY_TIME");
             let i = 0 + offset;
-            for(const account of accounts) {
+            for (const account of accounts) {
                 i += 1;
                 string += `\n${i}. ${sanitizeUsername(account.displayName ?? account.username)}: ${formatSeconds(account.playTime)}`;
             }

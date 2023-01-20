@@ -19,10 +19,10 @@ class CreditsInteraction extends DefaultInteraction {
             .setDescription(Locale.text(interaction, "CREDITS"))
             .setColor("#77BBAA")
             .setURL(Config.SERVER_INVITE)
-            .setAuthor({iconURL: interaction.client.user.avatarURL({size: 128}), name: "GitHub", url: Config.REPOSITORY_LINK})
+            .setAuthor({ iconURL: interaction.client.user.avatarURL({ size: 128 }), name: "GitHub", url: Config.REPOSITORY_LINK })
             .setTimestamp()
-        
-        return {embeds: [embed]};
+
+        return { embeds: [embed] };
     }
 }
 

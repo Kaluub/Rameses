@@ -53,10 +53,10 @@ class WikiAdminInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(interaction.isChatInputCommand()) {
+        if (interaction.isChatInputCommand()) {
             const subcommand = interaction.options.getSubcommand(false);
-            if(subcommand == "create") {
-                if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
+            if (subcommand == "create") {
+                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const modal = new ModalBuilder()
                     .setCustomId("wikiadmin/create")
                     .setTitle("Create a new page:")
@@ -64,40 +64,40 @@ class WikiAdminInteraction extends DefaultInteraction {
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                .setCustomId("title")
-                                .setLabel("Title of page:")
-                                .setMaxLength(50)
-                                .setPlaceholder("The title of the page. Keep it short!")
-                                .setStyle(TextInputStyle.Short)
+                                    .setCustomId("title")
+                                    .setLabel("Title of page:")
+                                    .setMaxLength(50)
+                                    .setPlaceholder("The title of the page. Keep it short!")
+                                    .setStyle(TextInputStyle.Short)
                             ),
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                .setCustomId("content")
-                                .setLabel("Page content:")
-                                .setMaxLength(1900)
-                                .setPlaceholder("Put the details here. Due to Discord limitations, maximum of 1900 characters.")
-                                .setStyle(TextInputStyle.Paragraph)
+                                    .setCustomId("content")
+                                    .setLabel("Page content:")
+                                    .setMaxLength(1900)
+                                    .setPlaceholder("Put the details here. Due to Discord limitations, maximum of 1900 characters.")
+                                    .setStyle(TextInputStyle.Paragraph)
                             ),
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                .setCustomId("image")
-                                .setLabel("Image URL:")
-                                .setMaxLength(1900)
-                                .setPlaceholder("Feel free to add an image URL here if needed.")
-                                .setStyle(TextInputStyle.Short)
-                                .setRequired(false)
+                                    .setCustomId("image")
+                                    .setLabel("Image URL:")
+                                    .setMaxLength(1900)
+                                    .setPlaceholder("Feel free to add an image URL here if needed.")
+                                    .setStyle(TextInputStyle.Short)
+                                    .setRequired(false)
                             )
                     )
                 await interaction.showModal(modal);
             }
-            if(subcommand == "edit") {
-                if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
+            if (subcommand == "edit") {
+                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const pageIdentifier = interaction.options.getString("wiki-page", false);
-                if(!pageIdentifier) return {content: "Please provide a page title!", ephemeral: true};
+                if (!pageIdentifier) return { content: "Please provide a page title!", ephemeral: true };
                 const page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
-                if(!page) return {content: "The page was not found!", ephemeral: true};
+                if (!page) return { content: "The page was not found!", ephemeral: true };
                 const modal = new ModalBuilder()
                     .setCustomId("wikiadmin/edit/" + page.uuid)
                     .setTitle("Edit an existing page:")
@@ -105,57 +105,57 @@ class WikiAdminInteraction extends DefaultInteraction {
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                .setCustomId("title")
-                                .setLabel("Title of page:")
-                                .setMaxLength(50)
-                                .setPlaceholder("The title of the page. Keep it short!")
-                                .setStyle(TextInputStyle.Short)
-                                .setValue(page.title ?? "")
+                                    .setCustomId("title")
+                                    .setLabel("Title of page:")
+                                    .setMaxLength(50)
+                                    .setPlaceholder("The title of the page. Keep it short!")
+                                    .setStyle(TextInputStyle.Short)
+                                    .setValue(page.title ?? "")
                             ),
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                .setCustomId("content")
-                                .setLabel("Page content:")
-                                .setMaxLength(1900)
-                                .setPlaceholder("Put the details here. Due to Discord limitations, maximum of 1900 characters.")
-                                .setStyle(TextInputStyle.Paragraph)
-                                .setValue(page.content ?? "")
+                                    .setCustomId("content")
+                                    .setLabel("Page content:")
+                                    .setMaxLength(1900)
+                                    .setPlaceholder("Put the details here. Due to Discord limitations, maximum of 1900 characters.")
+                                    .setStyle(TextInputStyle.Paragraph)
+                                    .setValue(page.content ?? "")
                             ),
                         new ActionRowBuilder()
                             .addComponents(
                                 new TextInputBuilder()
-                                .setCustomId("image")
-                                .setLabel("Image URL:")
-                                .setMaxLength(1900)
-                                .setPlaceholder("Feel free to add an image URL here if needed.")
-                                .setStyle(TextInputStyle.Short)
-                                .setRequired(false)
-                                .setValue(page.imageURL ?? "")
+                                    .setCustomId("image")
+                                    .setLabel("Image URL:")
+                                    .setMaxLength(1900)
+                                    .setPlaceholder("Feel free to add an image URL here if needed.")
+                                    .setStyle(TextInputStyle.Short)
+                                    .setRequired(false)
+                                    .setValue(page.imageURL ?? "")
                             )
                     )
                 await interaction.showModal(modal);
             }
-            if(subcommand == "remove") {
-                if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
+            if (subcommand == "remove") {
+                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const pageIdentifier = interaction.options.getString("wiki-page", false);
-                if(!pageIdentifier) return {content: "Please provide a page title!", ephemeral: true};
+                if (!pageIdentifier) return { content: "Please provide a page title!", ephemeral: true };
                 let page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
-                if(!page) return {content: "The page was not found!", ephemeral: true};
+                if (!page) return { content: "The page was not found!", ephemeral: true };
                 page.private = true;
                 await page.save();
-                return {content: "The page was privated.", ephemeral: true};
+                return { content: "The page was privated.", ephemeral: true };
             }
             return "How did we get here?";
-        } else if(interaction.isModalSubmit()) {
+        } else if (interaction.isModalSubmit()) {
             const subcommand = interaction.customId.split("/")[1];
-            if(subcommand == "create") {
-                if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
+            if (subcommand == "create") {
+                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
                 const imageURL = interaction.fields.getTextInputValue("image") ?? null;
-                if(await WikiPageData.getByTitle(title)) return {content: "There is already a page with this title! Save your content!\n\n" + content, ephemeral: true};
-                const wikiPage = new WikiPageData({title, content, imageURL, authors: [interaction.user.id]});
+                if (await WikiPageData.getByTitle(title)) return { content: "There is already a page with this title! Save your content!\n\n" + content, ephemeral: true };
+                const wikiPage = new WikiPageData({ title, content, imageURL, authors: [interaction.user.id] });
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()
                     .addComponents(
@@ -164,10 +164,10 @@ class WikiAdminInteraction extends DefaultInteraction {
                             .setStyle(ButtonStyle.Primary)
                             .setLabel("View page")
                     )
-                return {content: "Page created successfully!", ephemeral: true, components: [actionRow]};
+                return { content: "Page created successfully!", ephemeral: true, components: [actionRow] };
             }
-            if(subcommand == "edit") {
-                if(!wikiadmins.includes(interaction.user.id)) return {content: "You are not authorized to do this!", ephemeral: true};
+            if (subcommand == "edit") {
+                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const uuid = interaction.customId.split("/")[2];
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
@@ -176,8 +176,8 @@ class WikiAdminInteraction extends DefaultInteraction {
                 wikiPage.edited = Date.now();
                 wikiPage.title = title;
                 wikiPage.content = content;
-                if(imageURL != wikiPage.imageURL) wikiPage.imageURL = imageURL;
-                if(!wikiPage.authors.includes(interaction.user.id)) wikiPage.authors.push(interaction.user.id);
+                if (imageURL != wikiPage.imageURL) wikiPage.imageURL = imageURL;
+                if (!wikiPage.authors.includes(interaction.user.id)) wikiPage.authors.push(interaction.user.id);
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()
                     .addComponents(
@@ -186,7 +186,7 @@ class WikiAdminInteraction extends DefaultInteraction {
                             .setStyle(ButtonStyle.Primary)
                             .setLabel("View page")
                     )
-                return {content: "Page updated successfully!", ephemeral: true, components: [actionRow]};
+                return { content: "Page updated successfully!", ephemeral: true, components: [actionRow] };
             }
         }
     }

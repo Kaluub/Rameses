@@ -51,26 +51,26 @@ class GuildConfigInteraction extends DefaultInteraction {
     async execute(interaction) {
         const subcommandGroup = interaction.options.getSubcommandGroup(false);
         const subcommand = interaction.options.getSubcommand(false);
-        if(subcommandGroup == "tournament") {
-            if(!hasPermission(interaction, PermissionsBitField.Flags.ManageGuild, interaction.user)) return Locale.text(interaction, "MANAGE_GUILD_PERMISSION_REQUIRED")
-            if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
-            if(subcommand == "spectators") {
+        if (subcommandGroup == "tournament") {
+            if (!hasPermission(interaction, PermissionsBitField.Flags.ManageGuild, interaction.user)) return Locale.text(interaction, "MANAGE_GUILD_PERMISSION_REQUIRED")
+            if (!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
+            if (subcommand == "spectators") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const role = interaction.options.getRole("role");
-                if(guildData.tournamentSpectatorRole == role.id) return Locale.text(interaction, "SPECTATOR_ROLE_ALREADY");
+                if (guildData.tournamentSpectatorRole == role.id) return Locale.text(interaction, "SPECTATOR_ROLE_ALREADY");
                 guildData.tournamentSpectatorRole = role.id;
                 await guildData.save();
                 return Locale.text(interaction, "SPECTATOR_ROLE_SET");
             }
-            if(subcommand == "organizers") {
+            if (subcommand == "organizers") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const role = interaction.options.getRole("role");
-                if(guildData.tournamentOrganizerRole == role.id) return Locale.text(interaction, "ORGANIZER_ROLE_ALREADY");
+                if (guildData.tournamentOrganizerRole == role.id) return Locale.text(interaction, "ORGANIZER_ROLE_ALREADY");
                 guildData.tournamentOrganizerRole = role.id;
                 await guildData.save();
                 return Locale.text(interaction, "ORGANIZER_ROLE_SET");
             }
-            if(subcommand == "check-names") {
+            if (subcommand == "check-names") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const shouldCheck = interaction.options.getBoolean("should-check");
                 guildData.forceAccountExistence = shouldCheck;

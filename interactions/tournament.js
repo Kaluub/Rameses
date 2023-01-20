@@ -22,10 +22,10 @@ class TournamentInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand(false);
-        if(subcommand == "create") {
-            if(!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
+        if (subcommand == "create") {
+            if (!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
             const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-            if(!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return Locale.text(interaction, "TOURNAMENT_ORGANIZERS_ONLY");
+            if (!interaction.member.roles.cache.hasAny(guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return Locale.text(interaction, "TOURNAMENT_ORGANIZERS_ONLY");
             const modal = new ModalBuilder()
                 .setCustomId("tournament-create")
                 .setTitle(Locale.text(interaction, "CREATE_TOURNAMENT"))

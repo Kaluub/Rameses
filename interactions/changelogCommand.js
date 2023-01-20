@@ -23,26 +23,26 @@ class ChangelogInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(interaction.isAutocomplete()) {
-            if(!Changelog.cache) return await interaction.respond([]);
+        if (interaction.isAutocomplete()) {
+            if (!Changelog.cache) return await interaction.respond([]);
             const response = [];
-            for(const page of Changelog.cache.filter(cl => cl.title.includes(interaction.options.getFocused() ?? ""))) {
-                if(response.length >= 25) break;
-                response.push({name: page.title, value: (Changelog.cache.indexOf(page) + 1).toString()});
+            for (const page of Changelog.cache.filter(cl => cl.title.includes(interaction.options.getFocused() ?? ""))) {
+                if (response.length >= 25) break;
+                response.push({ name: page.title, value: (Changelog.cache.indexOf(page) + 1).toString() });
             }
             return await interaction.respond(response);
         } else {
             // Make sure changelog exists
-            if(!Changelog.cache) await Changelog.updateChangelog();
-            if(!Changelog.cache) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+            if (!Changelog.cache) await Changelog.updateChangelog();
+            if (!Changelog.cache) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
 
             const changelogNumber = parseInt(interaction?.options?.getString("changelog")) - 1 || parseInt(interaction?.customId?.split("/")[1]) || 0;
-            if(!Changelog.cache[changelogNumber]) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+            if (!Changelog.cache[changelogNumber]) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
 
             let string = `**__${Changelog.cache[changelogNumber]?.title}__**:`;
-            for(const segment of Changelog.cache[changelogNumber]?.content ?? []) {
+            for (const segment of Changelog.cache[changelogNumber]?.content ?? []) {
                 const toAdd = `\n• ${segment}\n`;
-                if((string + toAdd).length > 2000) break;
+                if ((string + toAdd).length > 2000) break;
                 string += toAdd;
             }
 
@@ -64,11 +64,11 @@ class ChangelogInteraction extends DefaultInteraction {
                 .setColor("#887711")
                 .setDescription(string)
                 .setURL("https://evades.io/")
-                .setFooter({text: `Update ${changelogNumber + 1} of ${Changelog.cache.length}`})
+                .setFooter({ text: `Update ${changelogNumber + 1} of ${Changelog.cache.length}` })
                 .setTimestamp()
 
-            if(interaction.isMessageComponent()) return await interaction.editReply({embeds: [embed], components: [actionRow]});
-            else return {embeds: [embed], components: [actionRow]};
+            if (interaction.isMessageComponent()) return await interaction.editReply({ embeds: [embed], components: [actionRow] });
+            else return { embeds: [embed], components: [actionRow] };
         }
     }
 }

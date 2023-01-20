@@ -38,29 +38,29 @@ class FriendInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if(interaction.isAutocomplete()) {
+        if (interaction.isAutocomplete()) {
             const userData = await DiscordUserData.getByID(interaction.user.id);
             const response = [];
-            for(const username of userData.friends.filter(username => username.includes(interaction.options.getFocused() ?? ""))) {
-                response.push({name: username, value: username});
-                if(response.length >= 25) break;
+            for (const username of userData.friends.filter(username => username.includes(interaction.options.getFocused() ?? ""))) {
+                response.push({ name: username, value: username });
+                if (response.length >= 25) break;
             }
             await interaction.respond(response);
         }
-        if(interaction.isChatInputCommand()) {
+        if (interaction.isChatInputCommand()) {
             const subcommand = interaction.options.getSubcommand(false);
-            if(subcommand == "add") {
+            if (subcommand == "add") {
                 const userData = await DiscordUserData.getByID(interaction.user.id);
                 const username = interaction.options.getString("username").toLowerCase();
-                if(userData.friends.includes(username)) return Locale.text(interaction, "FRIENDS_ALREADY");
+                if (userData.friends.includes(username)) return Locale.text(interaction, "FRIENDS_ALREADY");
                 userData.friends.push(username);
                 await userData.save();
                 return Locale.text(interaction, "FRIEND_ADDED");
             }
-            if(subcommand == "remove") {
+            if (subcommand == "remove") {
                 let userData = await DiscordUserData.getByID(interaction.user.id);
                 const username = interaction.options.getString("friend").toLowerCase();
-                if(!userData.friends.includes(username)) return Locale.text(interaction, "NOT_FRIENDS");
+                if (!userData.friends.includes(username)) return Locale.text(interaction, "NOT_FRIENDS");
                 userData.friends = userData.friends.filter(friend => friend !== username)
                 await userData.save();
                 return Locale.text(interaction, "FRIEND_REMOVED");
