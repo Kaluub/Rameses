@@ -6,7 +6,7 @@ import Locale from "../classes/locale.js";
 
 // Consider relocating to multiple lists or fetching it from somewhere.
 const staff = [
-    "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", // Developers.
+    "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Meldiron", // Developers.
     "extirpater", "Exoriz", "Jackal", // Head mods.
     // Space for Sr. mods.
     "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv",
