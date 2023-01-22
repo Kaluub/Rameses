@@ -11,7 +11,8 @@ const staff = [
     // Space for Sr. mods.
     "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv",
     "Vikenti", "Mel", "Amasterclasher", "Invi", // Mods.
-    "hula", "Ram", "basti", "Androoh", "lindsay", "ThatHodgeGuy", "Kaluub", "Angel🌸" // Jr. mods.
+    "Ram", "hula", "basti", "Androoh", "lindsay", "ThatHodgeGuy", "Kaluub", "Angel🌸",
+    "PotatoNuke", "xMaverick" // Jr. mods.
 ]
 
 function sortUsernamesAlphabetically(username1, username2) {
