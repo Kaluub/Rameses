@@ -3,14 +3,6 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBui
 import { WikiPageData } from "../classes/data.js";
 import Config from "../config.js";
 
-const wikiadmins = [
-    "461564949768962048", // Kaluub
-    "474088900953112576", // Piger
-    "291543872666861568", // Dep
-    "325966339904897026", // Jackal
-    "512215933155016724", // Invi
-];
-
 class WikiAdminInteraction extends DefaultInteraction {
     static name = "wikiadmin";
     static noGlobalInteraction = true;
@@ -56,7 +48,7 @@ class WikiAdminInteraction extends DefaultInteraction {
         if (interaction.isChatInputCommand()) {
             const subcommand = interaction.options.getSubcommand(false);
             if (subcommand == "create") {
-                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const modal = new ModalBuilder()
                     .setCustomId("wikiadmin/create")
                     .setTitle("Create a new page:")
@@ -93,7 +85,7 @@ class WikiAdminInteraction extends DefaultInteraction {
                 await interaction.showModal(modal);
             }
             if (subcommand == "edit") {
-                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const pageIdentifier = interaction.options.getString("wiki-page", false);
                 if (!pageIdentifier) return { content: "Please provide a page title!", ephemeral: true };
                 const page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
@@ -137,7 +129,7 @@ class WikiAdminInteraction extends DefaultInteraction {
                 await interaction.showModal(modal);
             }
             if (subcommand == "remove") {
-                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const pageIdentifier = interaction.options.getString("wiki-page", false);
                 if (!pageIdentifier) return { content: "Please provide a page title!", ephemeral: true };
                 let page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
@@ -150,7 +142,7 @@ class WikiAdminInteraction extends DefaultInteraction {
         } else if (interaction.isModalSubmit()) {
             const subcommand = interaction.customId.split("/")[1];
             if (subcommand == "create") {
-                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
                 const imageURL = interaction.fields.getTextInputValue("image") ?? null;
@@ -167,7 +159,7 @@ class WikiAdminInteraction extends DefaultInteraction {
                 return { content: "Page created successfully!", ephemeral: true, components: [actionRow] };
             }
             if (subcommand == "edit") {
-                if (!wikiadmins.includes(interaction.user.id)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
                 const uuid = interaction.customId.split("/")[2];
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");

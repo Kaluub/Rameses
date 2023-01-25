@@ -84,9 +84,9 @@ class EvadesAPI {
         this.requestTimeout = 5000;
         this.resetCache();
         updateLastSeen(this);
-        updateCareerVP(this);
+        // updateCareerVP(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
-        setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
+        // setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
     }
 
     resetCache() {
