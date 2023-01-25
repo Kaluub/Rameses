@@ -38,17 +38,18 @@ class PlayerDetailsData extends CachedData {
     calculateDetails() {
         let highestWeek = ["0", 0, null];
         let activeWeeks = 0;
-        let summedCareerVP = 0;
+        let summedCareerVP = this.stats["highest_area_achieved_resettable_counter"];
         let firstActiveWeekNumber = null;
         let lastActiveWeekNumber = "0";
+
         for (const weekNumber in this.stats["week_record"]) {
             const week = this.stats["week_record"][weekNumber];
             activeWeeks += 1;
-            summedCareerVP += week["wins"];
+            summedCareerVP += week["wins"] ?? 0;
             lastActiveWeekNumber = weekNumber;
             if (!firstActiveWeekNumber) firstActiveWeekNumber = weekNumber;
-            if (week["wins"] > highestWeek[1])
-                highestWeek = [weekNumber, week["wins"], week["finish"]];
+            if (week["wins"] ?? 0 > highestWeek[1])
+                highestWeek = [weekNumber, week["wins"] ?? 0, week["finish"]];
         }
 
         this.highestWeek = highestWeek;

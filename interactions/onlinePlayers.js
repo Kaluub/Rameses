@@ -47,27 +47,31 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         for (const username of onlinePlayers) {
             // Filter guests into their own category first.
             if (username.startsWith("Guest")) {
-                if ((onlineGuests.join(JOINER) + `${JOINER}${username}`).length > MAX_CHARACTER_COUNT) continue;
+                if ((onlineGuests.join(JOINER) + `${JOINER}${username}`).length > MAX_CHARACTER_COUNT)
+                    continue;
                 onlineGuests.push(username);
                 continue;
             }
             // Friends are next priority (you can't befriend a guest, sadly. Social norms, man)
             if (userData.friends.includes(username.toLowerCase())) {
                 const nextFriend = sanitizeUsername(username);
-                if ((onlineFriends.join(JOINER) + `${JOINER}${nextFriend}`).length > MAX_CHARACTER_COUNT) continue;
+                if ((onlineFriends.join(JOINER) + `${JOINER}${nextFriend}`).length > MAX_CHARACTER_COUNT)
+                    continue;
                 onlineFriends.push(nextFriend);
                 continue;
             }
-            // Put any staff members in a separate category
+            // Put any staff members in a separate category.
             if (staff.includes(username)) {
                 const nextStaff = sanitizeUsername(username);
-                if ((onlineStaff.join(JOINER) + `${JOINER}${nextStaff}`).length > MAX_CHARACTER_COUNT) continue;
+                if ((onlineStaff.join(JOINER) + `${JOINER}${nextStaff}`).length > MAX_CHARACTER_COUNT)
+                    continue;
                 onlineStaff.push(nextStaff);
                 continue;
             }
-            // Handle anyone else not in the above conditions
+            // Handle anyone else not in the above conditions.
             const nextRegistered = sanitizeUsername(username);
-            if ((onlineRegistered.join(JOINER) + `${JOINER}${nextRegistered}`).length > MAX_CHARACTER_COUNT) continue;
+            if ((onlineRegistered.join(JOINER) + `${JOINER}${nextRegistered}`).length > MAX_CHARACTER_COUNT)
+                continue;
             onlineRegistered.push(nextRegistered);
         }
 
@@ -83,10 +87,14 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             .setFooter({ text: Locale.text(interaction, "PLAYERS_ONLINE_COUNT", [onlinePlayers.length]) })
 
         // Put them all on display.
-        if (onlineFriends.length) embed.addFields({ name: Locale.text(interaction, "ONLINE_FRIENDS"), value: onlineFriends.join(JOINER) || "None!" });
-        if (onlineStaff.length) embed.addFields({ name: Locale.text(interaction, "ONLINE_STAFF"), value: onlineStaff.join(JOINER) || "None!" });
-        if (onlineRegistered.length) embed.addFields({ name: Locale.text(interaction, "ONLINE_PLAYERS"), value: onlineRegistered.join(JOINER) || "None!" });
-        if (onlineGuests.length) embed.addFields({ name: Locale.text(interaction, "ONLINE_GUESTS"), value: onlineGuests.join(JOINER) || "None!" });
+        if (onlineFriends.length)
+            embed.addFields({ name: Locale.text(interaction, "ONLINE_FRIENDS"), value: onlineFriends.join(JOINER) || "None!" });
+        if (onlineStaff.length)
+            embed.addFields({ name: Locale.text(interaction, "ONLINE_STAFF"), value: onlineStaff.join(JOINER) || "None!" });
+        if (onlineRegistered.length)
+            embed.addFields({ name: Locale.text(interaction, "ONLINE_PLAYERS"), value: onlineRegistered.join(JOINER) || "None!" });
+        if (onlineGuests.length)
+            embed.addFields({ name: Locale.text(interaction, "ONLINE_GUESTS"), value: onlineGuests.join(JOINER) || "None!" });
 
         return { embeds: [embed] }
     }
