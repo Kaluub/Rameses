@@ -48,7 +48,7 @@ class PlayerDetailsData extends CachedData {
             summedCareerVP += week["wins"] ?? 0;
             lastActiveWeekNumber = weekNumber;
             if (!firstActiveWeekNumber) firstActiveWeekNumber = weekNumber;
-            if (week["wins"] ?? 0 > highestWeek[1])
+            if ((week["wins"] ?? 0) > highestWeek[1])
                 highestWeek = [weekNumber, week["wins"] ?? 0, week["finish"]];
         }
 
@@ -67,6 +67,17 @@ class OnlinePlayersData extends CachedData {
     }
 }
 
+class ServerStatsData extends CachedData {
+    constructor() {
+        super();
+        this.localServers = [];
+        this.remoteServers = [];
+        this.connected = 0;
+        this.capacity = 0;
+        this.autoConnect = false;
+    }
+}
+
 class HallOfFameData extends CachedData {
     constructor() {
         super();
@@ -80,19 +91,21 @@ class EvadesAPI {
         this.cache = null;
         this.playerDetailsCacheTime = 300000;
         this.onlinePlayersCacheTime = 10000;
+        this.serverStatsCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
         this.requestTimeout = 5000;
         this.resetCache();
         updateLastSeen(this);
-        // updateCareerVP(this);
+        updateCareerVP(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
-        // setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
+        setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
     }
 
     resetCache() {
         this.cache = {
             playerManager: new PlayerManager(),
             onlinePlayers: new OnlinePlayersData(),
+            serverStats: new ServerStatsData(),
             hallOfFame: new HallOfFameData()
         }
     }
@@ -115,9 +128,6 @@ class EvadesAPI {
         if (force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.hallOfFameCacheTime)) {
             const playerDetails = await this.get("account/" + username);
             if (!playerDetails) return null;
-            let account = await AccountData.getByUsername(username);
-            account.careerVP = playerDetails.stats["highest_area_achieved_counter"];
-            await account.save();
             this.cache.playerManager.updatePlayer(username, playerDetails);
         }
         return this.cache.playerManager.getPlayer(username);
@@ -134,17 +144,45 @@ class EvadesAPI {
                     players.push(displayName);
                     continue;
                 }
-                let account = await AccountData.getByUsername(username);
-                if (!account.displayName) {
-                    account.displayName = displayName;
-                    await account.save();
-                }
+                AccountData.getByUsername(username).then((account) => {
+                    if (!account.displayName) {
+                        account.displayName = displayName;
+                        account.save();
+                    }
+                });
                 players.push(displayName);
             }
             this.cache.onlinePlayers.players = players;
             this.cache.onlinePlayers.fetched = Date.now();
         }
         return this.cache.onlinePlayers.players;
+    }
+
+    async getServerStats(force = false) {
+        if (force || this.cache.serverStats.isOutdated(this.serverStatsCacheTime)) {
+            const serverStats = await this.get("game/list");
+            if (!serverStats) return null;
+
+            this.cache.serverStats.localServers = [];
+            this.cache.serverStats.remoteServers = [];
+
+            for (const server of serverStats.local) {
+                this.cache.serverStats.localServers.push(...server);
+            }
+
+            for (const remote in serverStats.remotes) {
+                const servers = serverStats.remotes[remote];
+                for (const server of servers) {
+                    this.cache.serverStats.remoteServers.push(...server);
+                }
+            }
+
+            this.cache.serverStats.connected = serverStats.connected;
+            this.cache.serverStats.capacity = serverStats.capacity;
+            this.cache.serverStats.autoConnect = serverStats.autoConnect;
+            this.cache.serverStats.fetched = Date.now();
+        }
+        return this.cache.serverStats;
     }
 
     async getHallOfFame(force = false) {
@@ -186,11 +224,15 @@ async function updateLastSeen(evadesAPI) {
 }
 
 async function updateCareerVP(evadesAPI) {
-    // We know that only players in the hall of fame can even have an outdated career VP.
+    // We know that only players in the hall of fame can have an outdated career VP.
     const hallOfFame = await evadesAPI.getHallOfFame();
-    for (const [username, ...data] of hallOfFame) {
+    for (const [username, weeklyVP, careerVP] of hallOfFame) {
         // Fetch the players details, updating their career VP.
-        evadesAPI.getPlayerDetails(username);
+        AccountData.getByUsername(username).then((account) => {
+            if(!account) return;
+            account.careerVP = parseInt(careerVP);
+            account.save();
+        });
     }
 }
 

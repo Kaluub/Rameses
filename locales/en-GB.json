@@ -89,5 +89,7 @@
     "ACTIVITY_TITLE": "Activity of {0}:",
     "TOP_VP": "Career VP leaderboard:",
     "TOP_PLAY_TIME": "Time played leaderboard:",
-    "NO_MATCHES": "No matches."
+    "NO_MATCHES": "No matches.",
+    "INVALID_SERVER": "Invalid server.",
+    "PLAYERS_ONLINE_IN_SERVER": "Players currently online in {0}:"
 }
