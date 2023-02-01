@@ -1,6 +1,9 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
+import { v1 } from "uuid";
+import EvadesData from "../evadesData.js";
+import { randomElements } from "../utils.js";
 
 class EloInteraction extends DefaultInteraction {
     static name = "elo";
@@ -34,7 +37,7 @@ class EloInteraction extends DefaultInteraction {
 
     constructor() {
         super(EloInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
-        this.matches = [];
+        this.matches = new Map();
         this.brackets = [
             { name: "Iron", min: -Infinity, max: 700, leeway: 200 },
             { name: "Bronze", min: 700, max: 1100, leeway: 100 },
@@ -84,15 +87,14 @@ class EloInteraction extends DefaultInteraction {
             const thisELO = data.get(username) ?? 1200;
             let foundMatch = null;
             let cancelFindingMatch = false;
-            for (const match of this.matches.sort(Match.sortMatches)) {
+            for (const match of this.matches.values()) {
                 if (match.state !== Match.State.OPEN) continue;
                 if (match.user1 == interaction.user || match.user2 == interaction.user) {
                     cancelFindingMatch = true;
                     break;
                 }
-                console.log(this.determineFairMatch(thisELO, match.elo1))
                 if (this.determineFairMatch(thisELO, match.elo1)) {
-                    matchFound = match.setOpponent(interaction.user, username, thisELO);
+                    foundMatch = match.setOpponent(interaction.user, username, thisELO);
                     break;
                 }
             }
@@ -100,18 +102,32 @@ class EloInteraction extends DefaultInteraction {
                 return { content: "You can't participate in an ELO match right now! Are you already searching for a match?", ephemeral: true }
             }
             if (foundMatch) { // We now know that two users are available.
-                this.matches.slice(this.matches.findIndex(foundMatch), 1);
+                this.matches.delete(foundMatch.id);
                 const embed = new EmbedBuilder()
                     .setTitle("Match found!")
-                    .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nPick your servers and you'll need to pick between the following maps & heroes.`)
+                    .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
                 
+                // Get maps and heroes.
+                const heroes = randomElements(EvadesData.heroes, 3);
+                const maps = randomElements(EvadesData.maps, 5);
+
+                embed.addFields(
+                    {
+                        name: "Heroes:",
+                        value: heroes.join("\n")
+                    },
+                    {
+                        name: "Maps:",
+                        value: maps.join("\n")
+                    }
+                )
+
                 return { content: `${foundMatch.user1} & ${foundMatch.user2}`, embeds: [embed] }
             }
 
             // No match found. Create a new one.
-            this.matches.push(
-                new Match(interaction.user, username, thisELO)
-            );
+            const match = new Match(interaction.user, username, thisELO);
+            this.matches.set(match.id, match);
 
             return { content: `Hold on, ${username}! We're going to try to find you a fair match...` }
         }
@@ -125,11 +141,8 @@ class Match {
         CLOSED: 2
     }
 
-    static sortMatches(match1, match2) {
-        return match1.createdAt - match2.createdAt;
-    }
-
     constructor(user1, username1, elo1, user2 = null, username2 = null, elo2 = null) {
+        this.id = v1();
         this.createdAt = Date.now();
         this.state = Match.State.OPEN;
         this.user1 = user1;

@@ -72,4 +72,16 @@ function readJSON(path) {
     return JSON.parse(readFileSync(path))
 }
 
-export { tournamentFormatter, hasPermission, sanitizeUsername, timeSecondsToTime, formatSeconds, readJSON }
+function randomElements(array, amount) {
+    let result = new Array(amount);
+    let taken = new Array(array.length);
+    if (amount > array.length) return [];
+    while (amount--) {
+        var x = Math.floor(Math.random() * array.length);
+        result[amount] = array[x in taken ? taken[x] : x];
+        taken[x] = --array.length in taken ? taken[array.length] : array.length;
+    }
+    return result;
+}
+
+export { tournamentFormatter, hasPermission, sanitizeUsername, timeSecondsToTime, formatSeconds, readJSON, randomElements }
