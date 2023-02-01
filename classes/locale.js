@@ -12,11 +12,11 @@ class Locale {
             ?.replaceAll("{0}", args?.[0])
             ?.replaceAll("{1}", args?.[1])
             ?.replaceAll("{2}", args?.[2])
-        ?? Locale.map["en-GB"]?.[key]
-            ?.replaceAll("{0}", args?.[0])
-            ?.replaceAll("{1}", args?.[1])
-            ?.replaceAll("{2}", args?.[2])
-        ?? `Locale key error: ${key}`;
+            ?? Locale.map["en-GB"]?.[key]
+                ?.replaceAll("{0}", args?.[0])
+                ?.replaceAll("{1}", args?.[1])
+                ?.replaceAll("{2}", args?.[2])
+            ?? `Locale key error: ${key}`;
     }
 }
 

@@ -86,5 +86,10 @@
     "TIME_PLAYED": "Time played",
     "PLAYER_INACTIVE": "I have no data regarding the activity of {0}!",
     "ACTIVITY_FORMAT": "Hour (UTC) | Overall time spent",
-    "ACTIVITY_TITLE": "Activity of {0}:"
+    "ACTIVITY_TITLE": "Activity of {0}:",
+    "TOP_VP": "Career VP leaderboard:",
+    "TOP_PLAY_TIME": "Time played leaderboard:",
+    "NO_MATCHES": "No matches.",
+    "INVALID_SERVER": "Invalid server.",
+    "PLAYERS_ONLINE_IN_SERVER": "Players currently online in {0}:"
 }

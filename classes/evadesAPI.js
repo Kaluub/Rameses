@@ -38,17 +38,18 @@ class PlayerDetailsData extends CachedData {
     calculateDetails() {
         let highestWeek = ["0", 0, null];
         let activeWeeks = 0;
-        let summedCareerVP = 0;
+        let summedCareerVP = this.stats["highest_area_achieved_resettable_counter"];
         let firstActiveWeekNumber = null;
         let lastActiveWeekNumber = "0";
-        for(const weekNumber in this.stats["week_record"]) {
+
+        for (const weekNumber in this.stats["week_record"]) {
             const week = this.stats["week_record"][weekNumber];
             activeWeeks += 1;
-            summedCareerVP += week["wins"];
+            summedCareerVP += week["wins"] ?? 0;
             lastActiveWeekNumber = weekNumber;
-            if(!firstActiveWeekNumber) firstActiveWeekNumber = weekNumber;
-            if(week["wins"] > highestWeek[1])
-                highestWeek = [weekNumber, week["wins"], week["finish"]];
+            if (!firstActiveWeekNumber) firstActiveWeekNumber = weekNumber;
+            if ((week["wins"] ?? 0) > highestWeek[1])
+                highestWeek = [weekNumber, week["wins"] ?? 0, week["finish"]];
         }
 
         this.highestWeek = highestWeek;
@@ -66,6 +67,17 @@ class OnlinePlayersData extends CachedData {
     }
 }
 
+class ServerStatsData extends CachedData {
+    constructor() {
+        super();
+        this.localServers = [];
+        this.remoteServers = [];
+        this.connected = 0;
+        this.capacity = 0;
+        this.autoConnect = false;
+    }
+}
+
 class HallOfFameData extends CachedData {
     constructor() {
         super();
@@ -79,17 +91,21 @@ class EvadesAPI {
         this.cache = null;
         this.playerDetailsCacheTime = 300000;
         this.onlinePlayersCacheTime = 10000;
+        this.serverStatsCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
         this.requestTimeout = 5000;
         this.resetCache();
         updateLastSeen(this);
+        updateCareerVP(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
+        setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
     }
 
     resetCache() {
         this.cache = {
             playerManager: new PlayerManager(),
             onlinePlayers: new OnlinePlayersData(),
+            serverStats: new ServerStatsData(),
             hallOfFame: new HallOfFameData()
         }
     }
@@ -100,7 +116,7 @@ class EvadesAPI {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
             const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
-            if(!data || !data.ok) return null;
+            if (!data || !data.ok) return null;
             return await data.json();
         }
         catch {
@@ -109,30 +125,31 @@ class EvadesAPI {
     }
 
     async getPlayerDetails(username, force = false) {
-        if(force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.hallOfFameCacheTime)) {
+        if (force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.hallOfFameCacheTime)) {
             const playerDetails = await this.get("account/" + username);
-            if(!playerDetails) return null;
+            if (!playerDetails) return null;
             this.cache.playerManager.updatePlayer(username, playerDetails);
         }
         return this.cache.playerManager.getPlayer(username);
     }
 
     async getOnlinePlayers(force = false) {
-        if(force || this.cache.onlinePlayers.isOutdated(this.onlinePlayersCacheTime)) {
+        if (force || this.cache.onlinePlayers.isOutdated(this.onlinePlayersCacheTime)) {
             const rawPlayers = await this.get("game/usernames");
-            if(!rawPlayers) return null;
+            if (!rawPlayers) return null;
             const players = [];
-            for(const displayName of rawPlayers) {
-                const username = displayName.toLowerCase()
-                if(username.startsWith("guest")) {
+            for (const displayName of rawPlayers) {
+                const username = displayName.toLowerCase();
+                if (username.startsWith("guest")) {
                     players.push(displayName);
                     continue;
                 }
-                let account = await AccountData.getByUsername(username);
-                if(!account.displayName) {
-                    account.displayName = displayName;
-                    await account.save()
-                }
+                AccountData.getByUsername(username).then((account) => {
+                    if (!account.displayName) {
+                        account.displayName = displayName;
+                        account.save();
+                    }
+                });
                 players.push(displayName);
             }
             this.cache.onlinePlayers.players = players;
@@ -141,10 +158,37 @@ class EvadesAPI {
         return this.cache.onlinePlayers.players;
     }
 
+    async getServerStats(force = false) {
+        if (force || this.cache.serverStats.isOutdated(this.serverStatsCacheTime)) {
+            const serverStats = await this.get("game/list");
+            if (!serverStats) return null;
+
+            this.cache.serverStats.localServers = [];
+            this.cache.serverStats.remoteServers = [];
+
+            for (const server of serverStats.local) {
+                this.cache.serverStats.localServers.push(...server);
+            }
+
+            for (const remote in serverStats.remotes) {
+                const servers = serverStats.remotes[remote];
+                for (const server of servers) {
+                    this.cache.serverStats.remoteServers.push(...server);
+                }
+            }
+
+            this.cache.serverStats.connected = serverStats.connected;
+            this.cache.serverStats.capacity = serverStats.capacity;
+            this.cache.serverStats.autoConnect = serverStats.autoConnect;
+            this.cache.serverStats.fetched = Date.now();
+        }
+        return this.cache.serverStats;
+    }
+
     async getHallOfFame(force = false) {
-        if(force || this.cache.hallOfFame.isOutdated(this.hallOfFameCacheTime)) {
+        if (force || this.cache.hallOfFame.isOutdated(this.hallOfFameCacheTime)) {
             const hallOfFame = await this.get("game/hall_of_fame");
-            if(!hallOfFame) return null;
+            if (!hallOfFame) return null;
             this.cache.hallOfFame.entries = hallOfFame.players;
             this.cache.hallOfFame.fetched = Date.now();
         }
@@ -156,24 +200,37 @@ let failedToConnect = true;
 async function updateLastSeen(evadesAPI) {
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
 
-    if(!onlinePlayers) {
+    if (!onlinePlayers) {
         failedToConnect = true;
         return;
-    } else if(failedToConnect) {
+    } else if (failedToConnect) {
         // Fetch changelog after being unable to connect.
         failedToConnect = false;
         await Changelog.updateChangelog();
     }
 
     const hour = new Date().getUTCHours().toString();
-    for(const username of onlinePlayers) {
-        if(username.startsWith("Guest")) continue;
+    for (const username of onlinePlayers) {
+        if (username.startsWith("Guest")) continue;
         AccountData.getByUsername(username).then((account) => {
             // Collect data regarding active times.
             account.lastSeen = Math.floor(Date.now() / 1000);
-            if(!account.activity[hour]) account.activity[hour] = 0;
+            if (!account.activity[hour]) account.activity[hour] = 0;
             account.activity[hour] += 1;
             account.playTime += Math.floor(evadesAPI.onlinePlayersCacheTime / 1000);
+            account.save();
+        });
+    }
+}
+
+async function updateCareerVP(evadesAPI) {
+    // We know that only players in the hall of fame can have an outdated career VP.
+    const hallOfFame = await evadesAPI.getHallOfFame();
+    for (const [username, weeklyVP, careerVP] of hallOfFame) {
+        // Fetch the players details, updating their career VP.
+        AccountData.getByUsername(username).then((account) => {
+            if(!account) return;
+            account.careerVP = parseInt(careerVP);
             account.save();
         });
     }

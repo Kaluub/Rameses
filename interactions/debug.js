@@ -52,14 +52,14 @@ class DebugInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const subcommand = interaction.options.getSubcommand(false);
-        if(subcommand == "check") {
+        if (subcommand == "check") {
             const username = interaction.options.getString("username", false);
-            if(!username) return "No user found.";
+            if (!username) return "No user found.";
             const account = await AccountData.getByUsername(username, false);
-            if(!account) return "No data stored for this user yet.";
+            if (!account) return "No data stored for this user yet.";
             return `Stored data:\n\`\`\`json\n${JSON.stringify(account, null, 4)}\n\`\`\``;
         }
-        if(subcommand == "stats") {
+        if (subcommand == "stats") {
             return `Stats:
 Guilds cached: ${interaction.client.guilds.cache.size}
 Users cached: ${interaction.client.users.cache.size}
@@ -68,16 +68,16 @@ Channels cached: ${interaction.client.channels.cache.size}
 Stored accounts: ${await AccountData.count()}
 Cached accounts: ${AccountData.cache.size}`;
         }
-        if(subcommand == "fixusername") {
+        if (subcommand == "fixusername") {
             const username = interaction.options.getString("username", false);
-            if(!username) return "No user found.";
+            if (!username) return "No user found.";
             let account = await AccountData.getByUsername(username, false);
-            if(!account) return "No data stored for this user yet.";
+            if (!account) return "No data stored for this user yet.";
             account.displayName = null;
             await account.save();
             return `Display name cleared from "${account?.displayName ?? account.username}"`;
         }
-        if(subcommand == "flushcache") {
+        if (subcommand == "flushcache") {
             const size = AccountData.cache.size;
             AccountData.cache.clear();
             interaction.client.evadesAPI.resetCache();

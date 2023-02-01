@@ -40,16 +40,16 @@ class ActivityInteraction extends DefaultInteraction {
     async execute(interaction) {
         const username = interaction.options.getString("username");
         const account = await AccountData.getByUsername(username, false);
-        
-        if(!account) return Locale.text(interaction, "PLAYER_NOT_FOUND");
-        if(!account.playTime) return Locale.text(interaction, "PLAYER_INACTIVE", [sanitizeUsername(account.displayName ?? account.username)]);
-        
+
+        if (!account) return Locale.text(interaction, "PLAYER_NOT_FOUND");
+        if (!account.playTime) return Locale.text(interaction, "PLAYER_INACTIVE", [sanitizeUsername(account.displayName ?? account.username)]);
+
         // Customize the graph for fun (perhaps create generic graph function later if needed)
         const barValue = interaction.options.getString("graph-icon") || "▒";
         const detail = barValue.length > 1 ? Math.min(interaction.options.getInteger("graph-detail"), 40) || 30 : interaction.options.getInteger("graph-detail") || 30;
         const highestValue = Math.max(...Object.values(account.activity));
 
-        let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${formatSeconds(account.playTime)} (#${await AccountData.count({"playTime": {"$gte": account.playTime}})}, top ${(await AccountData.count({"playTime": {"$gte": account.playTime}}) / await AccountData.count({"playTime": {"$gte": 0}}) * 100).toFixed(5)}%)\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
+        let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${formatSeconds(account.playTime)} (#${await AccountData.count({ "playTime": { "$gte": account.playTime } })}, top ${(await AccountData.count({ "playTime": { "$gte": account.playTime } }) / await AccountData.count({ "playTime": { "$gte": 0 } }) * 100).toFixed(5)}%)\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
         string += "```";
         for (let h = 0; h < 24; h++) {
             const hour = h.toString();

@@ -3,7 +3,7 @@ import Locale from "./locale.js";
 class DefaultInteraction {
     static disabled = false;
     static applicationCommand = null;
-    
+
     constructor(name, interactionTypes = []) {
         this.name = name;
         this.interactionTypes = interactionTypes;

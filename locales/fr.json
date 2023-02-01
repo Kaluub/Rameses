@@ -86,5 +86,10 @@
     "TIME_PLAYED": "Temps en jouent",
     "PLAYER_INACTIVE": "Je n'ai pas d'information d'activité de {0}!",
     "ACTIVITY_FORMAT": "Heure (UTC) | Pourcentage de temps",
-    "ACTIVITY_TITLE": "L'activité de {0}:"
+    "ACTIVITY_TITLE": "L'activité de {0}:",
+    "TOP_VP": "Par PV de carière:",
+    "TOP_PLAY_TIME": "Par temps jouées:",
+    "NO_MATCHES": "Je trouve rien.",
+    "INVALID_SERVER": "Cet serveur n'existe pas.",
+    "PLAYERS_ONLINE_IN_SERVER": "Jouers actif dans {0}:"
 }

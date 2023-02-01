@@ -27,9 +27,9 @@ const emojiHats = {
 
 function getHatEmojis(accessories) {
     let string = ""
-    for(const hatName in accessories) {
-        if(accessories[hatName] && emojiHats[hatName])
-        string += emojiHats[hatName] ?? "";
+    for (const hatName in accessories) {
+        if (accessories[hatName] && emojiHats[hatName])
+            string += emojiHats[hatName] ?? "";
     }
     return string;
 }
@@ -37,7 +37,7 @@ function getHatEmojis(accessories) {
 function getHatName(name) {
     const segments = name.split("-");
     const nameArray = [];
-    for(const segment of segments) {
+    for (const segment of segments) {
         nameArray.push(segment[0].toUpperCase() + segment.slice(1));
     }
     return nameArray.join(" ");
@@ -45,7 +45,7 @@ function getHatName(name) {
 
 function getVictoryZonesTouched(stats) {
     let updates = stats.version_number;
-    for(const areaName in stats.highest_area_achieved) {
+    for (const areaName in stats.highest_area_achieved) {
         updates -= stats?.highest_area_achieved[areaName] ?? 0;
     }
     return updates;
@@ -73,28 +73,26 @@ class PlayerInfoInteraction extends DefaultInteraction {
         const username = interaction.options.getString("username");
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers() ?? [];
-        if(!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
-        let account = await AccountData.getByUsername(username);
-        if(account) {
-            account.careerVP = playerDetails.stats["highest_area_achieved_counter"];
-            await account.save();
-        }
+        if (!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
+        const account = await AccountData.getByUsername(username);
+        const higherVP = await AccountData.count({ "careerVP": { "$gte": account.careerVP } });
+        const higherPlaytime = await AccountData.count({ "playTime": { "$gte": account.playTime } });
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "PLAYER_DETAILS_TITLE", [sanitizeUsername(account?.displayName ?? username)]))
-            .setURL(`https://evades.io/profile/${account?.displayName ?? username}`)
+            // .setURL(`https://evades.io/profile/${account?.displayName ?? username}`) // Causes some issues.
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
-`**${Locale.text(interaction, "CAREER_VP")}**: ${playerDetails.stats["highest_area_achieved_counter"]} ${Locale.text(interaction, "VICTORY_POINTS")}${account.careerVP ? ` (#${await AccountData.count({"careerVP": {"$gte": account.careerVP}})}, top ${(await AccountData.count({"careerVP": {"$gte": account.careerVP}}) / await AccountData.count() * 100).toFixed(5)}%)` : ""}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**${Locale.text(interaction, "REAL_CAREER_VP")}**: ${playerDetails.summedCareerVP} ${Locale.text(interaction, "VICTORY_POINTS")}` : ""}
+                `**${Locale.text(interaction, "CAREER_VP")}**: ${playerDetails.stats["highest_area_achieved_counter"]} ${Locale.text(interaction, "VICTORY_POINTS")}${account.careerVP ? ` (#${higherVP}, top ${(higherVP / await AccountData.count() * 100).toFixed(5)}%)` : ""}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**${Locale.text(interaction, "REAL_CAREER_VP")}**: ${playerDetails.summedCareerVP} ${Locale.text(interaction, "VICTORY_POINTS")}` : ""}
 **${Locale.text(interaction, "WEEKLY_VP")}**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + ` ${Locale.text(interaction, "VICTORY_POINTS")}` : Locale.text(interaction, "NONE")}
-**${Locale.text(interaction, "TIME_PLAYED")}**: ${account.playTime ? `${formatSeconds(account.playTime)} (#${await AccountData.count({"playTime": {"$gte": account.playTime}})}, top ${(await AccountData.count({"playTime": {"$gte": account.playTime}}) / await AccountData.count({"playTime": {"$gte": 0}}) * 100).toFixed(5)}%)` : Locale.text(interaction, "NEVER")}
+**${Locale.text(interaction, "TIME_PLAYED")}**: ${account.playTime ? `${formatSeconds(account.playTime)} (#${higherPlaytime}, top ${(higherPlaytime / await AccountData.count({ "playTime": { "$gte": 0 } }) * 100).toFixed(5)}%)` : Locale.text(interaction, "NEVER")}
 **${Locale.text(interaction, "LAST_SEEN")}**: ${onlinePlayers.some(name => name.toLowerCase() == username.toLowerCase()) ? Locale.text(interaction, "ONLINE_NOW") : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : Locale.text(interaction, "NEVER")}
 **${Locale.text(interaction, "WEEKS_ACTIVE")}**: ${playerDetails.activeWeeks} ${Locale.text(interaction, "WEEKS_UNIT")}${playerDetails.firstActiveWeekNumber ? `\n**${Locale.text(interaction, "FIRST_ACTIVE_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.firstActiveWeekNumber}
 **${Locale.text(interaction, "LAST_ACTIVE_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.lastActiveWeekNumber}
 **${Locale.text(interaction, "BEST_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.highestWeek[0]} ${Locale.text(interaction, "WITH")} ${playerDetails.highestWeek[1]} ${Locale.text(interaction, "VICTORY_POINTS")}${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}` : ""}
 **${Locale.text(interaction, "CURRENT_HAT")}**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}`
-//**Hat collection**: ${hasPermission(interaction, PermissionsBitField.Flags.UseExternalEmojis) ? getHatEmojis(playerDetails.accessories.hat_collection) : "No emoji permissions!"}`
-        )
+                //**Hat collection**: ${hasPermission(interaction, PermissionsBitField.Flags.UseExternalEmojis) ? getHatEmojis(playerDetails.accessories.hat_collection) : "No emoji permissions!"}`
+            )
         return { embeds: [embed] }
     }
 }

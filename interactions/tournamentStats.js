@@ -17,24 +17,24 @@ class TournamentStatsInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const tournament = await TournamentData.getByID(interaction.targetMessage.id);
-        if(!tournament) return {ephemeral: true, content: Locale.text(interaction, "NOT_A_TOURNAMENT")};
+        if (!tournament) return { ephemeral: true, content: Locale.text(interaction, "NOT_A_TOURNAMENT") };
         let spectators = new Collection();
-        for(const run of tournament.leaderboard) {
+        for (const run of tournament.leaderboard) {
             let value = spectators.get(run.spectator) ?? 0;
             spectators.set(run.spectator, value + 1);
         }
         spectators.sort((spec1, spec2) => spec2 - spec1);
         let string =
-`Tournament stats:
+            `Tournament stats:
 Created: <t:${Math.floor(tournament.created / 1000)}>
 Runs: ${tournament.leaderboard.length} runs
 Top spectators:`;
-        for(const spectator of spectators.firstKey(5)) {
+        for (const spectator of spectators.firstKey(5)) {
             const runs = spectators.get(spectator)
             string += `\n${(await interaction.client.users.fetch(spectator)).tag} spectated ${runs} runs`
         }
 
-        return {ephemeral: true, content: string};
+        return { ephemeral: true, content: string };
     }
 }
 

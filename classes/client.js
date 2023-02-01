@@ -7,7 +7,7 @@ import Sheets from "./sheets.js";
 
 class DiscordClient extends Client {
     constructor() {
-        super({intents: [IntentsBitField.Flags.Guilds]});
+        super({ intents: [IntentsBitField.Flags.Guilds] });
         this.evadesAPI = new EvadesAPI();
         this.interactionHandler = new InteractionHandler();
         if(Config.GOOGLE_API_ENABLED) this.sheets = new Sheets();
@@ -15,8 +15,8 @@ class DiscordClient extends Client {
     }
 
     async clientLogin() {
-        if(!existsSync("./secrets/token")) throw "Token file not provided! Please put a bot token in a file named 'token' in the './secrets' directory.";
-        await this.login(readFileSync("./secrets/token", {encoding: "utf8"}).trim());
+        if (!existsSync("./secrets/token")) throw "Token file not provided! Please put a bot token in a file named 'token' in the './secrets' directory.";
+        await this.login(readFileSync("./secrets/token", { encoding: "utf8" }).trim());
         console.log("Client logged in.")
     }
 
