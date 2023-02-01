@@ -212,13 +212,13 @@ async function updateLastSeen(evadesAPI) {
     const hour = new Date().getUTCHours().toString();
     for (const username of onlinePlayers) {
         if (username.startsWith("Guest")) continue;
-        AccountData.getByUsername(username).then((account) => {
+        AccountData.getByUsername(username).then(async (account) => {
             // Collect data regarding active times.
             account.lastSeen = Math.floor(Date.now() / 1000);
             if (!account.activity[hour]) account.activity[hour] = 0;
             account.activity[hour] += 1;
             account.playTime += Math.floor(evadesAPI.onlinePlayersCacheTime / 1000);
-            account.save();
+            await account.save();
         });
     }
 }
@@ -227,11 +227,14 @@ async function updateCareerVP(evadesAPI) {
     // We know that only players in the hall of fame can have an outdated career VP.
     const hallOfFame = await evadesAPI.getHallOfFame();
     for (const [username, weeklyVP, careerVP] of hallOfFame) {
+        if (!username || !careerVP) continue;
         // Fetch the players details, updating their career VP.
-        AccountData.getByUsername(username).then((account) => {
+        AccountData.getByUsername(username).then(async (account) => {
             if(!account) return;
-            account.careerVP = parseInt(careerVP);
-            account.save();
+            const parsedVP = parseInt(careerVP);
+            if(isNaN(parsedVP) || account.careerVP == parsedVP) return;
+            account.careerVP = parsedVP;
+            await account.save();
         });
     }
 }

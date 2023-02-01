@@ -10,7 +10,7 @@ class DiscordClient extends Client {
         super({ intents: [IntentsBitField.Flags.Guilds] });
         this.evadesAPI = new EvadesAPI();
         this.interactionHandler = new InteractionHandler();
-        if(Config.GOOGLE_API_ENABLED) this.sheets = new Sheets();
+        if(Config.GOOGLE_API_ENABLED) this.sheets = new Sheets("18QTGlPn8WI5NfymccFV2m1duPcbUFahWtY22Qc5gc3g");
         this.on("interactionCreate", this.interactionHandler.handleInteraction);
     }
 

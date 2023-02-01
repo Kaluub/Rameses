@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, escapeMarkdown, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 
 class EloInteraction extends DefaultInteraction {
@@ -66,17 +66,6 @@ class EloInteraction extends DefaultInteraction {
         return false;
     }
 
-    getELOFromUsername(username, data) {
-        let elo = 1200;
-        for (const eloData of data) {
-            if (eloData[0].toLowerCase() === username.toLowerCase()) {
-                elo = parseInt(eloData[1]);
-                break;
-            }
-        }
-        return elo;
-    }
-
     async execute(interaction) {
         if (!interaction.client.sheets) return "Unuseable!";
         const subcommand = interaction?.options?.getSubcommand(false) ?? interaction.customId.split("/")[1];
@@ -85,17 +74,17 @@ class EloInteraction extends DefaultInteraction {
         }
         if (subcommand == "check") {
             const username = interaction.options.getString("username");
-            const data = await interaction.client.sheets.getELOData(); // Format: [[Username1, ELO1], [Username2, ELO2]];
-            const elo = this.getELOFromUsername(username, data);
+            const data = await interaction.client.sheets.getELOData();
+            const elo = data.get(username) ?? 1200;
             return `${username} has ${elo} ELO.`;
         }
         if (subcommand == "match") { // Matchmaking
             const username = interaction.options.getString("username");
             const data = await interaction.client.sheets.getELOData();
-            const thisELO = this.getELOFromUsername(username, data);
+            const thisELO = data.get(username) ?? 1200;
             let foundMatch = null;
             let cancelFindingMatch = false;
-            for (const match of this.matches) {
+            for (const match of this.matches.sort(Match.sortMatches)) {
                 if (match.state !== Match.State.OPEN) continue;
                 if (match.user1 == interaction.user || match.user2 == interaction.user) {
                     cancelFindingMatch = true;
@@ -115,8 +104,16 @@ class EloInteraction extends DefaultInteraction {
                 const embed = new EmbedBuilder()
                     .setTitle("Match found!")
                     .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nPick your servers and you'll need to pick between the following maps & heroes.`)
-                return { content: `${foundMatch.user1} & ${foundMatch.user2}`, embeds: [] }
+                
+                return { content: `${foundMatch.user1} & ${foundMatch.user2}`, embeds: [embed] }
             }
+
+            // No match found. Create a new one.
+            this.matches.push(
+                new Match(interaction.user, username, thisELO)
+            );
+
+            return { content: `Hold on, ${username}! We're going to try to find you a fair match...` }
         }
         return Locale.text(interaction, "HOW_DID_WE_GET_HERE");
     }
@@ -126,6 +123,10 @@ class Match {
     static State = {
         OPEN: 1,
         CLOSED: 2
+    }
+
+    static sortMatches(match1, match2) {
+        return match1.createdAt - match2.createdAt;
     }
 
     constructor(user1, username1, elo1, user2 = null, username2 = null, elo2 = null) {
