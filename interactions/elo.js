@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, StringSelectMenuBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 import { v1 } from "uuid";
 import EvadesData from "../evadesData.js";
@@ -72,15 +72,18 @@ class EloInteraction extends DefaultInteraction {
     async execute(interaction) {
         if (!interaction.client.sheets) return "Unuseable!";
         const subcommand = interaction?.options?.getSubcommand(false) ?? interaction.customId.split("/")[1];
+        
         if (subcommand == "test") {
             return "☻" //JSON.stringify([this.determineBracket(400), this.determineBracket(26044), this.determineBracket(1900), this.determineBracket(1300), this.determineBracket(1500)], null, 4)
         }
+
         if (subcommand == "check") {
             const username = interaction.options.getString("username");
             const data = await interaction.client.sheets.getELOData();
             const elo = data.get(username) ?? 1200;
             return `${username} has ${elo} ELO.`;
         }
+
         if (subcommand == "match") { // Matchmaking
             const username = interaction.options.getString("username");
             const data = await interaction.client.sheets.getELOData();
@@ -102,14 +105,16 @@ class EloInteraction extends DefaultInteraction {
                 return { content: "You can't participate in an ELO match right now! Are you already searching for a match?", ephemeral: true }
             }
             if (foundMatch) { // We now know that two users are available.
-                this.matches.delete(foundMatch.id);
                 const embed = new EmbedBuilder()
                     .setTitle("Match found!")
                     .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
                 
                 // Get maps and heroes.
+                const allowedMaps = thisELO >= 1500 ? EvadesData.heroes : EvadesData.maps.filter(map => !map.includes("Hard"));
                 const heroes = randomElements(EvadesData.heroes, 3);
-                const maps = randomElements(EvadesData.maps, 5);
+                const maps = randomElements(allowedMaps, 5);
+
+                foundMatch.setChoices(heroes, maps);
 
                 embed.addFields(
                     {
@@ -121,8 +126,29 @@ class EloInteraction extends DefaultInteraction {
                         value: maps.join("\n")
                     }
                 )
+                
+                const menu = new StringSelectMenuBuilder()
+                    .setCustomId(`elo/maps/${foundMatch.id}`)
+                    .setPlaceholder("Map vetoes")
+                    .setMinValues(1)
+                    .setMaxValues(1)
+                
+                for (const map of maps) {
+                    menu.addOptions(
+                        {
+                            label: map,
+                            value: map
+                        }
+                    )
+                }
+                
+                const row = new ActionRowBuilder().addComponents(menu);
 
-                return { content: `${foundMatch.user1} & ${foundMatch.user2}`, embeds: [embed] }
+                return {
+                    content: `${foundMatch.user1} & ${foundMatch.user2}`,
+                    embeds: [embed],
+                    components: [row]
+                }
             }
 
             // No match found. Create a new one.
@@ -131,6 +157,59 @@ class EloInteraction extends DefaultInteraction {
 
             return { content: `Hold on, ${username}! We're going to try to find you a fair match...` }
         }
+
+        if (subcommand == "maps") {
+            const matchId = interaction.customId.split("/")[2];
+            const match = this.matches.get(matchId);
+            if (!match)
+                return Locale.text(interaction, "COMMAND_ERROR");
+
+            if (match.user1.id !== interaction.user.id && match.user2.id !== interaction.user.id)
+                return Locale.text(interaction, "COMMAND_ERROR");
+            
+            if (match.usersWhoVetoed.includes(interaction.user.id))
+                return Locale.text(interaction, "COMMAND_ERROR");
+
+            const mapToVeto = interaction.values[0];
+            match.maps = match.maps.filter(map => map != mapToVeto);
+            match.usersWhoVetoed.push(interaction.id);
+            this.matches.set(match.id, match);
+            
+            const embed = new EmbedBuilder()
+                .setTitle("Match found!")
+                .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
+
+            embed.addFields(
+                {
+                    name: "Heroes:",
+                    value: heroes.join("\n")
+                },
+                {
+                    name: "Maps:",
+                    value: maps.join("\n")
+                }
+            )
+                
+            const menu = new StringSelectMenuBuilder()
+                .setCustomId(`elo/maps/${foundMatch.id}`)
+                .setPlaceholder("Map vetoes")
+                .setMinValues(1)
+                .setMaxValues(1)
+                
+            for (const map of match.maps) {
+                menu.addOptions(
+                    {
+                        label: map,
+                        value: map
+                    }
+                )
+            }
+            
+            const row = new ActionRowBuilder().addComponents(menu);
+
+            await interaction.update({components: [row]})
+        }
+
         return Locale.text(interaction, "HOW_DID_WE_GET_HERE");
     }
 }
@@ -151,6 +230,14 @@ class Match {
         this.username2 = username2;
         this.elo1 = elo1;
         this.elo2 = elo2;
+        this.heroes = [];
+        this.maps = [];
+        this.usersWhoVetoed = [];
+    }
+
+    setChoices(heroes, maps) {
+        this.heroes = heroes;
+        this.maps = maps;
     }
 
     setOpponent(opponentUser, opponentUsername, opponentElo) {
