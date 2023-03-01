@@ -10,7 +10,7 @@
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "google-spreadsheet": "^3.3.0",
-    "mongodb": "^4.13.0",
+    "mongodb": "^5.1.0",
     "node-fetch": "^3.3.0",
     "puppeteer": "^19.6.2",
     "uuid": "^9.0.0"

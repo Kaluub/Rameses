@@ -14,7 +14,7 @@ class UsernameInteraction extends DefaultInteraction {
         const accounts = await filter.toArray();
         const response = [];
         for (const account of accounts) {
-            if (account.username?.length < 2) continue;
+            if (account.username?.length < 2 || account.username?.length > 100) continue;
             response.push({ name: account?.displayName ?? account.username, value: account?.displayName ?? account.username });
         }
         await interaction.respond(response);
