@@ -1,5 +1,6 @@
-import { Collection, time } from "discord.js";
+import { Collection } from "discord.js";
 import fetch from "node-fetch";
+import Config from "../config.js";
 import Changelog from "./changelog.js";
 import { AccountData } from "./data.js";
 
@@ -114,7 +115,8 @@ class EvadesAPI {
         const controller = new AbortController();
         try {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
-            const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
+            if (Config.DEBUG) console.log(encodeURI(this.fetchURL + endpoint))
+            const data = await fetch(encodeURI(this.fetchURL + endpoint), { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
             if (!data || !data.ok) return null;
             return await data.json();
@@ -194,6 +196,21 @@ class EvadesAPI {
         }
         return this.cache.hallOfFame.entries;
     }
+
+    async getRuns(filters) {
+        // Since runs can have many filters, they aren't cached.
+        const filterStore = [];
+        for (const name in filters) {
+            const value = filters[name];
+            if (!name || !value) continue;
+            if (value === "X") continue;
+            filterStore.push(`${name}=${value}`);
+        }
+
+        const runs = await this.get("runs?" + filterStore.join("&"));
+        if (!runs) return null;
+        return runs;
+    }
 }
 
 let failedToConnect = true;
@@ -229,8 +246,9 @@ async function updateCareerVP(evadesAPI) {
     for (const [username, weeklyVP, careerVP] of hallOfFame) {
         // Fetch the players details, updating their career VP.
         AccountData.getByUsername(username).then((account) => {
-            if(!account) return;
-            account.careerVP = parseInt(careerVP);
+            if (!account) return;
+            const vp = parseInt(careerVP);
+            if (vp === account.careerVP) return;
             account.save();
         });
     }

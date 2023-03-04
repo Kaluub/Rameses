@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { AccountData } from "../classes/data.js";
 import { formatSeconds, sanitizeUsername } from "../utils.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 
 const emojiHats = {
@@ -70,16 +70,23 @@ class PlayerInfoInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const username = interaction.options.getString("username");
+        const username = this.getStringArgument(interaction, "username", 1);
+        if (!username)
+            return Locale.text(interaction, "COMMAND_ERROR");
+        
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers() ?? [];
-        if (!playerDetails) return Locale.text(interaction, "PLAYER_NOT_FOUND");
+        
+        if (!playerDetails)
+            return Locale.text(interaction, "PLAYER_NOT_FOUND");
+        
         const account = await AccountData.getByUsername(username);
         const higherVP = await AccountData.count({ "careerVP": { "$gte": account.careerVP } });
         const higherPlaytime = await AccountData.count({ "playTime": { "$gte": account.playTime } });
+        
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "PLAYER_DETAILS_TITLE", [sanitizeUsername(account?.displayName ?? username)]))
-            // .setURL(`https://evades.io/profile/${account?.displayName ?? username}`) // Causes some issues.
+            .setURL(encodeURI("https://evades.io/profile/" + account?.displayName ?? username))
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
@@ -92,8 +99,22 @@ class PlayerInfoInteraction extends DefaultInteraction {
 **${Locale.text(interaction, "BEST_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.highestWeek[0]} ${Locale.text(interaction, "WITH")} ${playerDetails.highestWeek[1]} ${Locale.text(interaction, "VICTORY_POINTS")}${playerDetails.highestWeek[2] ? ` (${getHatName(playerDetails.highestWeek[2])} Crown)` : ""}` : ""}
 **${Locale.text(interaction, "CURRENT_HAT")}**: ${playerDetails.accessories["hat_selection"] ? getHatName(playerDetails.accessories["hat_selection"]) : "None"}`
                 //**Hat collection**: ${hasPermission(interaction, PermissionsBitField.Flags.UseExternalEmojis) ? getHatEmojis(playerDetails.accessories.hat_collection) : "No emoji permissions!"}`
-            )
-        return { embeds: [embed] }
+        )
+
+        const activityButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Secondary)
+            .setCustomId("activity/" + account?.displayName ?? username)
+            .setLabel(Locale.text(interaction, "ACTIVITY"))
+        
+        const profilePageButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setURL(encodeURI("https://evades.io/profile/" + account?.displayName ?? username))
+            .setLabel(Locale.text(interaction, "ACCOUNT_PAGE"))
+            
+        const row = new ActionRowBuilder()
+            .addComponents(activityButton, profilePageButton)
+
+        return { embeds: [embed], components: [row] }
     }
 }
 

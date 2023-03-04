@@ -91,5 +91,13 @@
     "TOP_PLAY_TIME": "Par temps jouées:",
     "NO_MATCHES": "Je trouve rien.",
     "INVALID_SERVER": "Cet serveur n'existe pas.",
-    "PLAYERS_ONLINE_IN_SERVER": "Jouers actif dans {0}:"
+    "PLAYERS_ONLINE_IN_SERVER": "Jouers actif dans {0}:",
+    "PLAYER_INFO": "Info",
+    "ACTIVITY": "Activité",
+    "ACCOUNT_PAGE": "Source",
+    "RUNS_TITLE": "Journal des joueurs",
+    "NO_RUNS_FOUND": "Il n'y a pas des notes avec ces filtres appliques!",
+    "RANDOM_TITLE": "Randomiseur:",
+    "RANDOM_RESULTS": "Le region c'est **{0}** et celui sont votres héros:\n**{1}**",
+    "REROLL": "Relancer"
 }

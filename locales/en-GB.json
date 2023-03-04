@@ -91,5 +91,13 @@
     "TOP_PLAY_TIME": "Time played leaderboard:",
     "NO_MATCHES": "No matches.",
     "INVALID_SERVER": "Invalid server.",
-    "PLAYERS_ONLINE_IN_SERVER": "Players currently online in {0}:"
+    "PLAYERS_ONLINE_IN_SERVER": "Players currently online in {0}:",
+    "PLAYER_INFO": "Player Info",
+    "ACTIVITY": "Activity",
+    "ACCOUNT_PAGE": "Account",
+    "RUNS_TITLE": "Run History",
+    "NO_RUNS_FOUND": "No runs were found with that filter!",
+    "RANDOM_TITLE": "Randomizer:",
+    "RANDOM_RESULTS": "The region will be **{0}**, and here are your heroes:\n**{1}**",
+    "REROLL": "Reroll"
 }

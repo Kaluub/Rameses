@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { AccountData } from "../classes/data.js";
 import { formatSeconds, sanitizeUsername } from "../utils.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 
 class ActivityInteraction extends DefaultInteraction {
@@ -38,15 +38,18 @@ class ActivityInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const username = interaction.options.getString("username");
+        const username = this.getStringArgument(interaction, "username", 1);
+        if (!username)
+            return Locale.text(interaction, "COMMAND_ERROR");
+
         const account = await AccountData.getByUsername(username, false);
 
         if (!account) return Locale.text(interaction, "PLAYER_NOT_FOUND");
         if (!account.playTime) return Locale.text(interaction, "PLAYER_INACTIVE", [sanitizeUsername(account.displayName ?? account.username)]);
 
         // Customize the graph for fun (perhaps create generic graph function later if needed)
-        const barValue = interaction.options.getString("graph-icon") || "▒";
-        const detail = barValue.length > 1 ? Math.min(interaction.options.getInteger("graph-detail"), 40) || 30 : interaction.options.getInteger("graph-detail") || 30;
+        const barValue = interaction.options?.getString("graph-icon") || "▒";
+        const detail = barValue.length > 1 ? Math.min(interaction.options?.getInteger("graph-detail"), 40) || 30 : interaction.options?.getInteger("graph-detail") || 30;
         const highestValue = Math.max(...Object.values(account.activity));
 
         let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${formatSeconds(account.playTime)} (#${await AccountData.count({ "playTime": { "$gte": account.playTime } })}, top ${(await AccountData.count({ "playTime": { "$gte": account.playTime } }) / await AccountData.count({ "playTime": { "$gte": 0 } }) * 100).toFixed(5)}%)\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
@@ -64,8 +67,21 @@ class ActivityInteraction extends DefaultInteraction {
             .setColor("#224488")
             .setTimestamp()
             .setDescription(string)
+        
+        const playerInfoButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Secondary)
+            .setCustomId("player-info/" + account?.displayName ?? username)
+            .setLabel(Locale.text(interaction, "PLAYER_INFO"))
+        
+        const profilePageButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
+            .setURL(encodeURI("https://evades.io/profile/" + account?.displayName ?? username))
+            .setLabel(Locale.text(interaction, "ACCOUNT_PAGE"))
+            
+        const row = new ActionRowBuilder()
+            .addComponents(playerInfoButton, profilePageButton)
 
-        return { embeds: [embed] };
+        return { embeds: [embed], components: [row] };
     }
 }
 

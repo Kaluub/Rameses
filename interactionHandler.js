@@ -63,16 +63,9 @@ class InteractionHandler {
                 else if (!interaction.replied)
                     await interaction.reply(response);
             })
-            .catch(async err => {
+            .catch(err => {
                 console.error(err);
-                if (interaction.isAutocomplete())
-                    return;
-                if (interaction.deferred && !interaction.replied)
-                    await interaction.editReply({ content: Locale.text(interaction, "COMMAND_ERROR") });
-                if (!interaction.replied)
-                    await interaction.reply({ content: Locale.text(interaction, "COMMAND_ERROR"), ephemeral: true });
             })
-
     }
 }
 

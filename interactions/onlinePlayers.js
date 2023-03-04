@@ -9,10 +9,10 @@ const staff = [
     "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron", // Developers.
     "extirpater", "Exoriz", "Jackal", // Head mods.
     // Space for Sr. mods.
-    "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv",
-    "Vikenti", "Mel", "Amasterclasher", "Invi", // Mods.
-    "Ram", "hula", "basti", "Androoh", "lindsay", "ThatHodgeGuy", "Kaluub", "Angel🌸",
-    "PotatoNuke", "xMaverick" // Jr. mods.
+    "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "Darklight", "R0YqL",
+    "Raqzv", "Vikenti", "Mel", "Amasterclasher", "Invi", "hula", "basti",
+    "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸", // Mods.
+    "Ram", "PotatoNuke", "xMaverick" // Jr. mods.
 ]
 
 function sortUsernamesAlphabetically(username1, username2) {
@@ -23,6 +23,8 @@ const JOINER = "; ";
 const MAX_CHARACTER_COUNT = 1000;
 
 const serverChoices = [
+    { name: "All of NA", value: "local" },
+    { name: "All of EU", value: "remote" },
     { name: "NA 1", value: "local:0" },
     { name: "NA 2", value: "local:1" },
     { name: "NA 3", value: "local:2" },
@@ -65,22 +67,29 @@ class OnlinePlayersInteraction extends DefaultInteraction {
 
         if (specificServer) {
             const data = specificServer.split(":");
-            if (data.length != 2) return Locale.text(interaction, "INVALID_SERVER");
-
             const location = data[0];
             const index = parseInt(data[1]);
 
+            if (!location) return Locale.text(interaction, "INVALID_SERVER");
             if (!["local", "remote"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
-            if (isNaN(index)) return Locale.text(interaction, "INVALID_SERVER");
+            // if (isNaN(index)) return Locale.text(interaction, "INVALID_SERVER");
 
             const serverStats = await interaction.client.evadesAPI.getServerStats();
 
-            if (location === "local") {
+            if (isNaN(index)) {
+                const servers = location === "local" ? serverStats.localServers : serverStats.remoteServers;
+                onlinePlayers = [];
+                for (const server of servers) {
+                    onlinePlayers.push(server.online);
+                }
+            }
+
+            else if (location === "local") {
                 if (!serverStats.localServers[index]) return Locale.text(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.localServers[index].online;
             }
 
-            if (location === "remote") {
+            else if (location === "remote") {
                 if (!serverStats.remoteServers[index]) return Locale.text(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.remoteServers[index].online;
             }
