@@ -23,8 +23,8 @@ const JOINER = "; ";
 const MAX_CHARACTER_COUNT = 1000;
 
 const serverChoices = [
-    { name: "All of NA", value: "local" },
-    { name: "All of EU", value: "remote" },
+    { name: "all of NA", value: "local" },
+    { name: "all of EU", value: "remote" },
     { name: "NA 1", value: "local:0" },
     { name: "NA 2", value: "local:1" },
     { name: "NA 3", value: "local:2" },
@@ -80,7 +80,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
                 const servers = location === "local" ? serverStats.localServers : serverStats.remoteServers;
                 onlinePlayers = [];
                 for (const server of servers) {
-                    onlinePlayers.push(server.online);
+                    onlinePlayers.push(...server.online);
                 }
             }
 
