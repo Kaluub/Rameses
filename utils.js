@@ -73,15 +73,14 @@ function readJSON(path) {
 }
 
 function randomElements(array, amount) {
-    let result = new Array(amount);
-    let taken = new Array(array.length);
-    if (amount > array.length) return [];
-    while (amount--) {
-        var x = Math.floor(Math.random() * array.length);
-        result[amount] = array[x in taken ? taken[x] : x];
-        taken[x] = --array.length in taken ? taken[array.length] : array.length;
+    const picked = [];
+    while (picked.length < amount) {
+        const pool = array.filter(element => !picked.includes(element));
+        if (!pool.length)
+            break;
+        picked.push(pool[Math.floor(pool.length * Math.random())]);
     }
-    return result;
+    return picked;
 }
 
 export { tournamentFormatter, hasPermission, sanitizeUsername, timeSecondsToTime, formatSeconds, readJSON, randomElements }

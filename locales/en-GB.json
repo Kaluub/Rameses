@@ -91,5 +91,8 @@
     "TOP_PLAY_TIME": "Time played leaderboard:",
     "NO_MATCHES": "No matches.",
     "INVALID_SERVER": "Invalid server.",
-    "PLAYERS_ONLINE_IN_SERVER": "Players currently online in {0}:"
+    "PLAYERS_ONLINE_IN_SERVER": "Players currently online in {0}:",
+    "NOT_IN_MATCH": "You're not in this match.",
+    "ALREADY_SELECTED_MAP": "You've already selected the maps you wanted to veto!",
+    "MAP_ALREADY_REMOVED": "That map was already removed."
 }

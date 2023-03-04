@@ -110,9 +110,9 @@ class EloInteraction extends DefaultInteraction {
                     .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
                 
                 // Get maps and heroes.
-                const allowedMaps = thisELO >= 1500 ? EvadesData.heroes : EvadesData.maps.filter(map => !map.includes("Hard"));
+                const allowedMaps = thisELO >= 1500 ? EvadesData.maps : EvadesData.maps.filter(map => !map.includes("Hard") && map !== "Catastrophic Core");
                 const heroes = randomElements(EvadesData.heroes, 3);
-                const maps = randomElements(allowedMaps, 5);
+                const maps = randomElements(allowedMaps, 7);
 
                 foundMatch.setChoices(heroes, maps);
 
@@ -134,6 +134,7 @@ class EloInteraction extends DefaultInteraction {
                     .setMaxValues(1)
                 
                 for (const map of maps) {
+                    if (!map) continue;
                     menu.addOptions(
                         {
                             label: map,
@@ -160,38 +161,41 @@ class EloInteraction extends DefaultInteraction {
 
         if (subcommand == "maps") {
             const matchId = interaction.customId.split("/")[2];
-            const match = this.matches.get(matchId);
+            let match = this.matches.get(matchId);
             if (!match)
                 return Locale.text(interaction, "COMMAND_ERROR");
 
             if (match.user1.id !== interaction.user.id && match.user2.id !== interaction.user.id)
-                return Locale.text(interaction, "COMMAND_ERROR");
+                return Locale.text(interaction, "NOT_IN_MATCH");
             
-            if (match.usersWhoVetoed.includes(interaction.user.id))
-                return Locale.text(interaction, "COMMAND_ERROR");
+            if (match.usersWhoVetoed.filter(id => id === interaction.user.id).length >= 2)
+                return Locale.text(interaction, "ALREADY_SELECTED_MAP");
 
             const mapToVeto = interaction.values[0];
+            if (!match.maps.includes(mapToVeto))
+                return Locale.text(interaction, "MAP_ALREADY_REMOVED");
+
             match.maps = match.maps.filter(map => map != mapToVeto);
-            match.usersWhoVetoed.push(interaction.id);
+            match.usersWhoVetoed.push(interaction.user.id);
             this.matches.set(match.id, match);
             
             const embed = new EmbedBuilder()
                 .setTitle("Match found!")
-                .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
+                .setDescription(`${match.username1} will be going against ${match.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
 
             embed.addFields(
                 {
                     name: "Heroes:",
-                    value: heroes.join("\n")
+                    value: match.heroes.join("\n")
                 },
                 {
                     name: "Maps:",
-                    value: maps.join("\n")
+                    value: match.maps.join("\n")
                 }
             )
                 
             const menu = new StringSelectMenuBuilder()
-                .setCustomId(`elo/maps/${foundMatch.id}`)
+                .setCustomId(`elo/maps/${match.id}`)
                 .setPlaceholder("Map vetoes")
                 .setMinValues(1)
                 .setMaxValues(1)
@@ -207,7 +211,7 @@ class EloInteraction extends DefaultInteraction {
             
             const row = new ActionRowBuilder().addComponents(menu);
 
-            await interaction.update({components: [row]})
+            await interaction.update({embeds: [embed], components: [row]})
         }
 
         return Locale.text(interaction, "HOW_DID_WE_GET_HERE");
