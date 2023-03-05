@@ -23,7 +23,7 @@ class RandomInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const amountOfHeroes = this.getIntegerArgument(interaction, "heroes", 1) ?? 1;
+        const amountOfHeroes = this.getIntegerArgument(interaction, "heroes", 1) || 1;
 
         const heroes = randomElements(EvadesData.heroes, amountOfHeroes);
         const region = randomElements(EvadesData.regions, 1)[0];
