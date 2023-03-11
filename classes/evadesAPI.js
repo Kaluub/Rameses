@@ -99,7 +99,7 @@ class EvadesAPI {
         updateLastSeen(this);
         updateCareerVP(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
-        setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
+        setInterval(updateCareerVP, 600000, this); // Updates each 10 minutes.
     }
 
     resetCache() {
@@ -248,7 +248,8 @@ async function updateCareerVP(evadesAPI) {
         AccountData.getByUsername(username).then((account) => {
             if (!account) return;
             const vp = parseInt(careerVP);
-            if (vp === account.careerVP) return;
+            if (account.careerVP && vp < account.careerVP) return;
+            account.careerVP = vp;
             account.save();
         });
     }
