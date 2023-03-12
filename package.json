@@ -1,6 +1,6 @@
 {
   "name": "rameses",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Discord bot to interact with the Evades.io API",
   "main": "app.js",
   "type": "module",
@@ -10,8 +10,8 @@
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "mongodb": "^5.1.0",
-    "node-fetch": "^3.3.0",
-    "puppeteer": "^19.6.2",
+    "node-fetch": "^3.3.1",
+    "puppeteer": "^19.7.4",
     "uuid": "^9.0.0"
   }
 }

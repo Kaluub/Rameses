@@ -1,4 +1,17 @@
 class EvadesData {
+    static developers = ["MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron"];
+    static headMods = ["extirpater", "Exoriz", "Jackal"];
+    static seniorMods = [];
+    static mods = [
+        "Dittoblob", "Gianni", "LightY", "nosok", "Darklight", "R0YqL",
+        "Raqzv", "Vikenti", "Mel", "Amasterclasher", "Invi", "hula", "basti",
+        "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸"
+    ];
+    static juniorMods = ["Ram", "PotatoNuke", "xMaverick", "eagle45"];
+    static staff =
+        this.developers + this.headMods + this.seniorMods +
+        this.mods + this.juniorMods
+
     static heroes = [
         "Magmax",
         "Rime",
@@ -30,6 +43,50 @@ class EvadesData {
     ]
 
     static regions = [
+        "Central Core",
+        "Central Core Hard",
+        "Catastrophic Core",
+        "Vicious Valley",
+        "Vicious Valley Hard",
+        "Elite Expanse",
+        "Elite Expanse Hard",
+        "Wacky Wonderland",
+        "Glacial Gorge",
+        "Glacial Gorge Hard",
+        "Dangerous District",
+        "Dangerous District Hard",
+        "Peculiar Pyramid",
+        "Peculiar Pyramid Hard",
+        "Stellar Square",
+        "Monumental Migration",
+        "Humongous Hollow",
+        "Humongous Hollow Hard",
+        "Haunted Halls",
+        "Quiet Quarry",
+        "Quiet Quarry Hard",
+        "Frozen Fjord",
+        "Frozen Fjord Hard",
+        "Ominous Occult",
+        "Ominous Occult Hard",
+        "Restless Ridge",
+        "Restless Ridge Hard",
+        "Toxic Territory",
+        "Toxic Territory Hard",
+        "Magnetic Monopole",
+        "Magnetic Monopole Hard",
+        "Assorted Alcove",
+        "Assorted Alcove Hard",
+        "Burning Bunker",
+        "Burning Bunker Hard",
+        "Grand Garden",
+        "Grand Garden Hard",
+        "Endless Echo",
+        "Endless Echo Hard",
+        "Mysterious Mansion",
+        "Cyber Castle",
+    ]
+
+    static regionsExtended = [
         "Central Core",
         "Vicious Valley",
         "Elite Expanse",

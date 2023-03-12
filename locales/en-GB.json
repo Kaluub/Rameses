@@ -18,7 +18,7 @@
     "HALL_OF_FAME": "Hall of Fame:",
     "LEADERBOARD": "Leaderboard:",
     "LEADERBOARD_EMPTY": "The leaderboard is empty!",
-    "LEADERBOARD_FOOTER": "{0} players have collected {1} VP this week",
+    "HALL_OF_FAME_FOOTER": "{0} players have collected {1} VP this week",
     "NOBODY_ONLINE": "No players are online!",
     "PLAYERS_ONLINE": "Players currently online:",
     "PLAYERS_ONLINE_COUNT": "{0} players online",
@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "This isn't a tournament message!",
     "CHANGELOG_UNAVAILABLE": "The changelog is not available!",
     "CREDITS_TITLE": "Credits:",
-    "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Kaluub\n\nSpecial thanks to all who've helped with testing & finding issues!",
+    "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Kaluub\n\nSpecial thanks to all who've helped with testing & finding issues!\nIf you're interested in providing a translation for your language, feel free to reach out!",
     "NEWER": "Newer",
     "OLDER": "Older",
     "TIME_PLAYED": "Time played",
@@ -99,5 +99,9 @@
     "NO_RUNS_FOUND": "No runs were found with that filter!",
     "RANDOM_TITLE": "Randomizer:",
     "RANDOM_RESULTS": "The region will be **{0}**, and here are your heroes:\n**{1}**",
-    "REROLL": "Reroll"
+    "REROLL": "Reroll",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next",
+    "LEADERBOARD_VP_FOOTER": "{0} players have gained {1} VP",
+    "LEADERBOARD_ACTIVITY_FOOTER": "{0} players have played for {1}"
 }

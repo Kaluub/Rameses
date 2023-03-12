@@ -62,10 +62,11 @@ function timeSecondsToTime(t) {
 }
 
 function formatSeconds(seconds) {
-    const hours = Math.floor(seconds / (60 * 60));
-    const minutes = Math.floor(seconds / 60) - hours * 60;
+    const days = Math.floor(seconds / (60 * 60 * 24))
+    const hours = Math.floor(seconds / (60 * 60)) - days * 24;
+    const minutes = Math.floor(seconds / 60) - days * 24 * 60 - hours * 60;
     const remainingSeconds = seconds % 60;
-    return `${hours > 0 ? `${hours}h ` : ""}${minutes > 0 ? `${minutes}m ` : ""}${remainingSeconds}s`;
+    return `${days > 0 ? `${days}d ` : ""}${hours > 0 ? `${hours}h ` : ""}${minutes > 0 ? `${minutes}m ` : ""}${remainingSeconds}s`;
 }
 
 function readJSON(path) {

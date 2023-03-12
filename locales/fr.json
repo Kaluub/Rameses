@@ -18,7 +18,7 @@
     "HALL_OF_FAME": "Points de victoire gagnés:",
     "LEADERBOARD": "Classement:",
     "LEADERBOARD_EMPTY": "La classement est vide!",
-    "LEADERBOARD_FOOTER": "{0} jouers ont gagné {1} PV cette semaine",
+    "HALL_OF_FAME_FOOTER": "{0} jouers ont gagné {1} PV cette semaine",
     "NOBODY_ONLINE": "Personne est en ligne!",
     "PLAYERS_ONLINE": "Jouers actif:",
     "PLAYERS_ONLINE_COUNT": "{0} jouers en ligne",
@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "Ce n'est pas une message des tournois.",
     "CHANGELOG_UNAVAILABLE": "Les changes ne sont pas publique maintenant!",
     "CREDITS_TITLE": "Crédits:",
-    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!",
+    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
     "NEWER": "Jeune",
     "OLDER": "Agée",
     "TIME_PLAYED": "Temps en jouent",
@@ -99,5 +99,7 @@
     "NO_RUNS_FOUND": "Il n'y a pas des notes avec ces filtres appliques!",
     "RANDOM_TITLE": "Randomiseur:",
     "RANDOM_RESULTS": "Le region c'est **{0}** et celui sont votres héros:\n**{1}**",
-    "REROLL": "Relancer"
+    "REROLL": "Relancer",
+    "PREVIOUS": "Dernière",
+    "NEXT": "Prochaine"
 }

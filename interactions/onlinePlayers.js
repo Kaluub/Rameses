@@ -3,17 +3,7 @@ import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringO
 import { sanitizeUsername } from "../utils.js";
 import { DiscordUserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
-
-// Consider relocating to multiple lists or fetching it from somewhere.
-const staff = [
-    "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron", // Developers.
-    "extirpater", "Exoriz", "Jackal", // Head mods.
-    // Space for Sr. mods.
-    "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "Darklight", "R0YqL",
-    "Raqzv", "Vikenti", "Mel", "Amasterclasher", "Invi", "hula", "basti",
-    "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸", // Mods.
-    "Ram", "PotatoNuke", "xMaverick" // Jr. mods.
-]
+import EvadesData from "../classes/evadesData.js";
 
 function sortUsernamesAlphabetically(username1, username2) {
     return username1.localeCompare(username2);
@@ -104,6 +94,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         const onlineStaff = [];
         const onlineRegistered = [];
         const onlineGuests = [];
+
         for (const username of onlinePlayers) {
             // Filter guests into their own category first.
             if (username.startsWith("Guest")) {
@@ -121,7 +112,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
                 continue;
             }
             // Put any staff members in a separate category.
-            if (staff.includes(username)) {
+            if (EvadesData.staff.includes(username)) {
                 const nextStaff = sanitizeUsername(username);
                 if ((onlineStaff.join(JOINER) + `${JOINER}${nextStaff}`).length > MAX_CHARACTER_COUNT)
                     continue;

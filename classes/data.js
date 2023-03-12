@@ -30,6 +30,15 @@ class AccountData {
         await accounts.updateOne({ username: this.username.toLowerCase() }, { $set: this }, { upsert: true });
     }
 
+    static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
+        if (ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
+        const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({ username: username.toLowerCase() });
+        if (!accountData && createIfNonexistant) return new AccountData({ username: username.toLowerCase() });
+        if (!accountData && !createIfNonexistant) return null;
+        AccountData.cache.set(username.toLowerCase(), accountData);
+        return new AccountData(accountData);
+    }
+
     static async count(filter = {}) {
         return await accounts.countDocuments(filter);
     }
@@ -52,13 +61,8 @@ class AccountData {
         return accounts.find().sort({ playTime: -1 }).skip(offset).limit(maxDocuments);
     }
 
-    static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
-        if (ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
-        const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({ username: username.toLowerCase() });
-        if (!accountData && createIfNonexistant) return new AccountData({ username: username.toLowerCase() });
-        if (!accountData && !createIfNonexistant) return null;
-        AccountData.cache.set(username.toLowerCase(), accountData);
-        return new AccountData(accountData);
+    static async getSumOfField(fieldName) {
+        return (await accounts.aggregate([{ $group: { _id: null, value: { $sum: `$${fieldName}` } } }]).toArray())[0].value;
     }
 
     static async loadTopVP() {

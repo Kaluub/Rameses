@@ -1,6 +1,6 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType } from "discord.js";
-import EvadesData from "../evadesData.js";
+import EvadesData from "../classes/evadesData.js";
 
 class RegionInteraction extends DefaultInteraction {
     static name = "region";
@@ -11,7 +11,9 @@ class RegionInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const search = interaction.options.getFocused();
-        const regions = EvadesData.regions.filter(map => map.toLowerCase().includes(search.toLowerCase())).slice(0, 25);
+        const regions = EvadesData.regions
+            .filter(map => map.toLowerCase().includes(search.toLowerCase()))
+            .slice(0, 25)
         const response = [];
         for (const region of regions) {
             response.push({ name: region, value: region });

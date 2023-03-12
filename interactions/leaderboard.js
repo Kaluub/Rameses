@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { AccountData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import { formatSeconds, sanitizeUsername } from "../utils.js";
@@ -47,47 +47,98 @@ class LeaderboardInteraction extends DefaultInteraction {
         )
 
     constructor() {
-        super(LeaderboardInteraction.name, [InteractionType.ApplicationCommand]);
+        super(LeaderboardInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
         this.defer = true;
+        this.updateIfComponent = true;
     }
 
     async execute(interaction) {
-        const subcommand = interaction.options.getSubcommand(false);
+        const subcommand = interaction?.options?.getSubcommand(false) ?? interaction?.customId?.split("/")?.[1];
         if (subcommand == "vp") {
-            const limit = interaction.options.getInteger("limit") ?? 25;
-            const offset = interaction.options.getInteger("offset") ?? 0;
+            const limit = Math.min(this.getIntegerArgument(interaction, "limit", 2), 50) || 25;
+            const offset = Math.max(this.getIntegerArgument(interaction, "offset", 3), 0) || 0;
             const accounts = await AccountData.getTopVP(limit, offset).toArray();
-            if (!accounts.length) return Locale.text(interaction, "NO_MATCHES");
-            const total = await AccountData.count();
+            
+            if (!accounts.length)
+                return Locale.text(interaction, "NO_MATCHES");
+            
             let string = Locale.text(interaction, "TOP_VP");
             let i = 0 + offset;
+            
             for (const account of accounts) {
                 i += 1;
-                string += `\n${i}. ${sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP} VP`;
+                string += `\n**${i}.** ${sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP.toLocaleString()} VP`;
             }
+
+            const totalPlayers = await AccountData.count();
+            const totalVP = await AccountData.getSumOfField("careerVP");
+
             const embed = new EmbedBuilder()
                 .setColor("#dd33bb")
                 .setDescription(string)
+                .setFooter({ text: Locale.text(interaction, "LEADERBOARD_VP_FOOTER", [totalPlayers.toLocaleString(), totalVP.toLocaleString()]) })
                 .setTimestamp()
-            return { embeds: [embed] };
+            
+            const previousButton = new ButtonBuilder()
+                .setCustomId(`leaderboard/vp/${limit}/${offset - limit}`)
+                .setDisabled(offset === 0 || accounts.length === 0)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel(Locale.text(interaction, "PREVIOUS"))
+            
+            const nextButton = new ButtonBuilder()
+                .setCustomId(`leaderboard/vp/${limit}/${offset + limit}`)
+                .setDisabled(accounts.length !== limit)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel(Locale.text(interaction, "NEXT"))
+                 
+            const row = new ActionRowBuilder()
+                .addComponents(previousButton, nextButton)
+
+            if (interaction.isMessageComponent()) return await interaction.editReply({ embeds: [embed], components: [row] });
+            return { embeds: [embed], components: [row] };
         }
         if (subcommand == "activity") {
-            const limit = interaction.options.getInteger("limit") ?? 25;
-            const offset = interaction.options.getInteger("offset") ?? 0;
+            const limit = Math.min(this.getIntegerArgument(interaction, "limit", 2), 50) || 25;
+            const offset = Math.max(this.getIntegerArgument(interaction, "offset", 3), 0) || 0;
             const accounts = await AccountData.getTopActivity(limit, offset).toArray();
-            if (!accounts.length) return Locale.text(interaction, "NO_MATCHES");
-            const total = await AccountData.count();
+            
+            if (!accounts.length)
+                return Locale.text(interaction, "NO_MATCHES");
+            
             let string = Locale.text(interaction, "TOP_PLAY_TIME");
             let i = 0 + offset;
+            
             for (const account of accounts) {
                 i += 1;
-                string += `\n${i}. ${sanitizeUsername(account.displayName ?? account.username)}: ${formatSeconds(account.playTime)}`;
+                string += `\n**${i}.** ${sanitizeUsername(account.displayName ?? account.username)}: ${formatSeconds(account.playTime)}`;
             }
+
+            const totalPlayers = await AccountData.count();
+            const totalPlayTime = await AccountData.getSumOfField("playTime");
+
             const embed = new EmbedBuilder()
                 .setColor("#bb33dd")
                 .setDescription(string)
+                .setFooter({ text: Locale.text(interaction, "LEADERBOARD_ACTIVITY_FOOTER", [totalPlayers.toLocaleString(), formatSeconds(totalPlayTime)]) })
                 .setTimestamp()
-            return { embeds: [embed] };
+            
+            const previousButton = new ButtonBuilder()
+                .setCustomId(`leaderboard/activity/${limit}/${offset - limit}`)
+                .setDisabled(offset === 0 || accounts.length === 0)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel(Locale.text(interaction, "PREVIOUS"))
+            
+            const nextButton = new ButtonBuilder()
+                .setCustomId(`leaderboard/activity/${limit}/${offset + limit}`)
+                .setDisabled(accounts.length !== limit)
+                .setStyle(ButtonStyle.Primary)
+                .setLabel(Locale.text(interaction, "NEXT"))
+                 
+            const row = new ActionRowBuilder()
+                .addComponents(previousButton, nextButton)
+
+            if (interaction.isMessageComponent()) return await interaction.editReply({ embeds: [embed], components: [row] });
+            return { embeds: [embed], components: [row] };
         }
         return Locale.text(interaction, "HOW_DID_WE_GET_HERE");
     }
