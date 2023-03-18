@@ -8,6 +8,8 @@ class DefaultInteraction {
         this.name = name;
         this.interactionTypes = interactionTypes;
         this.defer = false;
+        this.ephemeral = false;
+        this.updateIfComponent = false;
     }
 
     isValidInteractionType(interaction) {

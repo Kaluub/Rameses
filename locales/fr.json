@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "Ce n'est pas une message des tournois.",
     "CHANGELOG_UNAVAILABLE": "Les changes ne sont pas publique maintenant!",
     "CREDITS_TITLE": "Crédits:",
-    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Kaluub\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
+    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Invi, Kaluub\nContributeurs du wiki: Invi, Piger, Raqsv\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
     "NEWER": "Jeune",
     "OLDER": "Agée",
     "TIME_PLAYED": "Temps en jouent",
@@ -101,5 +101,9 @@
     "RANDOM_RESULTS": "Le region c'est **{0}** et celui sont votres héros:\n**{1}**",
     "REROLL": "Relancer",
     "PREVIOUS": "Dernière",
-    "NEXT": "Prochaine"
+    "NEXT": "Prochaine",
+    "LEADERBOARD_VP_FOOTER": "{0} jouers on gagné {1} PV",
+    "LEADERBOARD_ACTIVITY_FOOTER": "{0} jouers sont actif pour {1}",
+    "SEEN": "Jouers qui sont recennement actifs:",
+    "SEEN_FOOTER": "Il y a {0} jouers actifs pendant les dernières 24 heures"
 }

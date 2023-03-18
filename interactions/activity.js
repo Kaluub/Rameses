@@ -1,6 +1,6 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { AccountData } from "../classes/data.js";
-import { formatSeconds, sanitizeUsername } from "../utils.js";
+import Utils from "../classes/utils.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 
@@ -45,14 +45,14 @@ class ActivityInteraction extends DefaultInteraction {
         const account = await AccountData.getByUsername(username, false);
 
         if (!account) return Locale.text(interaction, "PLAYER_NOT_FOUND");
-        if (!account.playTime) return Locale.text(interaction, "PLAYER_INACTIVE", [sanitizeUsername(account.displayName ?? account.username)]);
+        if (!account.playTime) return Locale.text(interaction, "PLAYER_INACTIVE", [Utils.sanitizeUsername(account.displayName ?? account.username)]);
 
         // Customize the graph for fun (perhaps create generic graph function later if needed)
         const barValue = interaction.options?.getString("graph-icon") || "▒";
         const detail = barValue.length > 1 ? Math.min(interaction.options?.getInteger("graph-detail"), 40) || 30 : interaction.options?.getInteger("graph-detail") || 30;
         const highestValue = Math.max(...Object.values(account.activity));
 
-        let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${formatSeconds(account.playTime)} (#${await AccountData.count({ "playTime": { "$gte": account.playTime } })}, top ${(await AccountData.count({ "playTime": { "$gte": account.playTime } }) / await AccountData.count({ "playTime": { "$gte": 0 } }) * 100).toFixed(5)}%)\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
+        let string = `${Locale.text(interaction, "TIME_PLAYED")}: ${Utils.formatSeconds(account.playTime)} (#${await AccountData.count({ "playTime": { "$gte": account.playTime } })}, top ${(await AccountData.count({ "playTime": { "$gte": account.playTime } }) / await AccountData.count({ "playTime": { "$gte": 0 } }) * 100).toFixed(5)}%)\n${Locale.text(interaction, "ACTIVITY_FORMAT")}\n`;
         string += "```";
         for (let h = 0; h < 24; h++) {
             const hour = h.toString();
@@ -63,7 +63,7 @@ class ActivityInteraction extends DefaultInteraction {
         string += "```";
 
         const embed = new EmbedBuilder()
-            .setTitle(Locale.text(interaction, "ACTIVITY_TITLE", [sanitizeUsername(account.displayName ?? account.username)]))
+            .setTitle(Locale.text(interaction, "ACTIVITY_TITLE", [Utils.sanitizeUsername(account.displayName ?? account.username)]))
             .setColor("#224488")
             .setTimestamp()
             .setDescription(string)

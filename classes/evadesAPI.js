@@ -1,7 +1,7 @@
 import { Collection } from "discord.js";
 import fetch from "node-fetch";
-import Config from "../config.js";
-import Changelog from "./changelog.js";
+import Config from "./config.js";
+import Changelog from "./gameChangelog.js";
 import { AccountData } from "./data.js";
 
 class CachedData {

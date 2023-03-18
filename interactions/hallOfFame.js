@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
-import { sanitizeUsername } from "../utils.js";
+import Utils from "../classes/utils.js";
 
 class HallOfFameInteraction extends DefaultInteraction {
     static name = "hall-of-fame";
@@ -23,7 +23,7 @@ class HallOfFameInteraction extends DefaultInteraction {
         for (const hallOfFameEntry of hallOfFameEntries) {
             ranking += 1;
             if (ranking < 31)
-                hallOfFamePlayersString += `\n${ranking <= 3 ? "🥇" : ranking <= 10 ? "🥈" : ranking <= 30 ? "🥉" : ""} ${ranking}. ${sanitizeUsername(hallOfFameEntry[0])} (${hallOfFameEntry[1]} ${Locale.text(interaction, "VICTORY_POINTS")})`;
+                hallOfFamePlayersString += `\n${ranking <= 3 ? "🥇" : ranking <= 10 ? "🥈" : ranking <= 30 ? "🥉" : ""} ${ranking}. ${Utils.sanitizeUsername(hallOfFameEntry[0])} (${hallOfFameEntry[1]} ${Locale.text(interaction, "VICTORY_POINTS")})`;
             totalVP += parseInt(hallOfFameEntry[1]);
         };
 

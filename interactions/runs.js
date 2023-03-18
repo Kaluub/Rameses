@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
-import { sanitizeUsername } from "../utils.js";
+import Utils from "../classes/utils.js";
 
 class RunsInteraction extends DefaultInteraction {
     static name = "runs";
@@ -62,7 +62,7 @@ class RunsInteraction extends DefaultInteraction {
         
         for (const run of runs) {
             embed.addFields({
-                name: `${sanitizeUsername(run.username)} as ${run.hero}`,
+                name: `${Utils.sanitizeUsername(run.username)} as ${run.hero}`,
                 value: `completed **${run.region_name} ${run.area_index}** in ${Math.floor(run.survival_time / 60)}m ${run.survival_time % 60}s (<t:${run.created_at}:R>)`
             })
         }

@@ -1,4 +1,4 @@
-import { timeSecondsToTime } from "../utils.js";
+import Utils from "./utils.js";
 
 class TournamentPlayerRunData {
     constructor() {
@@ -13,7 +13,7 @@ class TournamentPlayerRunData {
         res += tournament.topFormat.replaceAll("{position}", position.toString())
             .replaceAll("{player}", best.player)
             .replaceAll("{area}", total.area)
-            .replaceAll("{time}", timeSecondsToTime(total.timeSeconds))
+            .replaceAll("{time}", Utils.timeSecondsToTime(total.timeSeconds))
             .replaceAll("{attempt}", `(${this.list.length}/${tournament.maxAttempts})`);
 
         if (tournament.bottomFormat != " ") for (let i = 0; i < this.list.length; i++) {

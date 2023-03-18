@@ -1,6 +1,6 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import { sanitizeUsername } from "../utils.js";
+import Utils from "../classes/utils.js";
 import { DiscordUserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import EvadesData from "../classes/evadesData.js";
@@ -105,7 +105,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             }
             // Friends are next priority (you can't befriend a guest, sadly. Social norms, man)
             if (userData.friends.includes(username.toLowerCase())) {
-                const nextFriend = sanitizeUsername(username);
+                const nextFriend = Utils.sanitizeUsername(username);
                 if ((onlineFriends.join(JOINER) + `${JOINER}${nextFriend}`).length > MAX_CHARACTER_COUNT)
                     continue;
                 onlineFriends.push(nextFriend);
@@ -113,14 +113,14 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             }
             // Put any staff members in a separate category.
             if (EvadesData.staff.includes(username)) {
-                const nextStaff = sanitizeUsername(username);
+                const nextStaff = Utils.sanitizeUsername(username);
                 if ((onlineStaff.join(JOINER) + `${JOINER}${nextStaff}`).length > MAX_CHARACTER_COUNT)
                     continue;
                 onlineStaff.push(nextStaff);
                 continue;
             }
             // Handle anyone else not in the above conditions.
-            const nextRegistered = sanitizeUsername(username);
+            const nextRegistered = Utils.sanitizeUsername(username);
             if ((onlineRegistered.join(JOINER) + `${JOINER}${nextRegistered}`).length > MAX_CHARACTER_COUNT)
                 continue;
             onlineRegistered.push(nextRegistered);

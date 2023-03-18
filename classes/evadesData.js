@@ -7,7 +7,7 @@ class EvadesData {
         "Raqzv", "Vikenti", "Mel", "Amasterclasher", "Invi", "hula", "basti",
         "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸"
     ];
-    static juniorMods = ["Ram", "PotatoNuke", "xMaverick", "eagle45"];
+    static juniorMods = ["Ram", "PotatoNuke", "xMaverick", "eagle45", "Zade"];
     static staff =
         this.developers + this.headMods + this.seniorMods +
         this.mods + this.juniorMods
@@ -84,6 +84,7 @@ class EvadesData {
         "Endless Echo Hard",
         "Mysterious Mansion",
         "Cyber Castle",
+        "Shifting Sands"
     ]
 
     static regionsExtended = [
@@ -130,7 +131,8 @@ class EvadesData {
         "Cyber Castle",
         "Catastrophic Core",
         "Endless Echo Hard",
-        "Humongous Hollow Hard"
+        "Humongous Hollow Hard",
+        "Shifting Sands"
     ];
 }
 

@@ -1,9 +1,9 @@
-import { readJSON } from "../utils.js";
+import Utils from "./utils.js";
 
 class Locale {
     static map = {
-        "en-GB": readJSON("locales/en-GB.json"),
-        "fr": readJSON("locales/fr.json")
+        "en-GB": Utils.readJSON("locales/en-GB.json"),
+        "fr": Utils.readJSON("locales/fr.json")
     }
 
     static text(interaction, key, args = []) {

@@ -1,11 +1,11 @@
 import puppeteer from "puppeteer";
-import Config from "../config.js";
+import Config from "./config.js";
 
-class Changelog {
+class GameChangelog {
     static cache = null;
 
     static async updateChangelog() {
-        // Open new page
+        // Open new page.
         const browser = await puppeteer.launch({ executablePath: Config.CHROMIUM_EXECUTABLE, headless: true });
         const page = await browser.newPage();
         const response = await page.goto("https://evades.io/");
@@ -19,15 +19,15 @@ class Changelog {
         for (const element of elementArray) {
             data.push(await element.evaluate(e => {
                 let res = { title: "", content: [] };
-                res.title = e.querySelector(".changelog-section-header").innerText; // Usually a date
-                res.content = [...e.querySelectorAll(".changelog-change-list > li")].map(e => e.innerText); // Rest of changelog in list format
+                res.title = e.querySelector(".changelog-section-header").innerText; // Usually a date.
+                res.content = [...e.querySelectorAll(".changelog-change-list > li")].map(e => e.innerText); // Rest of changelog in list format.
                 return res;
             }));
         };
-        // Store it to cache
-        Changelog.cache = data;
+        // Store it to cache.
+        GameChangelog.cache = data;
         browser.close();
     }
 }
 
-export default Changelog;
+export default GameChangelog;

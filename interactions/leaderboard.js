@@ -2,7 +2,7 @@ import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { AccountData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
-import { formatSeconds, sanitizeUsername } from "../utils.js";
+import Utils from "../classes/utils.js";
 
 class LeaderboardInteraction extends DefaultInteraction {
     static name = "leaderboard";
@@ -67,7 +67,7 @@ class LeaderboardInteraction extends DefaultInteraction {
             
             for (const account of accounts) {
                 i += 1;
-                string += `\n**${i}.** ${sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP.toLocaleString()} VP`;
+                string += `\n**${i}.** ${Utils.sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP.toLocaleString()} VP`;
             }
 
             const totalPlayers = await AccountData.count();
@@ -110,7 +110,7 @@ class LeaderboardInteraction extends DefaultInteraction {
             
             for (const account of accounts) {
                 i += 1;
-                string += `\n**${i}.** ${sanitizeUsername(account.displayName ?? account.username)}: ${formatSeconds(account.playTime)}`;
+                string += `\n**${i}.** ${Utils.sanitizeUsername(account.displayName ?? account.username)}: ${Utils.formatSeconds(account.playTime)}`;
             }
 
             const totalPlayers = await AccountData.count();
@@ -119,7 +119,7 @@ class LeaderboardInteraction extends DefaultInteraction {
             const embed = new EmbedBuilder()
                 .setColor("#bb33dd")
                 .setDescription(string)
-                .setFooter({ text: Locale.text(interaction, "LEADERBOARD_ACTIVITY_FOOTER", [totalPlayers.toLocaleString(), formatSeconds(totalPlayTime)]) })
+                .setFooter({ text: Locale.text(interaction, "LEADERBOARD_ACTIVITY_FOOTER", [totalPlayers.toLocaleString(), Utils.formatSeconds(totalPlayTime)]) })
                 .setTimestamp()
             
             const previousButton = new ButtonBuilder()

@@ -2,7 +2,7 @@ import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption } from "discord.js";
 import Locale from "../classes/locale.js";
 import EvadesData from "../classes/evadesData.js";
-import { randomElements } from "../utils.js";
+import Utils from "../classes/utils.js";
 
 class RandomInteraction extends DefaultInteraction {
     static name = "random";
@@ -25,8 +25,8 @@ class RandomInteraction extends DefaultInteraction {
     async execute(interaction) {
         const amountOfHeroes = this.getIntegerArgument(interaction, "heroes", 1) || 1;
 
-        const heroes = randomElements(EvadesData.heroes, amountOfHeroes);
-        const region = randomElements(EvadesData.regionsExtended, 1)[0];
+        const heroes = Utils.randomElements(EvadesData.heroes, amountOfHeroes);
+        const region = Utils.randomElements(EvadesData.regionsExtended, 1)[0];
 
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "RANDOM_TITLE"))

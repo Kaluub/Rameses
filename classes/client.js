@@ -1,7 +1,7 @@
 import { Client, IntentsBitField } from "discord.js";
-import { readFileSync, existsSync } from "fs";
+import Config from "./config.js";
 import EvadesAPI from "./evadesAPI.js";
-import InteractionHandler from "../interactionHandler.js";
+import InteractionHandler from "./interactionHandler.js";
 
 class DiscordClient extends Client {
     constructor() {
@@ -12,8 +12,7 @@ class DiscordClient extends Client {
     }
 
     async clientLogin() {
-        if (!existsSync("./secrets/token")) throw "Token file not provided! Please put a bot token in a file named 'token' in the './secrets' directory.";
-        await this.login(readFileSync("./secrets/token", { encoding: "utf8" }).trim());
+        await this.login(Config.TOKEN);
         console.log("Client logged in.")
     }
 

@@ -1,7 +1,8 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { WikiPageData } from "../classes/data.js";
-import Config from "../config.js";
+import Config from "../classes/config.js";
+import ButtonLinks from "../classes/buttonLinks.js";
 
 class WikiAdminInteraction extends DefaultInteraction {
     static name = "wikiadmin";
@@ -80,6 +81,15 @@ class WikiAdminInteraction extends DefaultInteraction {
                                     .setPlaceholder("Feel free to add an image URL here if needed.")
                                     .setStyle(TextInputStyle.Short)
                                     .setRequired(false)
+                            ),
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId("button-links")
+                                    .setLabel("Button links:")
+                                    .setPlaceholder("Put a list of page names here, separated by new lines. Up to 25 only.")
+                                    .setStyle(TextInputStyle.Paragraph)
+                                    .setRequired(false)
                             )
                     )
                 await interaction.showModal(modal);
@@ -124,6 +134,16 @@ class WikiAdminInteraction extends DefaultInteraction {
                                     .setStyle(TextInputStyle.Short)
                                     .setRequired(false)
                                     .setValue(page.imageURL ?? "")
+                            ),
+                        new ActionRowBuilder()
+                            .addComponents(
+                                new TextInputBuilder()
+                                    .setCustomId("button-links")
+                                    .setLabel("Button links:")
+                                    .setPlaceholder("Put a list of page names here, separated by new lines. Up to 25 only.")
+                                    .setStyle(TextInputStyle.Paragraph)
+                                    .setRequired(false)
+                                    .setValue(page.links.length ? new ButtonLinks(null, page.links).parseToString() : "")
                             )
                     )
                 await interaction.showModal(modal);
@@ -146,8 +166,17 @@ class WikiAdminInteraction extends DefaultInteraction {
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
                 const imageURL = interaction.fields.getTextInputValue("image") ?? null;
-                if (await WikiPageData.getByTitle(title)) return { content: "There is already a page with this title! Save your content!\n\n" + content, ephemeral: true };
+                const buttonLinks = interaction.fields.getTextInputValue("button-links") ?? null;
+                
+                if (await WikiPageData.getByTitle(title))
+                    return { content: "There is already a page with this title! Save your content!\n\n" + content, ephemeral: true };
+                
                 const wikiPage = new WikiPageData({ title, content, imageURL, authors: [interaction.user.id] });
+
+                if (buttonLinks) {
+                    wikiPage.links = await (new ButtonLinks(buttonLinks, null)).parseFromString();
+                }
+                
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()
                     .addComponents(
@@ -164,12 +193,24 @@ class WikiAdminInteraction extends DefaultInteraction {
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
                 const imageURL = interaction.fields.getTextInputValue("image") ?? null;
+                const buttonLinks = interaction.fields.getTextInputValue("button-links") ?? null;
+                
                 let wikiPage = await WikiPageData.getByUUID(uuid);
                 wikiPage.edited = Date.now();
                 wikiPage.title = title;
                 wikiPage.content = content;
-                if (imageURL != wikiPage.imageURL) wikiPage.imageURL = imageURL;
-                if (!wikiPage.authors.includes(interaction.user.id)) wikiPage.authors.push(interaction.user.id);
+
+                if (buttonLinks === null)
+                    wikiPage.links = [];
+                else
+                    wikiPage.links = await (new ButtonLinks(buttonLinks, null)).parseFromString();
+                
+                if (imageURL != wikiPage.imageURL)
+                    wikiPage.imageURL = imageURL;
+                
+                if (!wikiPage.authors.includes(interaction.user.id))
+                    wikiPage.authors.push(interaction.user.id);
+                
                 await wikiPage.save();
                 const actionRow = new ActionRowBuilder()
                     .addComponents(

@@ -29,7 +29,7 @@ class TournamentStatsInteraction extends DefaultInteraction {
 Created: <t:${Math.floor(tournament.created / 1000)}>
 Runs: ${tournament.leaderboard.length} runs
 Top spectators:`;
-        for (const spectator of spectators.firstKey(5)) {
+        for (const spectator of spectators.firstKey(10)) {
             const runs = spectators.get(spectator)
             string += `\n${(await interaction.client.users.fetch(spectator)).tag} spectated ${runs} runs`
         }

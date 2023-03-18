@@ -11,11 +11,11 @@ class FriendInteraction extends DefaultInteraction {
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("add")
-                .setDescription("Add someone as a friend. Lovebird.")
+                .setDescription("Add someone as a friend, hoisting them in the online players list.")
                 .addStringOption(
                     new SlashCommandStringOption()
                         .setName("username")
-                        .setDescription("The username of the player")
+                        .setDescription("The username of the player to add as a friend.")
                         .setAutocomplete(true)
                         .setRequired(true)
                 )
@@ -27,7 +27,7 @@ class FriendInteraction extends DefaultInteraction {
                 .addStringOption(
                     new SlashCommandStringOption()
                         .setName("friend")
-                        .setDescription("The username of the friend you're about to remove")
+                        .setDescription("The username of the friend you're about to remove.")
                         .setAutocomplete(true)
                         .setRequired(true)
                 )

@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType } from "discord.js";
-import { tournamentFormatter } from "../utils.js";
-import Config from "../config.js";
+import Utils from "../classes/utils.js";
+import Config from "../classes/config.js";
 import { DiscordGuildData, TournamentData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 
@@ -32,7 +32,7 @@ class TournamentCreateInteraction extends DefaultInteraction {
             )
 
         const tournament = new TournamentData({ id: -1, topFormat, bottomFormat, type, maxAttempts, duration: duration * 86400000 });
-        const message = await interaction.channel.send({ content: tournamentFormatter(tournament), components: [row] }).catch();
+        const message = await interaction.channel.send({ content: Utils.tournamentFormatter(tournament), components: [row] }).catch();
         if (!message) return Locale.text(interaction, "TOURNAMENT_CANNOT_SEND_MESSAGE");
         tournament.id = message.id;
         await tournament.save();

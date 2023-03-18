@@ -1,7 +1,7 @@
 import { Collection } from "discord.js";
 import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
-import { readJSON } from "../utils.js";
+import Utils from "./utils.js";
 
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
 await mongoClient.connect().catch(err => { throw "Database error!\n" + err });
@@ -61,13 +61,17 @@ class AccountData {
         return accounts.find().sort({ playTime: -1 }).skip(offset).limit(maxDocuments);
     }
 
+    static getRecentlyOnline(maxDocuments = 25, offset = 0) {
+        return accounts.find({ lastSeen: { $lte: Math.floor(Date.now() / 1000) - 15 }}).sort({ lastSeen: -1 }).skip(offset).limit(maxDocuments);
+    }
+
     static async getSumOfField(fieldName) {
         return (await accounts.aggregate([{ $group: { _id: null, value: { $sum: `$${fieldName}` } } }]).toArray())[0].value;
     }
 
     static async loadTopVP() {
         console.log("Loading VP leaderboard from file... This will take a while!")
-        const accounts = readJSON("./secrets/VP.json");
+        const accounts = Utils.readJSON("./data/VP.json");
         if (!accounts) return console.log("There is no file data!");
         for (const name in accounts) {
             const data = accounts[name];
@@ -117,6 +121,7 @@ class WikiPageData {
         this.created = data?.created ?? Date.now();
         this.edited = data?.edited ?? Date.now();
         this.authors = data?.authors ?? [];
+        this.links = data?.links ?? [];
         this.content = data?.content ?? "";
         this.imageURL = data?.imageURL ?? null;
         this.private = data?.private ?? false;

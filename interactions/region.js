@@ -14,10 +14,12 @@ class RegionInteraction extends DefaultInteraction {
         const regions = EvadesData.regions
             .filter(map => map.toLowerCase().includes(search.toLowerCase()))
             .slice(0, 25)
+
         const response = [];
         for (const region of regions) {
             response.push({ name: region, value: region });
         }
+        
         await interaction.respond(response);
     }
 }
