@@ -3,6 +3,9 @@ dotenv.config();
 
 class Config {
     static TOKEN = Config.required(process.env.TOKEN, "TOKEN");
+    static MONGO_USERNAME = process.env.MONGO_USERNAME;
+    static MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+
     static DEBUG = Config.parseBoolean(process.env.DEBUG);
     static DEVELOPMENT_SERVER = process.env.DEVELOPMENT_SERVER ?? null;
 
