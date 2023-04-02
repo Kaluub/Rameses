@@ -46,11 +46,11 @@ class PlayerDetailsData extends CachedData {
         for (const weekNumber in this.stats["week_record"]) {
             const week = this.stats["week_record"][weekNumber];
             activeWeeks += 1;
-            summedCareerVP += week["wins"] ?? 0;
+            summedCareerVP += parseInt(week["wins"]) || 0;
             lastActiveWeekNumber = weekNumber;
             if (!firstActiveWeekNumber) firstActiveWeekNumber = weekNumber;
             if ((week["wins"] ?? 0) > highestWeek[1])
-                highestWeek = [weekNumber, week["wins"] ?? 0, week["finish"]];
+                highestWeek = [weekNumber, parseInt(week["wins"]) || 0, week["finish"]];
         }
 
         this.highestWeek = highestWeek;

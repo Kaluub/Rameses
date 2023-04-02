@@ -59,6 +59,7 @@ class EvadesData {
         "Peculiar Pyramid Hard",
         "Stellar Square",
         "Monumental Migration",
+        "Monumental Migration Hard",
         "Humongous Hollow",
         "Humongous Hollow Hard",
         "Haunted Halls",
@@ -128,7 +129,8 @@ class EvadesData {
         "Catastrophic Core",
         "Endless Echo Hard",
         "Humongous Hollow Hard",
-        "Shifting Sands"
+        "Shifting Sands",
+        "Monumental Migration Hard"
     ];
 }
 
