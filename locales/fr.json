@@ -36,12 +36,12 @@
     "FIRST_ACTIVE_WEEK": "Première semaine actif",
     "LAST_ACTIVE_WEEK": "Dernière semaine actif",
     "BEST_WEEK": "Meilleur semaine",
-    "CURRENT_HAT": "Châpeau utilisé maintenant",
+    "CURRENT_HAT": "Selection de châpeau",
     "VICTORY_POINTS": "PV",
     "WITH": "avec",
     "NONE": "Rien",
     "NEVER": "Jamais",
-    "ONLINE_NOW": "En ligne maintenant!",
+    "ONLINE_NOW": "**En ligne maintenant!**",
     "WEEKS_UNIT": "semaines",
     "WEEK": "Semaine",
     "TOURNAMENT_ERROR": "Il y'a une problème avec cette tournois. Demander une organisateur des tournois pour vous aidez.",
@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "Ce n'est pas une message des tournois.",
     "CHANGELOG_UNAVAILABLE": "Les changes ne sont pas publique maintenant!",
     "CREDITS_TITLE": "Crédits:",
-    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Invi, Kaluub\nContributeurs du wiki: Invi, Piger, Raqsv\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
+    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Invi, Kaluub\nContributeurs du wiki: Invi, Piger, Raqsv\nIcône de robot: Aldople\n\nMerci beaucoup au tout qui aidait avec l'expirimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
     "NEWER": "Jeune",
     "OLDER": "Agée",
     "TIME_PLAYED": "Temps en jouent",
@@ -105,5 +105,8 @@
     "LEADERBOARD_VP_FOOTER": "{0} jouers on gagné {1} PV",
     "LEADERBOARD_ACTIVITY_FOOTER": "{0} jouers sont actif pour {1}",
     "SEEN": "Jouers qui sont recennement actifs:",
-    "SEEN_FOOTER": "Il y a {0} jouers actifs pendant les dernières 24 heures"
+    "SEEN_FOOTER": "Il y a {0} jouers actifs pendant les dernières 24 heures",
+    "ACCOUNT_AGE": "Date de création",
+    "ACHIEVEMENT_PROGRESS": "Progrès des accomplishments",
+    "CURRENT_BODY": "Selection de corps"
 }

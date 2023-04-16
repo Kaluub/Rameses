@@ -33,6 +33,7 @@ class PlayerDetailsData extends CachedData {
         super();
         this.stats = data?.stats ?? {};
         this.accessories = data?.accessories ?? {};
+        this.createdAt = data?.created_at ?? Date.now() / 1000;
         this.calculateDetails();
     }
 

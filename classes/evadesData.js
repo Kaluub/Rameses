@@ -5,12 +5,14 @@ class EvadesData {
     static mods = [
         "Dittoblob", "Gianni", "LightY", "nosok", "Darklight", "R0YqL",
         "Raqzv", "Vikenti", "Mel", "Amasterclasher", "Invi", "hula", "basti",
-        "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸"
+        "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸", "DepressionOwU"
     ];
     static juniorMods = ["Ram", "PotatoNuke", "xMaverick", "eagle45", "Zade", "noPiger"];
     static staff =
         this.developers + this.headMods + this.seniorMods +
         this.mods + this.juniorMods
+    
+    static achievements = 34;
 
     static heroes = [
         "Magmax",
@@ -39,7 +41,8 @@ class EvadesData {
         "Viola",
         "Mortuus",
         "Cybot",
-        "Echelon"
+        "Echelon",
+        "Demona"
     ]
 
     static regions = [
@@ -59,7 +62,6 @@ class EvadesData {
         "Peculiar Pyramid Hard",
         "Stellar Square",
         "Monumental Migration",
-        "Monumental Migration Hard",
         "Humongous Hollow",
         "Humongous Hollow Hard",
         "Haunted Halls",
@@ -83,7 +85,8 @@ class EvadesData {
         "Endless Echo Hard",
         "Mysterious Mansion",
         "Cyber Castle",
-        "Shifting Sands"
+        "Shifting Sands",
+        "Infinite Inferno"
     ]
 
     static regionsExtended = [
@@ -130,7 +133,7 @@ class EvadesData {
         "Endless Echo Hard",
         "Humongous Hollow Hard",
         "Shifting Sands",
-        "Monumental Migration Hard"
+        "Infinite Inferno"
     ];
 }
 
