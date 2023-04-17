@@ -117,7 +117,7 @@ class EvadesAPI {
         try {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
             if (Config.DEBUG) console.log(encodeURI(this.fetchURL + endpoint))
-            const data = await fetch(encodeURI(this.fetchURL + endpoint), { signal: controller.signal }).catch();
+            const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
             if (!data || !data.ok) return null;
             return await data.json();
@@ -128,8 +128,8 @@ class EvadesAPI {
     }
 
     async getPlayerDetails(username, force = false) {
-        if (force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.hallOfFameCacheTime)) {
-            const playerDetails = await this.get("account/" + username);
+        if (force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.playerDetailsCacheTime)) {
+            const playerDetails = await this.get("account/" + encodeURIComponent(username));
             if (!playerDetails) return null;
             this.cache.playerManager.updatePlayer(username, playerDetails);
         }
