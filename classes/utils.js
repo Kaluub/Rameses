@@ -43,9 +43,10 @@ class Utils {
         return tournamentString;
     }
     
-    static hasPermission(interaction, permission, user = interaction.user) {
+    static hasPermission(interaction, permission, user = null) {
         if (!interaction) return false;
         if (!interaction.guild) return true;
+        if (!user) user = interaction.user;
         if (interaction.channel.permissionsFor(user).has(permission)) return true;
         return false;
     }

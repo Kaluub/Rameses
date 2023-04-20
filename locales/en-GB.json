@@ -105,8 +105,10 @@
     "LEADERBOARD_VP_FOOTER": "{0} players have gained {1} VP",
     "LEADERBOARD_ACTIVITY_FOOTER": "{0} players have played for {1}",
     "SEEN": "Recently seen players:",
-    "SEEN_FOOTER": "{0} players have been seen in the past 24 hours",
+    "SEEN_FOOTER": "{0} players have been seen in the last 24 hours",
     "ACCOUNT_AGE": "Account age",
     "ACHIEVEMENT_PROGRESS": "Achievement progress",
-    "CURRENT_BODY": "Current body selection"
+    "CURRENT_BODY": "Current body selection",
+    "COLLECTION": "Collection",
+    "MISSING_EMOJI_PERMISSIONS": "*The @everyone role in the server requires the 'Use External Emojis' permission in this channel.*"
 }
