@@ -1,6 +1,7 @@
-import { Collection, time } from "discord.js";
+import { Collection } from "discord.js";
 import fetch from "node-fetch";
-import Changelog from "./changelog.js";
+import Config from "./config.js";
+import Changelog from "./gameChangelog.js";
 import { AccountData } from "./data.js";
 
 class CachedData {
@@ -32,6 +33,7 @@ class PlayerDetailsData extends CachedData {
         super();
         this.stats = data?.stats ?? {};
         this.accessories = data?.accessories ?? {};
+        this.createdAt = data?.created_at ?? Date.now() / 1000;
         this.calculateDetails();
     }
 
@@ -45,11 +47,11 @@ class PlayerDetailsData extends CachedData {
         for (const weekNumber in this.stats["week_record"]) {
             const week = this.stats["week_record"][weekNumber];
             activeWeeks += 1;
-            summedCareerVP += week["wins"] ?? 0;
+            summedCareerVP += parseInt(week["wins"]) || 0;
             lastActiveWeekNumber = weekNumber;
             if (!firstActiveWeekNumber) firstActiveWeekNumber = weekNumber;
             if ((week["wins"] ?? 0) > highestWeek[1])
-                highestWeek = [weekNumber, week["wins"] ?? 0, week["finish"]];
+                highestWeek = [weekNumber, parseInt(week["wins"]) || 0, week["finish"]];
         }
 
         this.highestWeek = highestWeek;
@@ -98,7 +100,7 @@ class EvadesAPI {
         updateLastSeen(this);
         updateCareerVP(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
-        setInterval(updateCareerVP, 60 * 60 * 1000, this); // Updates each hour.
+        setInterval(updateCareerVP, 600000, this); // Updates each 10 minutes.
     }
 
     resetCache() {
@@ -114,6 +116,7 @@ class EvadesAPI {
         const controller = new AbortController();
         try {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
+            if (Config.DEBUG) console.log(encodeURI(this.fetchURL + endpoint))
             const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
             if (!data || !data.ok) return null;
@@ -125,8 +128,8 @@ class EvadesAPI {
     }
 
     async getPlayerDetails(username, force = false) {
-        if (force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.hallOfFameCacheTime)) {
-            const playerDetails = await this.get("account/" + username);
+        if (force || !this.cache.playerManager.getPlayer(username) || this.cache.playerManager.getPlayer(username).isOutdated(this.playerDetailsCacheTime)) {
+            const playerDetails = await this.get("account/" + encodeURIComponent(username));
             if (!playerDetails) return null;
             this.cache.playerManager.updatePlayer(username, playerDetails);
         }
@@ -194,6 +197,21 @@ class EvadesAPI {
         }
         return this.cache.hallOfFame.entries;
     }
+
+    async getRuns(filters) {
+        // Since runs can have many filters, they aren't cached.
+        const filterStore = [];
+        for (const name in filters) {
+            const value = filters[name];
+            if (!name || !value) continue;
+            if (value === "X") continue;
+            filterStore.push(`${name}=${value}`);
+        }
+
+        const runs = await this.get("runs?" + filterStore.join("&"));
+        if (!runs) return null;
+        return runs;
+    }
 }
 
 let failedToConnect = true;
@@ -224,17 +242,18 @@ async function updateLastSeen(evadesAPI) {
 }
 
 async function updateCareerVP(evadesAPI) {
+    if (Config.DEBUG) return;
     // We know that only players in the hall of fame can have an outdated career VP.
     const hallOfFame = await evadesAPI.getHallOfFame();
     for (const [username, weeklyVP, careerVP] of hallOfFame) {
         if (!username || !careerVP) continue;
         // Fetch the players details, updating their career VP.
-        AccountData.getByUsername(username).then(async (account) => {
-            if(!account) return;
-            const parsedVP = parseInt(careerVP);
-            if(isNaN(parsedVP) || account.careerVP == parsedVP) return;
-            account.careerVP = parsedVP;
-            await account.save();
+        AccountData.getByUsername(username).then((account) => {
+            if (!account) return;
+            const vp = parseInt(careerVP);
+            if (account.careerVP && vp < account.careerVP) return;
+            account.careerVP = vp;
+            account.save();
         });
     }
 }

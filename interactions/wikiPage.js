@@ -12,12 +12,14 @@ class WikiPageAutofillInteraction extends DefaultInteraction {
     async execute(interaction) {
         const filter = WikiPageData.findMatchingPages(interaction.options.getFocused() ?? "");
         const pages = await filter.toArray();
+
         const response = [];
         for (const page of pages) {
-            if (!page) continue
+            if (!page) continue;
             if (page.private) continue;
             response.push({ name: page.title, value: page.uuid ?? page.title });
         }
+
         await interaction.respond(response);
     }
 }

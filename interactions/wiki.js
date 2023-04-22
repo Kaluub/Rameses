@@ -1,6 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { WikiPageData } from "../classes/data.js";
+import ButtonLinks from "../classes/buttonLinks.js";
 
 class WikiInteraction extends DefaultInteraction {
     static name = "wiki";
@@ -29,16 +30,28 @@ class WikiInteraction extends DefaultInteraction {
         if (subcommand == "page") {
             const pageIdentifier = interaction?.options?.getString("wiki-page", false) ?? interaction?.customId?.split("/")[2];
             if (!pageIdentifier) return "Please provide a page title!";
+            
             const page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
             if (!page) return "The page was not found!";
+            
             const embed = new EmbedBuilder()
                 .setColor("#D665D2")
                 .setTitle(page.title ?? "No title!")
                 .setTimestamp(page.edited ?? Date.now())
                 .setFooter({ text: "Last edited" })
                 .setDescription(page.content ?? "This page is empty!")
-            if (page.imageURL) embed.setImage(page.imageURL);
-            return { embeds: [embed] };
+            
+            if (page.imageURL)
+                embed.setImage(page.imageURL);
+            
+            let result = { embeds: [embed] };
+
+            if (page.links.length) {
+                const links = new ButtonLinks(null, page.links);
+                result.components = links.parseFromArray();
+            }
+
+            return result;
         }
         return "How did we get here?";
     }

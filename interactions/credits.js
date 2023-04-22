@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
-import Config from "../config.js";
+import Config from "../classes/config.js";
 
 class CreditsInteraction extends DefaultInteraction {
     static name = "credits";

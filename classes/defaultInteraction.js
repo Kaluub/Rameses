@@ -8,10 +8,20 @@ class DefaultInteraction {
         this.name = name;
         this.interactionTypes = interactionTypes;
         this.defer = false;
+        this.ephemeral = false;
+        this.updateIfComponent = false;
     }
 
     isValidInteractionType(interaction) {
         return this.interactionTypes.length ? this.interactionTypes.includes(interaction.type) : true;
+    }
+
+    getStringArgument(interaction, name, index) {
+        return (interaction?.options?.getString(name) ?? interaction?.customId?.split("/")[index]);
+    }
+
+    getIntegerArgument(interaction, name, index) {
+        return (interaction?.options?.getInteger(name) ?? parseInt(interaction?.customId?.split("/")[index]));
     }
 
     async execute(interaction) {

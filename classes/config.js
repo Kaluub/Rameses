@@ -2,6 +2,10 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 class Config {
+    static TOKEN = Config.required(process.env.TOKEN, "TOKEN");
+    static MONGO_USERNAME = process.env.MONGO_USERNAME;
+    static MONGO_PASSWORD = process.env.MONGO_PASSWORD;
+
     static DEBUG = Config.parseBoolean(process.env.DEBUG);
 
     static DEVELOPMENT_SERVER = process.env.DEVELOPMENT_SERVER ?? null;
@@ -18,6 +22,11 @@ class Config {
     static GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY ?? undefined;
 
     static CHROMIUM_EXECUTABLE = process.env.CHROMIUM_EXECUTABLE ?? undefined;
+
+    static required(arg, name) {
+        if (!arg) throw `Required .env value not passed! Please set ${name}.`;
+        return arg;
+    }
 
     static parseBoolean(arg, def = false) {
         return arg?.toUpperCase() === "TRUE" ?? def;

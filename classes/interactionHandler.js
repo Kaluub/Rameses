@@ -1,18 +1,18 @@
 import { Collection } from "discord.js";
 import { readdirSync } from "fs";
-import Locale from "./classes/locale.js";
+import Locale from "./locale.js";
 
 class InteractionHandler {
     constructor() {
         this.interactions = new Collection();
-        this.loadInteractions("./interactions");
+        this.loadInteractions();
     };
 
-    loadInteractions(path) {
+    loadInteractions() {
         this.interactions.clear();
-        const files = readdirSync(path).filter(file => file.endsWith(".js"));
+        const files = readdirSync("./interactions").filter(file => file.endsWith(".js"));
         files.forEach(async file => {
-            const { default: InteractionClass } = await import(`${path}/${file}`);
+            const { default: InteractionClass } = await import(`../interactions/${file}`);
             if (!InteractionClass.disabled) this.interactions.set(InteractionClass.name, new InteractionClass());
         });
     };
@@ -21,7 +21,7 @@ class InteractionHandler {
         const applicationCommands = [];
         const files = readdirSync("./interactions").filter(file => file.endsWith('.js'));
         for (const file of files) {
-            const { default: InteractionClass } = await import(`./interactions/${file}`);
+            const { default: InteractionClass } = await import(`../interactions/${file}`);
             if (InteractionClass.noGlobalInteraction) {
                 for (const guildId of InteractionClass.guilds) {
                     const guild = client.guilds.cache.get(guildId);
@@ -63,16 +63,9 @@ class InteractionHandler {
                 else if (!interaction.replied)
                     await interaction.reply(response);
             })
-            .catch(async err => {
+            .catch(err => {
                 console.error(err);
-                if (interaction.isAutocomplete())
-                    return;
-                if (interaction.deferred && !interaction.replied)
-                    await interaction.editReply({ content: Locale.text(interaction, "COMMAND_ERROR") });
-                if (!interaction.replied)
-                    await interaction.reply({ content: Locale.text(interaction, "COMMAND_ERROR"), ephemeral: true });
             })
-
     }
 }
 

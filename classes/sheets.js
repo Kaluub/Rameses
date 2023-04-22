@@ -1,5 +1,5 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
-import Config from "../config.js";
+import Config from "./config.js";
 
 class Sheets {
     constructor(sheetId) {

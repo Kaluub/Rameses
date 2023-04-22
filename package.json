@@ -1,18 +1,18 @@
 {
   "name": "rameses",
-  "version": "1.6.3",
+  "version": "1.7.4",
   "description": "Discord bot to interact with the Evades.io API",
   "main": "app.js",
   "type": "module",
   "author": "Kaluub",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.9.0",
     "dotenv": "^16.0.3",
     "google-spreadsheet": "^3.3.0",
-    "mongodb": "^5.1.0",
-    "node-fetch": "^3.3.0",
-    "puppeteer": "^19.6.2",
+    "mongodb": "^5.3.0",
+    "node-fetch": "^3.3.1",
+    "puppeteer": "^19.10.1",
     "uuid": "^9.0.0"
   }
 }

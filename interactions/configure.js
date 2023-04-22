@@ -1,13 +1,13 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandRoleOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "discord.js";
 import { DiscordGuildData } from "../classes/data.js";
-import { hasPermission } from "../utils.js";
+import Utils from "../classes/utils.js";
 import Locale from "../classes/locale.js";
 
-class GuildConfigInteraction extends DefaultInteraction {
+class ConfigureInteraction extends DefaultInteraction {
     static name = "configure";
     static applicationCommand = new SlashCommandBuilder()
-        .setName(GuildConfigInteraction.name)
+        .setName(ConfigureInteraction.name)
         .setDescription("Configure some guild-related settings here.")
         .setDMPermission(false)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild)
@@ -45,15 +45,19 @@ class GuildConfigInteraction extends DefaultInteraction {
         )
 
     constructor() {
-        super(GuildConfigInteraction.name, [InteractionType.ApplicationCommand]);
+        super(ConfigureInteraction.name, [InteractionType.ApplicationCommand]);
     }
 
     async execute(interaction) {
         const subcommandGroup = interaction.options.getSubcommandGroup(false);
         const subcommand = interaction.options.getSubcommand(false);
         if (subcommandGroup == "tournament") {
-            if (!hasPermission(interaction, PermissionsBitField.Flags.ManageGuild, interaction.user)) return Locale.text(interaction, "MANAGE_GUILD_PERMISSION_REQUIRED")
-            if (!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
+            if (!Utils.hasPermission(interaction, PermissionsBitField.Flags.ManageGuild, interaction.user))
+                return Locale.text(interaction, "MANAGE_GUILD_PERMISSION_REQUIRED")
+            
+            if (!interaction.guild)
+                return Locale.text(interaction, "GUILD_ONLY");
+            
             if (subcommand == "spectators") {
                 let guildData = await DiscordGuildData.getByID(interaction.guild.id);
                 const role = interaction.options.getRole("role");
@@ -82,4 +86,4 @@ class GuildConfigInteraction extends DefaultInteraction {
     }
 }
 
-export default GuildConfigInteraction;
+export default ConfigureInteraction;

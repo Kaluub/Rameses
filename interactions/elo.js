@@ -3,7 +3,7 @@ import { ActionRowBuilder, EmbedBuilder, InteractionType, SlashCommandBuilder, S
 import Locale from "../classes/locale.js";
 import { v1 } from "uuid";
 import EvadesData from "../evadesData.js";
-import { randomElements } from "../utils.js";
+import Utils from "../classes/utils.js";
 
 class EloInteraction extends DefaultInteraction {
     static name = "elo";
@@ -111,8 +111,8 @@ class EloInteraction extends DefaultInteraction {
                 
                 // Get maps and heroes.
                 const allowedMaps = thisELO >= 1500 ? EvadesData.maps : EvadesData.maps.filter(map => !map.includes("Hard") && map !== "Catastrophic Core");
-                const heroes = randomElements(EvadesData.heroes, 3);
-                const maps = randomElements(allowedMaps, 7);
+                const heroes = Utils.randomElements(EvadesData.heroes, 3);
+                const maps = Utils.randomElements(allowedMaps, 7);
 
                 foundMatch.setChoices(heroes, maps);
 

@@ -1,9 +1,11 @@
 import { Collection } from "discord.js";
 import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
-import { readJSON } from "../utils.js";
+import Utils from "./utils.js";
+import Config from "./config.js";
 
-const mongoClient = new MongoClient("mongodb://127.0.0.1:27017");
+const connectionURL = `mongodb://${Config.MONGO_USERNAME && Config.MONGO_PASSWORD ? `${Config.MONGO_USERNAME}:${Config.MONGO_PASSWORD}@`: ""}127.0.0.1:27017`;
+const mongoClient = new MongoClient(connectionURL);
 await mongoClient.connect().catch(err => { throw "Database error!\n" + err });
 const database = mongoClient.db("Rameses");
 
@@ -30,6 +32,15 @@ class AccountData {
         await accounts.updateOne({ username: this.username.toLowerCase() }, { $set: this }, { upsert: true });
     }
 
+    static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
+        if (ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
+        const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({ username: username.toLowerCase() });
+        if (!accountData && createIfNonexistant) return new AccountData({ username: username.toLowerCase() });
+        if (!accountData && !createIfNonexistant) return null;
+        AccountData.cache.set(username.toLowerCase(), accountData);
+        return new AccountData(accountData);
+    }
+
     static async count(filter = {}) {
         return await accounts.countDocuments(filter);
     }
@@ -52,18 +63,17 @@ class AccountData {
         return accounts.find().sort({ playTime: -1 }).skip(offset).limit(maxDocuments);
     }
 
-    static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
-        if (ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
-        const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({ username: username.toLowerCase() });
-        if (!accountData && createIfNonexistant) return new AccountData({ username: username.toLowerCase() });
-        if (!accountData && !createIfNonexistant) return null;
-        AccountData.cache.set(username.toLowerCase(), accountData);
-        return new AccountData(accountData);
+    static getRecentlyOnline(maxDocuments = 25, offset = 0) {
+        return accounts.find({ lastSeen: { $lte: Math.floor(Date.now() / 1000) - 15 }}).sort({ lastSeen: -1 }).skip(offset).limit(maxDocuments);
+    }
+
+    static async getSumOfField(fieldName) {
+        return (await accounts.aggregate([{ $group: { _id: null, value: { $sum: `$${fieldName}` } } }]).toArray())[0].value;
     }
 
     static async loadTopVP() {
         console.log("Loading VP leaderboard from file... This will take a while!")
-        const accounts = readJSON("./secrets/VP.json");
+        const accounts = Utils.readJSON("./data/VP.json");
         if (!accounts) return console.log("There is no file data!");
         for (const name in accounts) {
             const data = accounts[name];
@@ -113,6 +123,7 @@ class WikiPageData {
         this.created = data?.created ?? Date.now();
         this.edited = data?.edited ?? Date.now();
         this.authors = data?.authors ?? [];
+        this.links = data?.links ?? [];
         this.content = data?.content ?? "";
         this.imageURL = data?.imageURL ?? null;
         this.private = data?.private ?? false;

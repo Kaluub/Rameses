@@ -1,19 +1,9 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import { sanitizeUsername } from "../utils.js";
+import Utils from "../classes/utils.js";
 import { DiscordUserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
-
-// Consider relocating to multiple lists or fetching it from somewhere.
-const staff = [
-    "MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron", // Developers.
-    "extirpater", "Exoriz", "Jackal", // Head mods.
-    // Space for Sr. mods.
-    "Dittoblob", "Gianni", "LightY", "nosok", "Koraiii", "⚝Simba⚝", "Darklight", "R0YqL", "Raqzv",
-    "Vikenti", "Mel", "Amasterclasher", "Invi", // Mods.
-    "Ram", "hula", "basti", "Androoh", "lindsay", "ThatHodgeGuy", "Kaluub", "Angel🌸",
-    "PotatoNuke", "xMaverick" // Jr. mods.
-]
+import EvadesData from "../classes/evadesData.js";
 
 function sortUsernamesAlphabetically(username1, username2) {
     return username1.localeCompare(username2);
@@ -23,6 +13,8 @@ const JOINER = "; ";
 const MAX_CHARACTER_COUNT = 1000;
 
 const serverChoices = [
+    { name: "all of NA", value: "local" },
+    { name: "all of EU", value: "remote" },
     { name: "NA 1", value: "local:0" },
     { name: "NA 2", value: "local:1" },
     { name: "NA 3", value: "local:2" },
@@ -65,22 +57,29 @@ class OnlinePlayersInteraction extends DefaultInteraction {
 
         if (specificServer) {
             const data = specificServer.split(":");
-            if (data.length != 2) return Locale.text(interaction, "INVALID_SERVER");
-
             const location = data[0];
             const index = parseInt(data[1]);
 
+            if (!location) return Locale.text(interaction, "INVALID_SERVER");
             if (!["local", "remote"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
-            if (isNaN(index)) return Locale.text(interaction, "INVALID_SERVER");
+            // if (isNaN(index)) return Locale.text(interaction, "INVALID_SERVER");
 
             const serverStats = await interaction.client.evadesAPI.getServerStats();
 
-            if (location === "local") {
+            if (isNaN(index)) {
+                const servers = location === "local" ? serverStats.localServers : serverStats.remoteServers;
+                onlinePlayers = [];
+                for (const server of servers) {
+                    onlinePlayers.push(...server.online);
+                }
+            }
+
+            else if (location === "local") {
                 if (!serverStats.localServers[index]) return Locale.text(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.localServers[index].online;
             }
 
-            if (location === "remote") {
+            else if (location === "remote") {
                 if (!serverStats.remoteServers[index]) return Locale.text(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.remoteServers[index].online;
             }
@@ -95,6 +94,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         const onlineStaff = [];
         const onlineRegistered = [];
         const onlineGuests = [];
+
         for (const username of onlinePlayers) {
             // Filter guests into their own category first.
             if (username.startsWith("Guest")) {
@@ -105,22 +105,22 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             }
             // Friends are next priority (you can't befriend a guest, sadly. Social norms, man)
             if (userData.friends.includes(username.toLowerCase())) {
-                const nextFriend = sanitizeUsername(username);
+                const nextFriend = Utils.sanitizeUsername(username);
                 if ((onlineFriends.join(JOINER) + `${JOINER}${nextFriend}`).length > MAX_CHARACTER_COUNT)
                     continue;
                 onlineFriends.push(nextFriend);
                 continue;
             }
             // Put any staff members in a separate category.
-            if (staff.includes(username)) {
-                const nextStaff = sanitizeUsername(username);
+            if (EvadesData.staff.includes(username)) {
+                const nextStaff = Utils.sanitizeUsername(username);
                 if ((onlineStaff.join(JOINER) + `${JOINER}${nextStaff}`).length > MAX_CHARACTER_COUNT)
                     continue;
                 onlineStaff.push(nextStaff);
                 continue;
             }
             // Handle anyone else not in the above conditions.
-            const nextRegistered = sanitizeUsername(username);
+            const nextRegistered = Utils.sanitizeUsername(username);
             if ((onlineRegistered.join(JOINER) + `${JOINER}${nextRegistered}`).length > MAX_CHARACTER_COUNT)
                 continue;
             onlineRegistered.push(nextRegistered);

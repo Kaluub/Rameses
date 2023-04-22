@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import { sanitizeUsername, tournamentFormatter } from "../utils.js";
-import Config from "../config.js";
+import Utils from "../classes/utils.js";
+import Config from "../classes/config.js";
 import { DiscordGuildData, TournamentData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 
@@ -74,7 +74,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             let time = interaction.fields.getTextInputValue("time").trim().normalize();
             if (!player || !area || !time) return { ephemeral: true, content: Locale.text(interaction, "INVALID_VALUES") };
             if (player.length > 64) return { ephemeral: true, content: Locale.text(interaction, "USERNAME_LONG") };
-            if (tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return { ephemeral: true, content: Locale.text(interaction, "ATTEMPTS_USED", sanitizeUsername(player)) }
+            if (tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) return { ephemeral: true, content: Locale.text(interaction, "ATTEMPTS_USED", Utils.sanitizeUsername(player)) }
             const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(player);
             if (!playerDetails && guildData.forceAccountExistence) return { ephemeral: true, content: Locale.text(interaction, "PLAYER_NOT_FOUND") };
             if (area.startsWith("area ")) {
@@ -106,7 +106,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             const message = await channel.messages.fetch(tournament.id);
             if (!message) return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
             if (!message.editable) return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
-            await message.edit({ content: tournamentFormatter(tournament) });
+            await message.edit({ content: Utils.tournamentFormatter(tournament) });
             return { content: Locale.text(interaction, "TOURNAMENT_RUN_ADDED"), ephemeral: true };
         }
     }
