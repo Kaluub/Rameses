@@ -71,7 +71,7 @@ Cached accounts: ${AccountData.cache.size}`;
             const id = interaction.options.getString("id", false);
             if (!id) return "No user found.";
             let data = await DiscordUserData.getByID(id, false);
-            if (!id) return "No Discord data is stored for this user yet.";
+            if (!data) return "No Discord data is stored for this user yet.";
             data.username = null;
             await data.save();
             return `Discord in-game name was cleared from <@${id}> (${id})`;
