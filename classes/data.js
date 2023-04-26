@@ -163,6 +163,7 @@ class DiscordUserData {
     constructor(data) {
         this.id = data.id;
         this.friends = data?.friends ?? [];
+        this.username = data?.username ?? null;
         this.created = data?.created ?? Date.now();
     }
 
@@ -174,6 +175,12 @@ class DiscordUserData {
     static async getByID(id) {
         const userData = this.cache.get(id) ?? await discordUsers.findOne({ id });
         if (!userData) return new DiscordUserData({ id });
+        return new DiscordUserData(userData);
+    }
+
+    static async getByUsername(username) {
+        const userData = await discordUsers.findOne({ username });
+        if (!userData) return null;
         return new DiscordUserData(userData);
     }
 }

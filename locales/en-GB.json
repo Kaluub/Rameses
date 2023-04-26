@@ -113,5 +113,9 @@
     "MISSING_EMOJI_PERMISSIONS": "*The @everyone role in the server requires the 'Use External Emojis' permission in this channel.*",
     "NOT_IN_MATCH": "You're not in this match.",
     "ALREADY_SELECTED_MAP": "You've already selected the maps you wanted to veto!",
-    "MAP_ALREADY_REMOVED": "That map was already removed."
+    "MAP_ALREADY_REMOVED": "That map was already removed.",
+    "NAME_ALREADY_SET": "You already added an in-game name for your Discord account: {0}",
+    "NAME_TAKEN": "This name was already taken by Discord user {0}.",
+    "NAME_SET": "Your in-game name was set to {0}.",
+    "USERNAME_NOT_SET": "You need to set your username beforehand using /set-name."
 }

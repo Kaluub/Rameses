@@ -7,7 +7,7 @@ class Sheets {
             throw new Error("Google API is disabled while a Sheets instance is being created!");
         
         if (!Config.GOOGLE_PRIVATE_KEY || !Config.GOOGLE_SERVICE_EMAIL)
-            throw new Error("Sheets required GOOGLE_PRIVATE_KEY and GOOGLE_SERVICE_EMAIL to be set in config! Set GOOGLE_API_ENABLED to false to ignore.");
+            throw new Error("Sheets requires GOOGLE_PRIVATE_KEY and GOOGLE_SERVICE_EMAIL to be set in config! Set GOOGLE_API_ENABLED to false to ignore.");
         
         this.sheetId = sheetId;
         this.cachedResults = new Map();

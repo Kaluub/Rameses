@@ -1,6 +1,6 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
-import { AccountData } from "../classes/data.js";
+import { AccountData, DiscordUserData } from "../classes/data.js";
 import Config from "../classes/config.js";
 
 class DebugInteraction extends DefaultInteraction {
@@ -30,13 +30,12 @@ class DebugInteraction extends DefaultInteraction {
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
-                .setName("fixusername")
-                .setDescription("Fix (reset) the display name for a player")
+                .setName("fixname")
+                .setDescription("Fix (reset) the in-game name for a Discord user")
                 .addStringOption(
                     new SlashCommandStringOption()
-                        .setName("username")
-                        .setDescription("The username to fix")
-                        .setAutocomplete(true)
+                        .setName("id")
+                        .setDescription("The user's ID")
                         .setRequired(true)
                 )
         )
@@ -68,14 +67,14 @@ Channels cached: ${interaction.client.channels.cache.size}
 Stored accounts: ${await AccountData.count()}
 Cached accounts: ${AccountData.cache.size}`;
         }
-        if (subcommand == "fixusername") {
-            const username = interaction.options.getString("username", false);
-            if (!username) return "No user found.";
-            let account = await AccountData.getByUsername(username, false);
-            if (!account) return "No data stored for this user yet.";
-            account.displayName = null;
-            await account.save();
-            return `Display name cleared from "${account?.displayName ?? account.username}"`;
+        if (subcommand == "fixname") {
+            const id = interaction.options.getString("id", false);
+            if (!id) return "No user found.";
+            let data = await DiscordUserData.getByID(id, false);
+            if (!id) return "No Discord data is stored for this user yet.";
+            data.username = null;
+            await data.save();
+            return `Discord in-game name was cleared from <@${id}> (${id})`;
         }
         if (subcommand == "flushcache") {
             const size = AccountData.cache.size;

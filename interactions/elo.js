@@ -4,6 +4,7 @@ import Locale from "../classes/locale.js";
 import { v1 } from "uuid";
 import EvadesData from "../evadesData.js";
 import Utils from "../classes/utils.js";
+import { DiscordUserData } from "../classes/data.js";
 
 class EloInteraction extends DefaultInteraction {
     static name = "elo";
@@ -14,13 +15,6 @@ class EloInteraction extends DefaultInteraction {
             new SlashCommandSubcommandBuilder()
                 .setName("match")
                 .setDescription("Find an opponent to battle with!")
-                .addStringOption(
-                    new SlashCommandStringOption()
-                        .setName("username")
-                        .setDescription("Your in-game name here!")
-                        .setAutocomplete(true)
-                        .setRequired(true)
-                )
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
@@ -72,10 +66,6 @@ class EloInteraction extends DefaultInteraction {
     async execute(interaction) {
         if (!interaction.client.sheets) return "Unuseable!";
         const subcommand = interaction?.options?.getSubcommand(false) ?? interaction.customId.split("/")[1];
-        
-        if (subcommand == "test") {
-            return "☻" //JSON.stringify([this.determineBracket(400), this.determineBracket(26044), this.determineBracket(1900), this.determineBracket(1300), this.determineBracket(1500)], null, 4)
-        }
 
         if (subcommand == "check") {
             const username = interaction.options.getString("username");
@@ -85,7 +75,10 @@ class EloInteraction extends DefaultInteraction {
         }
 
         if (subcommand == "match") { // Matchmaking
-            const username = interaction.options.getString("username");
+            const userData = await DiscordUserData.getByID(interaction.user.id);
+            if (!userData.username)
+                return Locale.text(interaction, "USERNAME_NOT_SET");
+            const username = userData.username;
             const data = await interaction.client.sheets.getELOData();
             const thisELO = data.get(username) ?? 1200;
             let foundMatch = null;
@@ -104,7 +97,8 @@ class EloInteraction extends DefaultInteraction {
             if (cancelFindingMatch) {
                 return { content: "You can't participate in an ELO match right now! Are you already searching for a match?", ephemeral: true }
             }
-            if (foundMatch) { // We now know that two users are available.
+            if (foundMatch) {
+                // We now know that two users are available.
                 const embed = new EmbedBuilder()
                     .setTitle("Match found!")
                     .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
