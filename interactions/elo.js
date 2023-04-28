@@ -5,9 +5,12 @@ import { v1 } from "uuid";
 import EvadesData from "../evadesData.js";
 import Utils from "../classes/utils.js";
 import { DiscordUserData } from "../classes/data.js";
+import Config from "../classes/config.js";
 
 class EloInteraction extends DefaultInteraction {
     static name = "elo";
+    static noGlobalInteraction = true;
+    static guilds = [Config.ELO_SERVER];
     static applicationCommand = new SlashCommandBuilder()
         .setName(EloInteraction.name)
         .setDescription("ELO tools.")

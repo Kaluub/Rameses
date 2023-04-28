@@ -9,6 +9,7 @@ class Config {
     static DEBUG = Config.parseBoolean(process.env.DEBUG);
 
     static DEVELOPMENT_SERVER = process.env.DEVELOPMENT_SERVER ?? null;
+    static ELO_SERVER = process.env.ELO_SERVER ?? null;
     static WIKI_ADMIN_ROLES = Config.parseList(process.env.WIKI_ADMIN_ROLES, ["1067888625339076648"]);
     static TOURNAMENT_ORGANIZER_ROLES = Config.parseList(process.env.TOURNAMENT_ORGANIZER_ROLES, ["644345517693861888"]);
     static TOURNAMENT_SPECTATOR_ROLES = Config.parseList(process.env.TOURNAMENT_SPECTATOR_ROLES, ["617185571252600961"]);
