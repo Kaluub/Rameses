@@ -153,7 +153,7 @@ class EloInteraction extends DefaultInteraction {
             const match = new Match(interaction.user, username, thisELO);
             this.matches.set(match.id, match);
 
-            return { content: `Hold on, ${username}! We're going to try to find you a fair match...` }
+            return { content: `Hold on, ${username}! We're going to try to find you a fair match... (ELO: ${thisELO})` }
         }
 
         if (subcommand == "maps") {
@@ -163,18 +163,40 @@ class EloInteraction extends DefaultInteraction {
                 return Locale.text(interaction, "COMMAND_ERROR");
 
             if (match.user1.id !== interaction.user.id && match.user2.id !== interaction.user.id)
-                return Locale.text(interaction, "NOT_IN_MATCH");
+                return { content: Locale.text(interaction, "NOT_IN_MATCH"), ephemeral: true }
             
             if (match.usersWhoVetoed.filter(id => id === interaction.user.id).length >= 2)
-                return Locale.text(interaction, "ALREADY_SELECTED_MAP");
+                return { content: Locale.text(interaction, "ALREADY_SELECTED_MAP"), ephemeral: true }
 
             const mapToVeto = interaction.values[0];
             if (!match.maps.includes(mapToVeto))
-                return Locale.text(interaction, "MAP_ALREADY_REMOVED");
+                return { content: Locale.text(interaction, "MAP_ALREADY_REMOVED"), ephemeral: true }
 
             match.maps = match.maps.filter(map => map != mapToVeto);
             match.usersWhoVetoed.push(interaction.user.id);
             this.matches.set(match.id, match);
+
+            if (match.maps.length <= 3) {
+                // Match is now ready.
+                const embed = new EmbedBuilder()
+                    .setTitle("Ready up!")
+                    .setDescription(`${match.username1} & ${match.username2}:\nYou're now ready to battle! Pick your servers and use the following hero and maps.`)
+                    .setColor("#AA6644")
+                const hero = Utils.randomElements(match.heroes, 1)[0];
+                const map = Utils.randomElements(match.maps, 1)[0];
+                embed.addFields(
+                    {
+                        name: "Hero:",
+                        value: hero
+                    },
+                    {
+                        name: "Map:",
+                        value: map
+                    }
+                )
+                await interaction.update({embeds: [embed], components: []});
+                return;
+            }
             
             const embed = new EmbedBuilder()
                 .setTitle("Match found!")
