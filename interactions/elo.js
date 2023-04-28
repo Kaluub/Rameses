@@ -34,6 +34,7 @@ class EloInteraction extends DefaultInteraction {
 
     constructor() {
         super(EloInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
+        this.defer = true;
         this.matches = new Map();
         this.brackets = [
             { name: "Iron", min: -Infinity, max: 700, leeway: 200 },
