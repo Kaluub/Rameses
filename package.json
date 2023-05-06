@@ -16,5 +16,8 @@
     "puppeteer": "^19.10.1",
     "utf-8-validate": "^6.0.3",
     "uuid": "^9.0.0"
+  },
+  "optionalDependencies": {
+    "evades-client": "file:install/evades-client-1.0.0.tgz"
   }
 }
