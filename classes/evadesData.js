@@ -5,14 +5,15 @@ class EvadesData {
     static mods = [
         "Dittoblob", "Gianni", "LightY", "nosok", "Darklight", "R0YqL",
         "Raqzv", "Vikenti", "Mel", "Amasterclasher", "Invi", "hula", "basti",
-        "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸", "DepressionOwU"
+        "Androoh", "ThatHodgeGuy", "Kaluub", "Angel🌸", "DepressionOwU",
+        "Zade", "PotatoNuke", "AWEN"
     ];
-    static juniorMods = ["Ram", "PotatoNuke", "xMaverick", "eagle45", "Zade", "noPiger"];
+    static juniorMods = ["Ram", "eagle45", "noPiger"];
     static staff =
         this.developers + this.headMods + this.seniorMods +
         this.mods + this.juniorMods
     
-    static achievements = 34;
+    static achievements = 35;
 
     static heroes = [
         "Magmax",
