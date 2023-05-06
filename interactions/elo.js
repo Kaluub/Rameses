@@ -67,7 +67,9 @@ class EloInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if (!interaction.client.sheets) return "Unuseable!";
+        if (!interaction.client.sheets)
+            return "Unuseable!";
+        
         const subcommand = interaction?.options?.getSubcommand(false) ?? interaction.customId.split("/")[1];
 
         if (subcommand == "check") {
@@ -79,11 +81,12 @@ class EloInteraction extends DefaultInteraction {
 
         if (subcommand == "match") { // Matchmaking
             const userData = await DiscordUserData.getByID(interaction.user.id);
-            if (!userData.username)
-                return Locale.text(interaction, "USERNAME_NOT_SET");
+            if (!userData.username || !userData.region)
+                return Locale.text(interaction, "ELO_REQUIREMENTS_NOT_MET");
             const username = userData.username;
             const data = await interaction.client.sheets.getELOData();
             const thisELO = data.get(username) ?? 1200;
+            const thisPreferredRegion = userData.region;
             let foundMatch = null;
             let cancelFindingMatch = false;
             for (const match of this.matches.values()) {
@@ -93,7 +96,7 @@ class EloInteraction extends DefaultInteraction {
                     break;
                 }
                 if (this.determineFairMatch(thisELO, match.elo1)) {
-                    foundMatch = match.setOpponent(interaction.user, username, thisELO);
+                    foundMatch = match.setOpponent(interaction.user, username, thisELO, thisPreferredRegion);
                     break;
                 }
             }
@@ -104,7 +107,10 @@ class EloInteraction extends DefaultInteraction {
                 // We now know that two users are available.
                 const embed = new EmbedBuilder()
                     .setTitle("Match found!")
-                    .setDescription(`${foundMatch.username1} will be going against ${foundMatch.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
+                    .setDescription(
+                        `${foundMatch.username1} will be going against ${foundMatch.username2}!\n\n` +
+                        `Before you start, you'll select **2** maps that you **do not** want to play.`
+                    )
                 
                 // Get maps and heroes.
                 const allowedMaps = thisELO >= 1500 ? EvadesData.maps : EvadesData.maps.filter(map => !map.includes("Hard") && map !== "Catastrophic Core");
@@ -180,7 +186,10 @@ class EloInteraction extends DefaultInteraction {
                 // Match is now ready.
                 const embed = new EmbedBuilder()
                     .setTitle("Ready up!")
-                    .setDescription(`${match.username1} & ${match.username2}:\nYou're now ready to battle! Pick your servers and use the following hero and maps.`)
+                    .setDescription(
+                        `${match.username1} & ${match.username2}:\n` +
+                        `You're now ready to battle! Pick your servers and use the following hero and maps.`
+                    )
                     .setColor("#AA6644")
                 const hero = Utils.randomElements(match.heroes, 1)[0];
                 const map = Utils.randomElements(match.maps, 1)[0];
@@ -200,7 +209,10 @@ class EloInteraction extends DefaultInteraction {
             
             const embed = new EmbedBuilder()
                 .setTitle("Match found!")
-                .setDescription(`${match.username1} will be going against ${match.username2}!\n\nChoose your servers and you'll need to pick between the following maps & heroes.`)
+                .setDescription(
+                    `${match.username1} will be going against ${match.username2}!\n\n` +
+                    `Choose your servers and you'll need to pick between the following maps & heroes.`
+                )
 
             embed.addFields(
                 {
@@ -240,7 +252,8 @@ class EloInteraction extends DefaultInteraction {
 class Match {
     static State = {
         OPEN: 1,
-        CLOSED: 2
+        ONGOING: 2,
+        CLOSED: 3
     }
 
     constructor(user1, username1, elo1, user2 = null, username2 = null, elo2 = null) {
@@ -251,6 +264,8 @@ class Match {
         this.user2 = user2;
         this.username1 = username1;
         this.username2 = username2;
+        this.preferredRegion1 = "NA";
+        this.preferredRegion2 = "NA";
         this.elo1 = elo1;
         this.elo2 = elo2;
         this.heroes = [];
@@ -263,11 +278,12 @@ class Match {
         this.maps = maps;
     }
 
-    setOpponent(opponentUser, opponentUsername, opponentElo) {
+    setOpponent(opponentUser, opponentUsername, opponentElo, opponentPreferredRegion) {
         this.state = Match.State.CLOSED;
         this.user2 = opponentUser;
         this.username2 = opponentUsername;
         this.elo2 = opponentElo;
+        this.preferredRegion2 = opponentPreferredRegion;
         return this;
     }
 }

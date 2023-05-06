@@ -18,6 +18,8 @@ class Config {
     static REPOSITORY_LINK = process.env.REPOSITORY_LINK ?? "https://github.com/Kaluub/Rameses/";
     static SERVER_INVITE = process.env.SERVER_INVITE ?? "https://discord.gg/j7fPN2xqBp";
 
+    static USE_EVADES_CLIENT = Config.parseBoolean(process.env.USE_EVADES_CLIENT);
+
     static GOOGLE_API_ENABLED = Config.parseBoolean(process.env.GOOGLE_API_ENABLED);
     static GOOGLE_SERVICE_EMAIL = process.env.GOOGLE_SERVICE_EMAIL ?? undefined;
     static GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY ?? undefined;

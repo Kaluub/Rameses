@@ -164,6 +164,7 @@ class DiscordUserData {
         this.id = data.id;
         this.friends = data?.friends ?? [];
         this.username = data?.username ?? null;
+        this.region = data?.region ?? null;
         this.created = data?.created ?? Date.now();
     }
 
