@@ -10,6 +10,7 @@ class Config {
 
     static DEVELOPMENT_SERVER = process.env.DEVELOPMENT_SERVER ?? null;
     static ELO_SERVER = process.env.ELO_SERVER ?? null;
+    static ELO_RESULTS_CHANNEL = process.env.ELO_RESULTS_CHANNEL ?? "1104476816250507405";
     static WIKI_ADMIN_ROLES = Config.parseList(process.env.WIKI_ADMIN_ROLES, ["1067888625339076648"]);
     static TOURNAMENT_ORGANIZER_ROLES = Config.parseList(process.env.TOURNAMENT_ORGANIZER_ROLES, ["644345517693861888"]);
     static TOURNAMENT_SPECTATOR_ROLES = Config.parseList(process.env.TOURNAMENT_SPECTATOR_ROLES, ["617185571252600961"]);
@@ -17,6 +18,8 @@ class Config {
 
     static REPOSITORY_LINK = process.env.REPOSITORY_LINK ?? "https://github.com/Kaluub/Rameses/";
     static SERVER_INVITE = process.env.SERVER_INVITE ?? "https://discord.gg/j7fPN2xqBp";
+
+    static GAME_CLIENT_ENABLED = Config.parseBoolean(process.env.GAME_CLIENT_ENABLED);
 
     static GOOGLE_API_ENABLED = Config.parseBoolean(process.env.GOOGLE_API_ENABLED);
     static GOOGLE_SERVICE_EMAIL = process.env.GOOGLE_SERVICE_EMAIL ?? undefined;

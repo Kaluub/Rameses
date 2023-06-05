@@ -1,8 +1,9 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import { AccountData, DiscordUserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import Utils from "../classes/utils.js";
+import Config from "../classes/config.js";
 
 class SetNameInteraction extends DefaultInteraction {
     static name = "set-name";

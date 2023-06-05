@@ -6,7 +6,7 @@ class GameChangelog {
 
     static async updateChangelog() {
         // Open new page.
-        const browser = await puppeteer.launch({ executablePath: Config.CHROMIUM_EXECUTABLE, headless: true });
+        const browser = await puppeteer.launch({ executablePath: Config.CHROMIUM_EXECUTABLE, headless: "new" });
         const page = await browser.newPage();
         const response = await page.goto("https://evades.io/");
         if (!response.ok()) return null;

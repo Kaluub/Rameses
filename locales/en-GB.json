@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "This isn't a tournament message!",
     "CHANGELOG_UNAVAILABLE": "The changelog is not available!",
     "CREDITS_TITLE": "Credits:",
-    "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Invi, Kaluub\nWiki contributors: Invi, Piger, Raqsv\nBot profile picture: Aldople\n\nSpecial thanks to all who've helped with testing & finding issues!\nIf you're interested in providing a translation for your language, feel free to reach out!",
+    "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Invi, Kaluub\nWiki contributors: Invi, Piger, Raqzv\nBot profile picture: Aldople\n\nSpecial thanks to all who've helped with testing & finding issues!\nIf you're interested in providing a translation for your language, feel free to reach out!",
     "NEWER": "Newer",
     "OLDER": "Older",
     "TIME_PLAYED": "Time played",
@@ -117,5 +117,6 @@
     "NAME_ALREADY_SET": "You already added an in-game name for your Discord account: {0}",
     "NAME_TAKEN": "This name was already taken by Discord user {0}.",
     "NAME_SET": "Your in-game name was set to {0}.",
-    "USERNAME_NOT_SET": "You need to set your username beforehand using /set-name."
+    "REGION_SET": "Your preffered region is now set to {0}.",
+    "ELO_REQUIREMENTS_NOT_MET": "You need to set your username and preffered region beforehand using /set-name and /set-region."
 }
