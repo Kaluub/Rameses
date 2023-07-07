@@ -9,8 +9,8 @@ class EvadesData {
         "Zade", "PotatoNuke", "AWEN"
     ];
     static juniorMods = [
-        "Ram", "eagle45", "Koraiii", "๖ۣۜCorrupt 🆉", "☯☪$ai",
-        "AniFonG", "MeguclOwUn", "yeetyeet47"
+        "Ram", "eagle45", "๖ۣۜCorrupt 🆉", "☯☪$ai",
+        "AniFonG", "MeguclOwUn"
     ];
     static staff =
         this.developers + this.headMods + this.seniorMods +
