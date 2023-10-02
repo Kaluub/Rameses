@@ -10,11 +10,11 @@
     "bufferutil": "^4.0.7",
     "discord.js": "^14.13.0",
     "dotenv": "^16.3.1",
-    "google-spreadsheet": "^4.0.3",
-    "mongodb": "^6.0.0",
+    "google-spreadsheet": "^4.1.0",
+    "mongodb": "^6.1.0",
     "node-fetch": "^3.3.2",
-    "puppeteer": "^21.1.1",
+    "puppeteer": "^21.3.6",
     "utf-8-validate": "^6.0.3",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   }
 }

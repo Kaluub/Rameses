@@ -3,7 +3,7 @@ class EvadesData {
     static headMods = ["extirpater", "Exoriz", "Jackal"];
     static seniorMods = [];
     static mods = [
-        "Dittoblob", "Gianni", "LightY", "nosok", "Darklight", "R0YqL",
+        "Dittoblob", "Gianni", "LightY", "nosok", "Darklight",
         "Raqzv", "Vikenti", "Mel", "Amasterclasher", "hula", "basti",
         "ThatHodgeGuy", "Kaluub", "DepressionOwU",
         "Zade", "PotatoNuke", "AWEN", "eagle45",
@@ -11,7 +11,7 @@ class EvadesData {
     ];
     static juniorMods = [
         "Ram", "☯☪$ai", "AniFonG", "MeguclOwUn",
-        "kikaa", "jules"
+        "kikaa", "jules", "yeetyeet47", "lindsay"
     ];
     static staff =
         this.developers + this.headMods + this.seniorMods +

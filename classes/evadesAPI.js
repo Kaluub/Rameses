@@ -216,6 +216,7 @@ class EvadesAPI {
 
 let failedToConnect = true;
 async function updateLastSeen(evadesAPI) {
+    if (Config.DEBUG) return;
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
 
     if (!onlinePlayers) {
