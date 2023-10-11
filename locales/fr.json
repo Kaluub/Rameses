@@ -117,5 +117,5 @@
     "NAME_ALREADY_SET": "Vous avez ajouté un nom à votre compte: {0}",
     "NAME_TAKEN": "Cette nom est déja utilisé par {0}.",
     "NAME_SET": "Votre nom est maintenant {0}.",
-    "USERNAME_NOT_SET": "Vouz devraiez utiliser /set-name avant que vouz pouvez utiliser ceci."
+    "USERNAME_NOT_SET": "Vouz devraiez utiliser /set-name et /set-region avant que vouz pouvez utiliser ceci."
 }

@@ -1,21 +1,20 @@
 class EvadesData {
     static developers = ["MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron", "Jäckäl"];
     static headMods = ["extirpater", "Exoriz", "Jackal"];
-    static seniorMods = [];
+    static seniorMods = ["LightY", "Darklight", "Raqzv", "Kaluub"];
     static mods = [
-        "Dittoblob", "Gianni", "LightY", "nosok", "Darklight",
-        "Raqzv", "Vikenti", "Mel", "Amasterclasher", "hula", "basti",
-        "ThatHodgeGuy", "Kaluub", "DepressionOwU",
-        "Zade", "PotatoNuke", "AWEN", "eagle45",
-        "Androoh", "Angel🌸"
+        "Gianni", "Vikenti", "Mel",
+        "Amasterclasher", "basti", "ThatHodgeGuy",
+        "DepressionOwU", "Zade", "PotatoNuke", "AWEN",
+        "eagle45", "Androoh", "Angel🌸", "Ram"
     ];
     static juniorMods = [
-        "Ram", "☯☪$ai", "AniFonG", "MeguclOwUn",
-        "kikaa", "jules", "yeetyeet47", "lindsay"
+        "☯☪$ai", "AniFonG", "MeguclOwUn",
+        "kikaa", "jules", "yeetyeet47", "lindsay",
+        "nosok"
     ];
-    static staff =
-        this.developers + this.headMods + this.seniorMods +
-        this.mods + this.juniorMods
+
+    static staff = [].concat(this.developers, this.headMods, this.seniorMods, this.mods, this.juniorMods);
     
     static achievements = 36;
 

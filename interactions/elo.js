@@ -83,7 +83,7 @@ class EloInteraction extends DefaultInteraction {
 
         if (subcommand == "match") { // Matchmaking
             const userData = await DiscordUserData.getByID(interaction.user.id);
-            if (!userData.username)
+            if (!userData.username || !userData.region)
                 return Locale.text(interaction, "USERNAME_NOT_SET");
             const username = userData.username;
             const data = await interaction.client.sheets.getELOData();
