@@ -34,7 +34,21 @@ const emojiHats = {
     "tuxedo": "<:tuxedo:1098418647250243634>",
     "sunglasses": "<:sunglasses:1098418655848583231>",
     "winter-olympics-wreath": "<:winterolympicswreath:1098418723137781901>",
-    "winter-wreath": "<:winterwreath:1045570392921743391>"
+    "winter-wreath": "<:winterwreath:1045570392921743391>",
+    "clouds": "<:clouds:1179967810546442251>",
+    "storm-clouds": "<:stormclouds:1179967824517664838>",
+    "bronze-jewels": "<:bronzejewels:1179967333486297119>",
+    "silver-jewels": "<:silverjewels:1179967456597512233>",
+    "gold-jewels": "<:goldjewels:1179967440768225300>",
+    "rose-wreath": "<:rosewreath:1179967467938906234>",
+    "pirate-hat": "<:piratehat:1179967283561517167>",
+    "plastic-shine": "<:plasticshine:1179967729613144186>",
+    "royal-robes": "<:royalrobes:1179967493348003922>",
+    "broomstick": "<:broomstick:1179967342445351012>",
+    "doughnut": "<:doughnut:1179967351014297671>",
+    "mummy-wrap": "<:mummywrap:1179967538499698818>",
+    "fedora": "<:fedora:1179967399915704401>",
+    "stardust": "<:stardust:1179967449123270687>",
 }
 
 function getHatEmojis(accessories) {
@@ -53,16 +67,6 @@ function getAccessoryName(name) {
         nameArray.push(segment[0].toUpperCase() + segment.slice(1));
     }
     return nameArray.join(" ");
-}
-
-function getVictoryZonesTouched(stats) {
-    // Does not work as originally intended.
-    // Will use achievement records later instead.
-    let updates = stats.version_number;
-    for (const areaName in stats.highest_area_achieved) {
-        updates -= stats?.highest_area_achieved[areaName] ?? 0;
-    }
-    return updates;
 }
 
 class PlayerInfoInteraction extends DefaultInteraction {

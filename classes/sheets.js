@@ -1,4 +1,5 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
+import { JWT } from "google-auth-library";
 import Config from "./config.js";
 
 class Sheets {
@@ -17,11 +18,14 @@ class Sheets {
     }
 
     async setup() {
-        this.doc = new GoogleSpreadsheet(this.sheetId);
-        await this.doc.useServiceAccountAuth({
-            client_email: Config.GOOGLE_SERVICE_EMAIL,
-            private_key: Config.GOOGLE_PRIVATE_KEY
-        });
+        const serviceAccountAuth = new JWT({
+            email: Config.GOOGLE_SERVICE_EMAIL,
+            key: Config.GOOGLE_PRIVATE_KEY,
+            scopes: [
+                "https://www.googleapis.com/auth/spreadsheets"
+            ]
+        })
+        this.doc = new GoogleSpreadsheet(this.sheetId, serviceAccountAuth);
         await this.doc.loadInfo();
         this.eloSheet = this.doc.sheetsById["582153053"];
     }

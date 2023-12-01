@@ -1,17 +1,17 @@
 class EvadesData {
     static developers = ["MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron", "Jäckäl"];
     static headMods = ["extirpater", "Exoriz", "Jackal"];
-    static seniorMods = ["LightY", "Darklight", "Raqzv", "Kaluub"];
+    static seniorMods = ["Darklight", "LightY", "Raqzv", "Kaluub"];
     static mods = [
         "Gianni", "Vikenti", "Mel",
         "Amasterclasher", "basti", "ThatHodgeGuy",
-        "DepressionOwU", "Zade", "PotatoNuke", "AWEN",
-        "eagle45", "Androoh", "Angel🌸", "Ram"
+        "Zade", "PotatoNuke", "AWEN",
+        "eagle45", "Angel🌸", "Ram", "hula", "lindsay",
+        "AniFonG", "MeguclOwUn",
     ];
     static juniorMods = [
-        "☯☪$ai", "AniFonG", "MeguclOwUn",
-        "kikaa", "jules", "yeetyeet47", "lindsay",
-        "nosok"
+        "jules", "yeetyeet47", "nosok",
+        "waterfowlgen", "RadicalLarry", "Br1h", "зефирка",
     ];
 
     static staff = [].concat(this.developers, this.headMods, this.seniorMods, this.mods, this.juniorMods);
@@ -46,7 +46,8 @@ class EvadesData {
         "Mortuus",
         "Cybot",
         "Echelon",
-        "Demona"
+        "Demona",
+        "Stheno"
     ]
 
     static regions = [
@@ -89,8 +90,10 @@ class EvadesData {
         "Endless Echo Hard",
         "Mysterious Mansion",
         "Cyber Castle",
+        "Cyber Castle Hard",
         "Shifting Sands",
-        "Infinite Inferno"
+        "Infinite Inferno",
+        "Coupled Corridors"
     ]
 
     static regionsExtended = [
@@ -133,11 +136,14 @@ class EvadesData {
         "Mysterious Mansion",
         "Dangerous District Hard",
         "Cyber Castle",
+        "Cyber Castle Hard",
         "Catastrophic Core",
         "Endless Echo Hard",
         "Humongous Hollow Hard",
         "Shifting Sands",
-        "Infinite Inferno"
+        "Infinite Inferno",
+        "Coupled Corridors North",
+        "Coupled Corridors South"
     ];
 }
 
