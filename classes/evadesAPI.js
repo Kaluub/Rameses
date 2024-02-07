@@ -95,7 +95,7 @@ class EvadesAPI {
         this.onlinePlayersCacheTime = 10000;
         this.serverStatsCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
-        this.requestTimeout = 5000;
+        this.requestTimeout = 5000; // Timeout if no response in 5 seconds.
         this.resetCache();
         updateLastSeen(this);
         updateCareerVP(this);
@@ -116,7 +116,7 @@ class EvadesAPI {
         const controller = new AbortController();
         try {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
-            if (Config.DEBUG) console.log(encodeURI(this.fetchURL + endpoint))
+            if (Config.DEBUG) console.log(`> Fetched endpoint: ${encodeURI(this.fetchURL + endpoint)}`)
             const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
             if (!data || !data.ok) return null;
@@ -216,7 +216,7 @@ class EvadesAPI {
 
 let failedToConnect = true;
 async function updateLastSeen(evadesAPI) {
-    if (Config.DEBUG) return;
+    // if (Config.DEBUG) return;
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
 
     if (!onlinePlayers) {
@@ -237,13 +237,13 @@ async function updateLastSeen(evadesAPI) {
             if (!account.activity[hour]) account.activity[hour] = 0;
             account.activity[hour] += 1;
             account.playTime += Math.floor(evadesAPI.onlinePlayersCacheTime / 1000);
-            await account.save();
+            account.save();
         });
     }
 }
 
 async function updateCareerVP(evadesAPI) {
-    if (Config.DEBUG) return;
+    // if (Config.DEBUG) return;
     // We know that only players in the hall of fame can have an outdated career VP.
     const hallOfFame = await evadesAPI.getHallOfFame();
     for (const [username, weeklyVP, careerVP] of hallOfFame) {
@@ -252,7 +252,7 @@ async function updateCareerVP(evadesAPI) {
         AccountData.getByUsername(username).then((account) => {
             if (!account) return;
             const vp = parseInt(careerVP);
-            if (account.careerVP && vp < account.careerVP) return;
+            if (account.careerVP && vp === account.careerVP) return;
             account.careerVP = vp;
             account.save();
         });

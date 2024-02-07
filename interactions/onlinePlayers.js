@@ -62,7 +62,6 @@ class OnlinePlayersInteraction extends DefaultInteraction {
 
             if (!location) return Locale.text(interaction, "INVALID_SERVER");
             if (!["local", "remote"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
-            // if (isNaN(index)) return Locale.text(interaction, "INVALID_SERVER");
 
             const serverStats = await interaction.client.evadesAPI.getServerStats();
 
@@ -103,7 +102,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
                 onlineGuests.push(username);
                 continue;
             }
-            // Friends are next priority (you can't befriend a guest, sadly. Social norms, man)
+            // Friends are next priority.
             if (userData.friends.includes(username.toLowerCase())) {
                 const nextFriend = Utils.sanitizeUsername(username);
                 if ((onlineFriends.join(JOINER) + `${JOINER}${nextFriend}`).length > MAX_CHARACTER_COUNT)
@@ -151,6 +150,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         if (onlineGuests.length)
             embed.addFields({ name: Locale.text(interaction, "ONLINE_GUESTS"), value: onlineGuests.join(JOINER) || "None!" });
 
+        // Handle case where nobody is online.
         if (!(onlineFriends.length || onlineStaff.length || onlineRegistered.length || onlineGuests.length))
             embed.addFields({ name: Locale.text(interaction, "ONLINE_PLAYERS"), value: Locale.text(interaction, "NOBODY_ONLINE") });
 

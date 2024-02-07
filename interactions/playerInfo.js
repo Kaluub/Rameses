@@ -99,6 +99,14 @@ class PlayerInfoInteraction extends DefaultInteraction {
             return Locale.text(interaction, "PLAYER_NOT_FOUND");
         
         const account = await AccountData.getByUsername(username);
+
+        // Handle potential useful updates.
+        const careerVP = playerDetails.stats["highest_area_achieved_counter"];
+        if (account.careerVP !== careerVP) {
+            account.careerVP = careerVP;
+            account.save();
+        }
+
         const higherVP = await AccountData.count({ "careerVP": { "$gte": account.careerVP } });
         const higherPlaytime = await AccountData.count({ "playTime": { "$gte": account.playTime } });
         

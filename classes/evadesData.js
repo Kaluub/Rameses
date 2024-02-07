@@ -4,17 +4,16 @@ class EvadesData {
     static seniorMods = ["Darklight", "LightY", "Raqzv", "Kaluub"];
     static mods = [
         "Gianni", "Vikenti", "Mel",
-        "Amasterclasher", "basti", "ThatHodgeGuy",
+        "Amasterclasher", "basti", "Hodge",
         "Zade", "PotatoNuke", "AWEN",
         "eagle45", "Angel🌸", "Ram", "hula", "lindsay",
-        "AniFonG", "MeguclOwUn",
+        "AniFonG", "MeguclOwUn", "yeetyeet47", "nosok",
     ];
     static juniorMods = [
-        "jules", "yeetyeet47", "nosok",
-        "waterfowlgen", "RadicalLarry", "Br1h", "зефирка",
+        "jules", "waterfowlgen", "RadicalLarry", "Br1h", "зефирка",
     ];
 
-    static staff = [].concat(this.developers, this.headMods, this.seniorMods, this.mods, this.juniorMods);
+    static staff = Array.of(this.developers, this.headMods, this.seniorMods, this.mods, this.juniorMods);
     
     static achievements = 36;
 
@@ -47,7 +46,8 @@ class EvadesData {
         "Cybot",
         "Echelon",
         "Demona",
-        "Stheno"
+        "Stheno",
+        "Factorb",
     ]
 
     static regions = [
@@ -93,7 +93,8 @@ class EvadesData {
         "Cyber Castle Hard",
         "Shifting Sands",
         "Infinite Inferno",
-        "Coupled Corridors"
+        "Coupled Corridors",
+        "Withering Wasteland",
     ]
 
     static regionsExtended = [
@@ -143,7 +144,8 @@ class EvadesData {
         "Shifting Sands",
         "Infinite Inferno",
         "Coupled Corridors North",
-        "Coupled Corridors South"
+        "Coupled Corridors South",
+        "Withering Wasteland",
     ];
 }
 
