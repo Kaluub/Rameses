@@ -13,7 +13,7 @@ class EvadesData {
         "jules", "waterfowlgen", "RadicalLarry", "Br1h", "зефирка",
     ];
 
-    static staff = Array.of(this.developers, this.headMods, this.seniorMods, this.mods, this.juniorMods);
+    static staff = Array.of(...this.developers, ...this.headMods, ...this.seniorMods, ...this.mods, ...this.juniorMods);
     
     static achievements = 36;
 
