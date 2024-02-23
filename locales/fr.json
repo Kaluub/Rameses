@@ -107,7 +107,6 @@
     "SEEN": "Jouers qui sont recennement actifs:",
     "SEEN_FOOTER": "Il y a {0} jouers actifs pendant les dernières 24 heures",
     "ACCOUNT_AGE": "Date de création",
-    "ACHIEVEMENT_PROGRESS": "Progrès des accomplishments",
     "CURRENT_BODY": "Selection de corps",
     "COLLECTION": "Collection",
     "MISSING_EMOJI_PERMISSIONS": "*Le rôle @everyone besoin la permission 'Use External Emojis' dans cette canal.*",

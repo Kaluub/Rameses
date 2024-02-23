@@ -14,8 +14,6 @@ class EvadesData {
     ];
 
     static staff = Array.of(...this.developers, ...this.headMods, ...this.seniorMods, ...this.mods, ...this.juniorMods);
-    
-    static achievements = 36;
 
     static heroes = [
         "Magmax",

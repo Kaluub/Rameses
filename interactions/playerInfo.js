@@ -127,7 +127,6 @@ class PlayerInfoInteraction extends DefaultInteraction {
 **${Locale.text(interaction, "BEST_WEEK")}**: ${Locale.text(interaction, "WEEK")} ${playerDetails.highestWeek[0]} ${Locale.text(interaction, "WITH")} ${playerDetails.highestWeek[1]} ${Locale.text(interaction, "VICTORY_POINTS")}${playerDetails.highestWeek[2] ? ` (${getAccessoryName(playerDetails.highestWeek[2])} Crown)` : ""}` : ""}
 **${Locale.text(interaction, "CURRENT_HAT")}**: ${playerDetails.accessories["hat_selection"] ? getAccessoryName(playerDetails.accessories["hat_selection"]) : Locale.text(interaction, "NONE")}
 **${Locale.text(interaction, "CURRENT_BODY")}**: ${playerDetails.accessories["body_selection"] ? getAccessoryName(playerDetails.accessories["body_selection"]) : Locale.text(interaction, "NONE")}
-**${Locale.text(interaction, "ACHIEVEMENT_PROGRESS")}**: ${playerDetails.stats.achievements.length}/${EvadesData.achievements} (${(playerDetails.stats.achievements.length / EvadesData.achievements * 100).toFixed(2)}%)
 **${Locale.text(interaction, "COLLECTION")}**: ${interaction.guild
     ? !interaction.channel.permissionsFor(interaction.guild.roles.everyone).has(PermissionsBitField.Flags.UseExternalEmojis)
     ? Locale.text(interaction, "MISSING_EMOJI_PERMISSIONS")
