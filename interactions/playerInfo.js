@@ -3,29 +3,22 @@ import { AccountData } from "../classes/data.js";
 import Utils from "../classes/utils.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, PermissionsBitField, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
-import EvadesData from "../classes/evadesData.js";
 
 const emojiHats = {
-    "angel-wings": "<:angelwings:1098418604631932968>",
-    "autumn-leaves": "<:autumnleaves:1098418595047940176>",
     "autumn-wreath": "<:autumnwreath:1045570375788019793>",
     "blue-flames": "<:blueflames:1045570376962420827>",
     "blue-santa-hat": "<:bluesantahat:1045570378333966417>",
     "bronze-crown": "<:bronzecrown:1045570379248312400>",
-    "coconut-holes": "<:coconutholes:1098418613301551144>",
     "flames": "<:flames:1045570379760025702>",
     "flower-headband": "<:flowerheadband:1098418580531445811>",
     "gold-crown": "<:goldcrown:1045570380846350418>",
     "gold-wreath": "<:goldwreath:1045570382259822633>",
     "halo": "<:halo:1045570383274852412>",
-    "one-winged-angel": "<:onewingedangel:1098418468195410061>",
     "orbit-ring": "<:orbitring:1045570385061621760>",
-    "pellets": "<:pellets:1098418551154540544>",
     "santa-hat": "<:santahat:1045570386240229406>",
     "silver-crown": "<:silvercrown:1045570387024564306>",
     "spring-wreath": "<:springwreath:1045570388207341658>",
     "stars": "<:starshat:1045570388874244107>",
-    "stick": "<:stick:1098418516014673961>",
     "sticky-coat": "<:stickycoat:1045570390015086753>",
     "summer-olympics-wreath": "<:summerolympicswreath:1045570383916576769>",
     "summer-olympics-wreath-2": "<:summerolympicswreath2:1098418535996330034>",
@@ -42,12 +35,8 @@ const emojiHats = {
     "gold-jewels": "<:goldjewels:1179967440768225300>",
     "rose-wreath": "<:rosewreath:1179967467938906234>",
     "pirate-hat": "<:piratehat:1179967283561517167>",
-    "plastic-shine": "<:plasticshine:1179967729613144186>",
-    "royal-robes": "<:royalrobes:1179967493348003922>",
     "broomstick": "<:broomstick:1179967342445351012>",
     "doughnut": "<:doughnut:1179967351014297671>",
-    "mummy-wrap": "<:mummywrap:1179967538499698818>",
-    "fedora": "<:fedora:1179967399915704401>",
     "stardust": "<:stardust:1179967449123270687>",
 }
 
