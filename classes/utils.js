@@ -64,11 +64,12 @@ class Utils {
     }
     
     static formatSeconds(seconds) {
-        const days = Math.floor(seconds / (60 * 60 * 24));
-        const hours = Math.floor(seconds / (60 * 60)) - days * 24;
-        const minutes = Math.floor(seconds / 60) - days * 24 * 60 - hours * 60;
+        const years = Math.floor(seconds / (60 * 60 * 24 * 365));
+        const days = Math.floor(seconds / (60 * 60 * 24)) - years * 365;
+        const hours = Math.floor(seconds / (60 * 60)) - years * 365 * 24 - days * 24;
+        const minutes = Math.floor(seconds / 60) - years * 365 * 24 * 60 - days * 24 * 60 - hours * 60;
         const remainingSeconds = seconds % 60;
-        return `${days > 0 ? `${days}d ` : ""}${hours > 0 ? `${hours}h ` : ""}${minutes > 0 ? `${minutes}m ` : ""}${remainingSeconds}s`;
+        return `${years > 0 ? `${years}y ` : ""}${days > 0 ? `${days}d ` : ""}${hours > 0 ? `${hours}h ` : ""}${minutes > 0 ? `${minutes}m ` : ""}${remainingSeconds > 0 ? `${remainingSeconds}s` : ""}`;
     }
     
     static readJSON(path) {
