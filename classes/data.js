@@ -23,7 +23,7 @@ class AccountData {
         this.displayName = data?.displayName ?? null;
         this.careerVP = data?.careerVP ?? null;
         this.lastSeen = data?.lastSeen ?? null;
-        this.playTime = data?.playTime ?? 0; // In SECONDS.
+        this.playTime = data?.playTime ?? 0; // In seconds.
         this.activity = data?.activity ?? {};
     }
 

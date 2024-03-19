@@ -6,9 +6,13 @@ class TournamentPlayerRunData {
     }
 
     getString(tournament, position) {
-        let res = "", total = this.total, best = this.best;
+        let res = "";
+        let total = this.total();
+        let best = this.best();
 
-        if (tournament.type == "best") total = best;
+        if (tournament.type == "best") {
+            total = best;
+        }
 
         res += tournament.topFormat.replaceAll("{position}", position.toString())
             .replaceAll("{player}", best.player)
@@ -16,27 +20,32 @@ class TournamentPlayerRunData {
             .replaceAll("{time}", Utils.timeSecondsToTime(total.timeSeconds))
             .replaceAll("{attempt}", `(${this.list.length}/${tournament.maxAttempts})`);
 
-        if (tournament.bottomFormat != " ") for (let i = 0; i < this.list.length; i++) {
-            const run = this.list[i];
+        if (tournament.bottomFormat != " ") {
+            for (let i = 0; i < this.list.length; i++) {
+                const run = this.list[i];
 
-            res += "\n" + tournament.bottomFormat
-                .replaceAll("{player}", run.player)
-                .replaceAll("{area}", run.area)
-                .replaceAll("{time}", run.time)
-                .replaceAll("{attempt}", `(${i + 1}/${tournament.maxAttempts})`);
+                res += "\n" + tournament.bottomFormat
+                    .replaceAll("{player}", run.player)
+                    .replaceAll("{area}", run.area)
+                    .replaceAll("{time}", run.time)
+                    .replaceAll("{attempt}", `(${i + 1}/${tournament.maxAttempts})`);
+            }
         }
 
 
         return res;
     }
 
-    get total() {
+    total() {
         const res = {
             area: 0,
             timeSeconds: 0
         };
+
         for (const run of this.list) {
-            if (!isNaN(+run.area.split(" ")[1])) res.area += +run.area.split(" ")[1];
+            if (!isNaN(+run.area.split(" ")[1])) {
+                res.area += +run.area.split(" ")[1];
+            }
             res.timeSeconds += run.timeSeconds;
         }
 
@@ -45,7 +54,7 @@ class TournamentPlayerRunData {
         return res;
     }
 
-    get best() {
+    best() {
         return [...this.list].sort(TournamentPlayerRunData.sortElements)[0];
     }
 

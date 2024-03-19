@@ -3,6 +3,8 @@ import Locale from "./locale.js";
 class DefaultInteraction {
     static disabled = false;
     static applicationCommand = null;
+    static isGlobalInteraction = true;
+    static guilds = null;
 
     constructor(name, interactionTypes = []) {
         this.name = name;

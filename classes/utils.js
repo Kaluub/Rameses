@@ -83,6 +83,11 @@ class Utils {
                 break;
             picked.push(pool[Math.floor(pool.length * Math.random())]);
         }
+        for (let i = 0; i < picked.length; i += 1) {
+            if (picked[i] instanceof Array) {
+                picked[i] = picked[i][Math.floor(picked[i].length * Math.random())];
+            }
+        }
         return picked;
     }
 }

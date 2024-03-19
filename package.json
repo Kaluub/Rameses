@@ -9,12 +9,10 @@
   "dependencies": {
     "bufferutil": "^4.0.8",
     "discord.js": "^14.14.1",
-    "dotenv": "^16.4.1",
-    "google-auth-library": "^8.9.0",
-    "google-spreadsheet": "^4.1.1",
-    "mongodb": "^6.3.0",
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.5.0",
     "node-fetch": "^3.3.2",
-    "puppeteer": "^22.0.0",
+    "puppeteer": "^22.5.0",
     "utf-8-validate": "^6.0.3",
     "uuid": "^9.0.1"
   }

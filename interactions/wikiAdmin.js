@@ -6,7 +6,7 @@ import ButtonLinks from "../classes/buttonLinks.js";
 
 class WikiAdminInteraction extends DefaultInteraction {
     static name = "wikiadmin";
-    static noGlobalInteraction = true;
+    static isGlobalInteraction = false;
     static guilds = [Config.DEVELOPMENT_SERVER];
     static applicationCommand = new SlashCommandBuilder()
         .setName(WikiAdminInteraction.name)

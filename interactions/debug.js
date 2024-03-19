@@ -5,7 +5,7 @@ import Config from "../classes/config.js";
 
 class DebugInteraction extends DefaultInteraction {
     static name = "debug";
-    static noGlobalInteraction = true;
+    static isGlobalInteraction = false;
     static guilds = [Config.DEVELOPMENT_SERVER];
     static applicationCommand = new SlashCommandBuilder()
         .setName(DebugInteraction.name)
