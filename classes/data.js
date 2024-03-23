@@ -16,8 +16,6 @@ const discordUsers = database.collection("discord");
 const discordGuilds = database.collection("guilds");
 
 class AccountData {
-    static cache = new Collection();
-
     constructor(data) {
         this.username = data.username;
         this.displayName = data?.displayName ?? null;
@@ -27,17 +25,15 @@ class AccountData {
         this.activity = data?.activity ?? {};
     }
 
-    async save(noCache = false) {
-        if (!noCache) AccountData.cache.set(this.username.toLowerCase(), this);
+    async save() {
         await accounts.updateOne({ username: this.username.toLowerCase() }, { $set: this }, { upsert: true });
     }
 
     static async getByUsername(username, createIfNonexistant = true, ignoreGuest = true) {
         if (ignoreGuest && username.toLowerCase().startsWith("guest")) return null;
-        const accountData = this.cache.get(username.toLowerCase()) ?? await accounts.findOne({ username: username.toLowerCase() });
+        const accountData = await accounts.findOne({ username: username.toLowerCase() });
         if (!accountData && createIfNonexistant) return new AccountData({ username: username.toLowerCase() });
         if (!accountData && !createIfNonexistant) return null;
-        AccountData.cache.set(username.toLowerCase(), accountData);
         return new AccountData(accountData);
     }
 
@@ -71,6 +67,50 @@ class AccountData {
         return (await accounts.aggregate([{ $group: { _id: null, value: { $sum: `$${fieldName}` } } }]).toArray())[0].value;
     }
 
+    static bulkUpdateOnlinePlayers(onlinePlayers, timeInterval) {
+        const lastSeen = Math.floor(Date.now() / 1000);
+        const hour = new Date().getUTCHours().toString();
+        const names = onlinePlayers
+            .filter(name => !name.startsWith("Guest"))
+            .map(name => name.toLowerCase());
+        
+        accounts.updateMany(
+            {username: {$in: names}},
+            {
+                $set: {
+                    lastSeen: lastSeen
+                },
+                $inc: {
+                    playTime: timeInterval,
+                    [`activity.${hour}`]: 1
+                }
+            },
+            {upsert: true}
+        );
+    }
+
+    static bulkUpdateHallOfFame(hallOfFame) {
+        const operations = [];
+        for (const [username, weeklyVP, careerVP] of hallOfFame) {
+            if (!username || !careerVP) {
+                continue;
+            }
+            operations.push({
+                updateOne: {
+                    filter: {username: username.toLowerCase()},
+                    update: {
+                        $set: {
+                            careerVP: parseInt(careerVP),
+                            displayName: username
+                        }
+                    },
+                    upsert: true
+                }
+            });
+        }
+        accounts.bulkWrite(operations);
+    }
+
     static async loadTopVP() {
         console.log("Loading VP leaderboard from file... This will take a while!")
         const accounts = Utils.readJSON("./data/VP.json");
@@ -80,7 +120,7 @@ class AccountData {
             AccountData.getByUsername(data.name, true, false).then((acc) => {
                 acc.careerVP = data.vp;
                 acc.displayName = data.name;
-                acc.save(true);
+                acc.save();
             });
         }
         console.log("Loaded VP leaderboard from file!")

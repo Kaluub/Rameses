@@ -100,7 +100,7 @@ class EvadesAPI {
         updateLastSeen(this);
         updateCareerVP(this);
         setInterval(updateLastSeen, this.onlinePlayersCacheTime, this);
-        setInterval(updateCareerVP, 600000, this); // Updates each 10 minutes.
+        setInterval(updateCareerVP, 600000, this); // Updates every 10 minutes.
     }
 
     resetCache() {
@@ -216,7 +216,6 @@ class EvadesAPI {
 
 let failedToConnect = true;
 async function updateLastSeen(evadesAPI) {
-    // if (Config.DEBUG) return;
     const onlinePlayers = await evadesAPI.getOnlinePlayers();
 
     if (!onlinePlayers) {
@@ -228,35 +227,13 @@ async function updateLastSeen(evadesAPI) {
         await Changelog.updateChangelog();
     }
 
-    const hour = new Date().getUTCHours().toString();
-    for (const username of onlinePlayers) {
-        if (username.startsWith("Guest")) continue;
-        AccountData.getByUsername(username).then(async (account) => {
-            // Collect data regarding active times.
-            account.lastSeen = Math.floor(Date.now() / 1000);
-            if (!account.activity[hour]) account.activity[hour] = 0;
-            account.activity[hour] += 1;
-            account.playTime += Math.floor(evadesAPI.onlinePlayersCacheTime / 1000);
-            account.save();
-        });
-    }
+    AccountData.bulkUpdateOnlinePlayers(onlinePlayers, Math.floor(evadesAPI.onlinePlayersCacheTime / 1000));
 }
 
 async function updateCareerVP(evadesAPI) {
-    // if (Config.DEBUG) return;
     // We know that only players in the hall of fame can have an outdated career VP.
     const hallOfFame = await evadesAPI.getHallOfFame();
-    for (const [username, weeklyVP, careerVP] of hallOfFame) {
-        if (!username || !careerVP) continue;
-        // Fetch the players details, updating their career VP.
-        AccountData.getByUsername(username).then((account) => {
-            if (!account) return;
-            const vp = parseInt(careerVP);
-            if (account.careerVP && vp === account.careerVP) return;
-            account.careerVP = vp;
-            account.save();
-        });
-    }
+    AccountData.bulkUpdateHallOfFame(hallOfFame);
 }
 
 export default EvadesAPI;
