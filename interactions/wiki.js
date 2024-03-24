@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { WikiPageData } from "../classes/data.js";
 import ButtonLinks from "../classes/buttonLinks.js";
 
@@ -26,7 +26,8 @@ class WikiInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const subcommand = interaction?.options?.getSubcommand(false) ?? interaction?.customId?.split("/")[1];
+        const subcommand = this.getSubcommand(interaction);
+
         if (subcommand == "page") {
             const pageIdentifier = interaction?.options?.getString("wiki-page", false) ?? interaction?.customId?.split("/")[2];
             if (!pageIdentifier) return "Please provide a page title!";
@@ -53,6 +54,7 @@ class WikiInteraction extends DefaultInteraction {
 
             return result;
         }
+
         return "How did we get here?";
     }
 }

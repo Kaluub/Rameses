@@ -155,8 +155,6 @@ class TournamentData {
 }
 
 class WikiPageData {
-    static cache = new Collection();
-
     constructor(data) {
         this.title = data.title;
         this.uuid = data?.uuid ?? uuid();
@@ -170,7 +168,6 @@ class WikiPageData {
     }
 
     async save() {
-        AccountData.cache.set(this.uuid, this);
         await wikiPages.updateOne({ uuid: this.uuid }, { $set: this }, { upsert: true });
     }
 
@@ -179,7 +176,7 @@ class WikiPageData {
     }
 
     static async getByTitle(title) {
-        const page = this.cache.get(title) ?? await wikiPages.findOne({ title });
+        const page = await wikiPages.findOne({ title });
         if (!page) return null;
         return new WikiPageData(page);
     }
@@ -198,8 +195,6 @@ class WikiPageData {
 }
 
 class DiscordUserData {
-    static cache = new Collection();
-
     constructor(data) {
         this.id = data.id;
         this.friends = data?.friends ?? [];
@@ -209,12 +204,11 @@ class DiscordUserData {
     }
 
     async save() {
-        DiscordUserData.cache.set(this.id, this);
         await discordUsers.updateOne({ id: this.id }, { $set: this }, { upsert: true });
     }
 
     static async getByID(id) {
-        const userData = this.cache.get(id) ?? await discordUsers.findOne({ id });
+        const userData = await discordUsers.findOne({ id });
         if (!userData) return new DiscordUserData({ id });
         return new DiscordUserData(userData);
     }
@@ -227,8 +221,6 @@ class DiscordUserData {
 }
 
 class DiscordGuildData {
-    static cache = new Collection();
-
     constructor(data) {
         this.id = data.id;
         this.tournamentOrganizerRole = data?.tournamentOrganizerRole ?? null;
@@ -238,12 +230,11 @@ class DiscordGuildData {
     }
 
     async save() {
-        DiscordGuildData.cache.set(this.id, this);
         await discordGuilds.updateOne({ id: this.id }, { $set: this }, { upsert: true });
     }
 
     static async getByID(id) {
-        const guildData = this.cache.get(id) ?? await discordGuilds.findOne({ id });
+        const guildData = await discordGuilds.findOne({ id });
         if (!guildData) return new DiscordGuildData({ id });
         return new DiscordGuildData(guildData);
     }

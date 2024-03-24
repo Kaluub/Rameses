@@ -9,11 +9,13 @@ class GameChangelog {
         const browser = await puppeteer.launch({ executablePath: Config.CHROMIUM_EXECUTABLE, headless: "new" });
         const page = await browser.newPage();
         const response = await page.goto("https://evades.io/");
-        if (!response.ok()) return null;
+        if (!response.ok()) {
+            return null;
+        }
 
         await page.waitForSelector(".changelog");
 
-        // Get all changelogs
+        // Get all changelogs.
         const data = [];
         const elementArray = await page.$$('.changelog-section');
         for (const element of elementArray) {

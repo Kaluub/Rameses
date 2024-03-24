@@ -13,14 +13,28 @@ class TournamentAddInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        if (!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
+        if (!interaction.guild) {
+            return Locale.text(interaction, "GUILD_ONLY");
+        }
+
         const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-        if (!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
+
+        if (!interaction.member.roles.cache.hasAny(
+            guildData.tournamentSpectatorRole,
+            guildData.tournamentOrganizerRole,
+            ...Config.TOURNAMENT_SPECTATOR_ROLES,
+            ...Config.TOURNAMENT_ORGANIZER_ROLES,
+            ...Config.MODERATOR_ROLES)) {
+            return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
+        }
+
         if (interaction.isMessageComponent()) {
             const tournament = await TournamentData.getByID(interaction.message.id);
-            if (!tournament) return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+            if (!tournament) {
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+            }
             if (Date.now() > tournament.created + tournament.duration) {
-                // Remove button or something later
+                interaction.message.edit({})
                 return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER") };
             }
             const modal = new ModalBuilder()
@@ -58,6 +72,7 @@ class TournamentAddInteraction extends DefaultInteraction {
                 )
             return await interaction.showModal(modal);
         }
+
         if (interaction.isModalSubmit()) {
             if (!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
             const guildData = await DiscordGuildData.getByID(interaction.guild.id);

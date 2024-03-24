@@ -1,6 +1,6 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
-import { AccountData, DiscordUserData } from "../classes/data.js";
+import { AccountData } from "../classes/data.js";
 import Config from "../classes/config.js";
 
 class AdminInteraction extends DefaultInteraction {
@@ -30,11 +30,6 @@ class AdminInteraction extends DefaultInteraction {
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
-                .setName("flushcache")
-                .setDescription("Clear the caches")
-        )
-        .addSubcommand(
-            new SlashCommandSubcommandBuilder()
                 .setName("interactions")
                 .setDescription("Rebuilds all interactions")
         )
@@ -44,7 +39,8 @@ class AdminInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const subcommand = interaction.options.getSubcommand(false);
+        const subcommand = this.getSubcommand(interaction);
+
         if (subcommand == "check") {
             const username = interaction.options.getString("username", false);
             if (!username) return "No user found.";
@@ -52,25 +48,21 @@ class AdminInteraction extends DefaultInteraction {
             if (!account) return "No data stored for this user yet.";
             return `Stored data:\n\`\`\`json\n${JSON.stringify(account, null, 4)}\n\`\`\``;
         }
+
         if (subcommand == "stats") {
             return `Stats:
 Guilds cached: ${interaction.client.guilds.cache.size}
 Users cached: ${interaction.client.users.cache.size}
 Channels cached: ${interaction.client.channels.cache.size}
 
-Stored accounts: ${await AccountData.count()}
-Cached accounts: ${AccountData.cache.size}`;
+Stored accounts: ${await AccountData.count()}`;
         }
-        if (subcommand == "flushcache") {
-            const size = AccountData.cache.size;
-            AccountData.cache.clear();
-            interaction.client.evadesAPI.resetCache();
-            return `Flushed ${size} account caches.`;
-        }
+
         if (subcommand == "interactions") {
             interaction.client.updateInteractions();
             return "All interactions will be updated.";
         }
+
         return "How did we get here?";
     }
 }

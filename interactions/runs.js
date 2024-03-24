@@ -34,7 +34,7 @@ class RunsInteraction extends DefaultInteraction {
         super(RunsInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
         this.defer = true;
         this.updateIfComponent = true;
-        this.runsPerPage = 10;
+        this.runsPerPage = 15;
     }
 
     async execute(interaction) {

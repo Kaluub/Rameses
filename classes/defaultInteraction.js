@@ -26,6 +26,14 @@ class DefaultInteraction {
         return (interaction?.options?.getInteger(name) ?? parseInt(interaction?.customId?.split("/")[index]));
     }
 
+    getSubcommand(interaction) {
+        return (interaction?.options?.getSubcommand(false) ?? interaction?.customId?.split("/")[1]);
+    }
+
+    /**
+     * @abstract
+     * @param {import("discord.js").BaseInteraction} interaction 
+     */
     async execute(interaction) {
         return Locale.text(interaction, "DEFAULT_COMMAND");
     }

@@ -47,6 +47,7 @@ class FriendInteraction extends DefaultInteraction {
             }
             await interaction.respond(response);
         }
+        
         if (interaction.isChatInputCommand()) {
             const subcommand = interaction.options.getSubcommand(false);
             if (subcommand == "add") {
