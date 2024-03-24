@@ -13,7 +13,7 @@ class DiscordClient extends Client {
 
     async clientLogin() {
         await this.login(Config.TOKEN);
-        console.log("Client logged in.")
+        console.log("Client logged in.");
     }
 
     async updateInteractions() {

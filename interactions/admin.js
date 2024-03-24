@@ -3,13 +3,13 @@ import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCo
 import { AccountData, DiscordUserData } from "../classes/data.js";
 import Config from "../classes/config.js";
 
-class DebugInteraction extends DefaultInteraction {
-    static name = "debug";
+class AdminInteraction extends DefaultInteraction {
+    static name = "admin";
     static isGlobalInteraction = false;
     static guilds = [Config.DEVELOPMENT_SERVER];
     static applicationCommand = new SlashCommandBuilder()
-        .setName(DebugInteraction.name)
-        .setDescription("Generic debug data")
+        .setName(AdminInteraction.name)
+        .setDescription("Bot admin tools")
         .setDefaultMemberPermissions("0")
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
@@ -30,23 +30,17 @@ class DebugInteraction extends DefaultInteraction {
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
-                .setName("fixname")
-                .setDescription("Fix (reset) the in-game name for a Discord user")
-                .addStringOption(
-                    new SlashCommandStringOption()
-                        .setName("id")
-                        .setDescription("The user's ID")
-                        .setRequired(true)
-                )
-        )
-        .addSubcommand(
-            new SlashCommandSubcommandBuilder()
                 .setName("flushcache")
                 .setDescription("Clear the caches")
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("interactions")
+                .setDescription("Rebuilds all interactions")
+        )
 
     constructor() {
-        super(DebugInteraction.name, [InteractionType.ApplicationCommand]);
+        super(AdminInteraction.name, [InteractionType.ApplicationCommand]);
     }
 
     async execute(interaction) {
@@ -67,23 +61,18 @@ Channels cached: ${interaction.client.channels.cache.size}
 Stored accounts: ${await AccountData.count()}
 Cached accounts: ${AccountData.cache.size}`;
         }
-        if (subcommand == "fixname") {
-            const id = interaction.options.getString("id", false);
-            if (!id) return "No user found.";
-            let data = await DiscordUserData.getByID(id, false);
-            if (!data) return "No Discord data is stored for this user yet.";
-            data.username = null;
-            await data.save();
-            return `Discord in-game name was cleared from <@${id}> (${id})`;
-        }
         if (subcommand == "flushcache") {
             const size = AccountData.cache.size;
             AccountData.cache.clear();
             interaction.client.evadesAPI.resetCache();
             return `Flushed ${size} account caches.`;
         }
+        if (subcommand == "interactions") {
+            interaction.client.updateInteractions();
+            return "All interactions will be updated.";
+        }
         return "How did we get here?";
     }
 }
 
-export default DebugInteraction;
+export default AdminInteraction;
