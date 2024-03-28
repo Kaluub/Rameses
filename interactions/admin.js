@@ -32,6 +32,12 @@ class AdminInteraction extends DefaultInteraction {
             new SlashCommandSubcommandBuilder()
                 .setName("interactions")
                 .setDescription("Rebuilds all interactions")
+                .addStringOption(
+                    new SlashCommandStringOption()
+                        .setName("guild")
+                        .setDescription("A guild ID to clear interactions for if needed.")
+                        .setRequired(false)
+                )
         )
 
     constructor() {
@@ -59,6 +65,16 @@ Stored accounts: ${await AccountData.count()}`;
         }
 
         if (subcommand == "interactions") {
+            const guildId = interaction.options.getString("guild", false);
+            if (guildId) {
+                const guild = await interaction.client.guilds.fetch(guildId);
+                if (!guild) {
+                    return "Guild could not be resolved.";
+                }
+                await guild.commands.set([]);
+                return `Cleared all commands for server ${guild.name}.`;
+            }
+            
             interaction.client.updateInteractions();
             return "All interactions will be updated.";
         }
