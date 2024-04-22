@@ -67,7 +67,7 @@ class LeaderboardInteraction extends DefaultInteraction {
             
             for (const account of accounts) {
                 i += 1;
-                string += `\n**${i}.** ${Utils.sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP.toLocaleString()} VP`;
+                string += `\n**${i}.** ${Utils.sanitizeUsername(account.displayName ?? account.username)}: ${account.careerVP ? account.careerVP.toLocaleString() : "Unknown"} VP`;
             }
 
             const totalPlayers = await AccountData.count();
