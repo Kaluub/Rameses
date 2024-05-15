@@ -4,11 +4,12 @@ class EvadesData {
     static seniorMods = ["Darklight", "LightY", "Raqzv", "Kaluub"];
     static mods = [
         "Gianni", "Vikenti", "Mel",
-        "Amasterclasher", "basti", "Hodge",
+        "Amasterclasher", "Hodge",
         "Zade", "PotatoNuke", "AWEN",
         "eagle45", "Angel🌸", "Ram", "AniFonG",
         "MeguclOwUn", "yeetyeet47", "nosok",
-        "waterfowlgen", "RadicalLarry", "Br1h", "зефирка",
+        "waterfowlgen", "RadicalLarry", "Br1h",
+        "зефирка", "⚝Simba⚝",
     ];
     static juniorMods = ["Greeny"];
 
