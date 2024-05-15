@@ -109,13 +109,5 @@
     "ACCOUNT_AGE": "Date de création",
     "CURRENT_BODY": "Selection de corps",
     "COLLECTION": "Collection",
-    "MISSING_EMOJI_PERMISSIONS": "*Le rôle @everyone besoin la permission 'Use External Emojis' dans cette canal.*",
-    "NOT_IN_MATCH": "Tu n'es pas un participant.",
-    "ALREADY_SELECTED_MAP": "Vous avez déja choisi votres régions!",
-    "MAP_ALREADY_REMOVED": "Cette région est déja enlever.",
-    "NAME_ALREADY_SET": "Vous avez ajouté un nom à votre compte: {0}",
-    "NAME_TAKEN": "Cette nom est déja utilisé par {0}.",
-    "NAME_SET": "Votre nom est maintenant {0}.",
-    "REGION_SET": "Votre région est maintenant {0}.",
-    "USERNAME_NOT_SET": "Vouz devraiez utiliser /set-name et /set-region avant que vouz pouvez utiliser ceci."
+    "MISSING_EMOJI_PERMISSIONS": "*Le rôle @everyone besoin la permission 'Use External Emojis' dans cette salon.*"
 }

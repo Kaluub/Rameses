@@ -2,6 +2,7 @@ import DefaultInteraction from "../classes/defaultInteraction.js";
 import { InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { AccountData } from "../classes/data.js";
 import Config from "../classes/config.js";
+import Utils from "../classes/utils.js";
 
 class AdminInteraction extends DefaultInteraction {
     static name = "admin";
@@ -56,12 +57,12 @@ class AdminInteraction extends DefaultInteraction {
         }
 
         if (subcommand == "stats") {
-            return `Stats:
-Guilds cached: ${interaction.client.guilds.cache.size}
-Users cached: ${interaction.client.users.cache.size}
-Channels cached: ${interaction.client.channels.cache.size}
-
-Stored accounts: ${await AccountData.count()}`;
+            return "Stats:\n" +
+                `Bot uptime: ${Utils.formatSeconds(interaction.client.uptime / 1000)}\n` +
+                `Guilds cached: ${interaction.client.guilds.cache.size}\n` +
+                `Users cached: ${interaction.client.users.cache.size}\n` +
+                `Channels cached: ${interaction.client.channels.cache.size}\n\n` +
+                `Stored accounts: ${await AccountData.count()}`;
         }
 
         if (subcommand == "interactions") {

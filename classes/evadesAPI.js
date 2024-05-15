@@ -54,6 +54,10 @@ class PlayerDetailsData extends CachedData {
                 highestWeek = [weekNumber, parseInt(week["wins"]) || 0, week["finish"]];
         }
 
+        if (this.stats["highest_area_achieved_resettable_counter"] || 0 > 0) {
+            activeWeeks += 1;
+        }
+
         this.highestWeek = highestWeek;
         this.activeWeeks = activeWeeks;
         this.summedCareerVP = summedCareerVP;
