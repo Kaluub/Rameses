@@ -1,6 +1,7 @@
-import { Collection } from "discord.js";
+import { Collection, CommandInteraction } from "discord.js";
 import { readdirSync } from "fs";
 import Locale from "./locale.js";
+import { CommandLog } from "./data.js";
 
 class InteractionHandler {
     constructor() {
@@ -58,6 +59,9 @@ class InteractionHandler {
         }
     }
 
+    /**
+     * @param {CommandInteraction} interaction 
+     */
     async handleInteraction(interaction) {
         let interactionHandler = this.interactionHandler.interactions.get(interaction?.commandName ?? interaction?.customId?.split("/")[0]);
         if (interaction.isAutocomplete()) {
@@ -87,6 +91,10 @@ class InteractionHandler {
             .catch(err => {
                 console.error(err);
             })
+        if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
+            new CommandLog(interaction.toString(), interaction.guildId, interaction.user.id)
+                .insert();
+        }
     }
 }
 

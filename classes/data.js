@@ -14,6 +14,7 @@ const tournaments = database.collection("tournaments");
 const wikiPages = database.collection("wiki");
 const discordUsers = database.collection("discord");
 const discordGuilds = database.collection("guilds");
+const commandLogs = database.collection("commands");
 
 class AccountData {
     constructor(data) {
@@ -198,8 +199,6 @@ class DiscordUserData {
     constructor(data) {
         this.id = data.id;
         this.friends = data?.friends ?? [];
-        this.username = data?.username ?? null;
-        this.region = data?.region ?? null;
         this.created = data?.created ?? Date.now();
     }
 
@@ -210,12 +209,6 @@ class DiscordUserData {
     static async getByID(id) {
         const userData = await discordUsers.findOne({ id });
         if (!userData) return new DiscordUserData({ id });
-        return new DiscordUserData(userData);
-    }
-
-    static async getByUsername(username) {
-        const userData = await discordUsers.findOne({ username });
-        if (!userData) return null;
         return new DiscordUserData(userData);
     }
 }
@@ -240,4 +233,17 @@ class DiscordGuildData {
     }
 }
 
-export { AccountData, TournamentData, WikiPageData, DiscordUserData, DiscordGuildData };
+class CommandLog {
+    constructor(command, guild, user) {
+        this.command = command;
+        this.guild = guild;
+        this.user = user;
+        this.timestamp = Date.now();
+    }
+
+    async insert() {
+        await commandLogs.insertOne(this);
+    }
+}
+
+export { AccountData, TournamentData, WikiPageData, DiscordUserData, DiscordGuildData, CommandLog };
