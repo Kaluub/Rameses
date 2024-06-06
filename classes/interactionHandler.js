@@ -91,8 +91,16 @@ class InteractionHandler {
             .catch(err => {
                 console.error(err);
             })
-        if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
+        if (interaction.isChatInputCommand()) {
             new CommandLog(interaction.toString(), interaction.guildId, interaction.user.id)
+                .insert();
+        }
+        else if (interaction.isMessageComponent()) {
+            new CommandLog(interaction.customId, interaction.guildId, interaction.user.id)
+                .insert();
+        }
+        else if (interaction.isContextMenuCommand()) {
+            new CommandLog(interaction.commandName, interaction.guildId, interaction.user.id)
                 .insert();
         }
     }
