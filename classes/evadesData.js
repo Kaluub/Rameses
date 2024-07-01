@@ -4,13 +4,13 @@ class EvadesData {
     static seniorMods = ["Darklight", "LightY", "Raqzv", "Kaluub", "Amasterclasher"];
     static mods = [
         "Gianni", "Vikenti", "Mel",
-        "Hodge", "Zade", "PotatoNuke", "AWEN",
+        "Hodge", "Zade", "PotatoNuke",
         "eagle45", "Angel🌸", "Ram", "AniFonG",
         "MeguclOwUn", "yeetyeet47", "nosok",
         "waterfowlgen", "RadicalLarry", "Br1h",
         "зефирка", "⚝Simba⚝",
     ];
-    static juniorMods = ["Greeny", "TREN", "hotox", "bandanamaster", "Артомесик"];
+    static juniorMods = ["greeny", "TREN", "hotox", "bandanamaster", "Артомесик"];
 
     static staff = Array.of(...this.developers, ...this.headMods, ...this.seniorMods, ...this.mods, ...this.juniorMods);
 
