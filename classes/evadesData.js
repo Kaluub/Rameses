@@ -1,5 +1,5 @@
 class EvadesData {
-    static developers = ["MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Meldiron", "Jäckäl"];
+    static developers = ["MiceLee", "Stovoy", "Mrnibbles", "DDBus", "PotaroNuke", "Lime", "Jäckäl", "Amasterdevster"];
     static headMods = ["extirpater", "Exoriz", "Jackal"];
     static seniorMods = ["Darklight", "LightY", "Raqzv", "Kaluub", "Amasterclasher"];
     static mods = [
