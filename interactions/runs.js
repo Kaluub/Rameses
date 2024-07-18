@@ -62,7 +62,7 @@ class RunsInteraction extends DefaultInteraction {
         
         for (const run of runs) {
             embed.addFields({
-                name: `${Utils.sanitizeUsername(run.username)} as ${run.hero}`,
+                name: `${Utils.sanitizeUsername(run.username)}${run.interactions.length ? ` with ${run.interactions.join(' & ')}` : ""} as ${run.hero}`,
                 value: `completed **${run.region_name} ${run.area_index}** in ${Math.floor(run.survival_time / 60)}m ${run.survival_time % 60}s (<t:${run.created_at}:R>)`
             })
         }
