@@ -137,7 +137,9 @@ class LeaderboardInteraction extends DefaultInteraction {
             const row = new ActionRowBuilder()
                 .addComponents(previousButton, nextButton)
 
-            if (interaction.isMessageComponent()) return await interaction.editReply({ embeds: [embed], components: [row] });
+            if (interaction.isMessageComponent()) {
+                return await interaction.editReply({ embeds: [embed], components: [row] });
+            }
             return { embeds: [embed], components: [row] };
         }
         return Locale.text(interaction, "HOW_DID_WE_GET_HERE");

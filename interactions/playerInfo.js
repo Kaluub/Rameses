@@ -87,7 +87,7 @@ class PlayerInfoInteraction extends DefaultInteraction {
         if (!playerDetails)
             return Locale.text(interaction, "PLAYER_NOT_FOUND");
         
-        const account = await AccountData.getByUsername(username);
+        const account = await AccountData.getByUsername(username, true, false);
 
         // Handle potential useful updates.
         const careerVP = playerDetails.stats["highest_area_achieved_counter"];
