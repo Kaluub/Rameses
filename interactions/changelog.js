@@ -1,6 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
-import GameChangelog from "../classes/gameChangelog.js";
 import Locale from "../classes/locale.js";
 
 class ChangelogInteraction extends DefaultInteraction {
@@ -24,25 +23,38 @@ class ChangelogInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         if (interaction.isAutocomplete()) {
-            if (!GameChangelog.cache) return await interaction.respond([]);
+            const changelog = await interaction.client.evadesAPI.getChangelog();
+            if (changelog === null) {
+                return await interaction.respond([]);
+            }
+
             const response = [];
-            for (const page of GameChangelog.cache.filter(cl => cl.title.includes(interaction.options.getFocused() ?? ""))) {
-                if (response.length >= 25) break;
-                response.push({ name: page.title, value: (GameChangelog.cache.indexOf(page) + 1).toString() });
+            for (const entry of changelog.filter(entry => entry.header.includes(interaction.options.getFocused() ?? ""))) {
+                if (response.length >= 25) {
+                    break;
+                }
+                response.push({ name: entry.header, value: (changelog.indexOf(entry) + 1).toString() });
             }
             return await interaction.respond(response);
         } else {
-            // Make sure changelog exists
-            if (!GameChangelog.cache) await GameChangelog.updateChangelog();
-            if (!GameChangelog.cache) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+            const changelog = await interaction.client.evadesAPI.getChangelog();
+            if (changelog === null) {
+                return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+            }
 
             const changelogNumber = parseInt(interaction?.options?.getString("changelog")) - 1 || parseInt(interaction?.customId?.split("/")[1]) || 0;
-            if (!GameChangelog.cache[changelogNumber]) return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+            if (!changelog[changelogNumber]) {
+                return Locale.text(interaction, "CHANGELOG_UNAVAILABLE");
+            }
 
-            let string = `**__${GameChangelog.cache[changelogNumber]?.title}__**:`;
-            for (const segment of GameChangelog.cache[changelogNumber]?.content ?? []) {
-                const toAdd = `\n• ${segment}\n`;
-                if ((string + toAdd).length > 2000) break;
+            let string = `**__${changelog[changelogNumber].header}__**:`;
+            for (const segment of changelog[changelogNumber].changes) {
+                const toAdd = `\n• ${segment.content}\n`;
+                if ((string + toAdd).length > 1995) {
+                    // Prevent long changelogs from getting over the limit.
+                    string += `\n...`;
+                    break;
+                }
                 string += toAdd;
             }
 
@@ -55,7 +67,7 @@ class ChangelogInteraction extends DefaultInteraction {
                 new ButtonBuilder()
                     .setCustomId(`changelog/${changelogNumber + 1}/older`)
                     .setLabel(Locale.text(interaction, "OLDER"))
-                    .setDisabled(changelogNumber + 1 >= GameChangelog.cache.length)
+                    .setDisabled(changelogNumber + 1 >= changelog.length)
                     .setStyle(ButtonStyle.Primary)
             )
 
@@ -64,7 +76,7 @@ class ChangelogInteraction extends DefaultInteraction {
                 .setColor("#887711")
                 .setDescription(string)
                 .setURL("https://evades.io/")
-                .setFooter({ text: `Update ${changelogNumber + 1} of ${GameChangelog.cache.length}` })
+                .setFooter({ text: `Update ${changelogNumber + 1} of ${changelog.length}` })
                 .setTimestamp()
 
             if (interaction.isMessageComponent()) return await interaction.editReply({ embeds: [embed], components: [actionRow] });

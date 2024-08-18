@@ -1,4 +1,3 @@
-import { Collection } from "discord.js";
 import { v4 as uuid } from "uuid";
 import { MongoClient } from "mongodb";
 import Utils from "./utils.js";

@@ -8,12 +8,11 @@
   "license": "ISC",
   "dependencies": {
     "bufferutil": "^4.0.8",
-    "discord.js": "^14.15.2",
+    "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
-    "mongodb": "^6.6.2",
+    "mongodb": "^6.8.0",
     "node-fetch": "^3.3.2",
-    "puppeteer": "^22.8.2",
     "utf-8-validate": "^6.0.4",
-    "uuid": "^9.0.1"
+    "uuid": "^10.0.0"
   }
 }

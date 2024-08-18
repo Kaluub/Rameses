@@ -1,7 +1,6 @@
 import { Collection } from "discord.js";
 import fetch from "node-fetch";
 import Config from "./config.js";
-import Changelog from "./gameChangelog.js";
 import { AccountData } from "./data.js";
 
 class CachedData {
@@ -91,6 +90,12 @@ class HallOfFameData extends CachedData {
     }
 }
 
+class ChangelogData {
+    constructor() {
+        this.entries = [];
+    }
+}
+
 class EvadesAPI {
     constructor() {
         this.fetchURL = "https://evades.io/api/"
@@ -112,7 +117,8 @@ class EvadesAPI {
             playerManager: new PlayerManager(),
             onlinePlayers: new OnlinePlayersData(),
             serverStats: new ServerStatsData(),
-            hallOfFame: new HallOfFameData()
+            hallOfFame: new HallOfFameData(),
+            changelog: new ChangelogData(),
         }
     }
 
@@ -120,7 +126,9 @@ class EvadesAPI {
         const controller = new AbortController();
         try {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
-            if (Config.DEBUG) console.log(`> Fetched endpoint: ${encodeURI(this.fetchURL + endpoint)}`)
+            if (Config.DEBUG) {
+                console.log(`> Fetched endpoint: ${encodeURI(this.fetchURL + endpoint)}`);
+            }
             const data = await fetch(this.fetchURL + endpoint, { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
             if (!data || !data.ok) return null;
@@ -216,6 +224,18 @@ class EvadesAPI {
         if (!runs) return null;
         return runs;
     }
+
+    async getChangelog(force = false) {
+        if (force || this.cache.changelog === null) {
+            // We don't fetch the changelog unless the server restarts.
+            const changelog = await this.get("game/changelog");
+            if (!changelog) {
+                return null;
+            }
+            this.cache.changelog = changelog;
+        }
+        return this.cache.changelog;
+    }
 }
 
 let failedToConnect = true;
@@ -228,7 +248,7 @@ async function updateLastSeen(evadesAPI) {
     } else if (failedToConnect) {
         // Fetch changelog after being unable to connect.
         failedToConnect = false;
-        await Changelog.updateChangelog();
+        evadesAPI.getChangelog(true);
     }
 
     AccountData.bulkUpdateOnlinePlayers(onlinePlayers, Math.floor(evadesAPI.onlinePlayersCacheTime / 1000));
