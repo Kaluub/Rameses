@@ -180,8 +180,6 @@ class EvadesAPI {
                 return null;
             }
 
-            console.log(serverStats);
-
             this.cache.serverStats.na = serverStats.servers.NA;
             this.cache.serverStats.eu = serverStats.servers.EU;
             this.cache.serverStats.connected = serverStats.connected;

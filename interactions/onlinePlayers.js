@@ -68,7 +68,6 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             if (index === undefined) {
                 const servers = location === "na" ? serverStats.na : serverStats.eu;
                 onlinePlayers = [];
-                console.log(servers);
                 for (const server of Object.values(servers)) {
                     onlinePlayers.push(...server.online);
                 }
