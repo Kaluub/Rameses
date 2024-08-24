@@ -75,8 +75,8 @@ class OnlinePlayersData extends CachedData {
 class ServerStatsData extends CachedData {
     constructor() {
         super();
-        this.localServers = [];
-        this.remoteServers = [];
+        this.na = [];
+        this.eu = [];
         this.connected = 0;
         this.capacity = 0;
         this.autoConnect = false;
@@ -176,22 +176,14 @@ class EvadesAPI {
     async getServerStats(force = false) {
         if (force || this.cache.serverStats.isOutdated(this.serverStatsCacheTime)) {
             const serverStats = await this.get("game/list");
-            if (!serverStats) return null;
-
-            this.cache.serverStats.localServers = [];
-            this.cache.serverStats.remoteServers = [];
-
-            for (const server of serverStats.local) {
-                this.cache.serverStats.localServers.push(...server);
+            if (!serverStats) {
+                return null;
             }
 
-            for (const remote in serverStats.remotes) {
-                const servers = serverStats.remotes[remote];
-                for (const server of servers) {
-                    this.cache.serverStats.remoteServers.push(...server);
-                }
-            }
+            console.log(serverStats);
 
+            this.cache.serverStats.na = serverStats.servers.NA;
+            this.cache.serverStats.eu = serverStats.servers.EU;
             this.cache.serverStats.connected = serverStats.connected;
             this.cache.serverStats.capacity = serverStats.capacity;
             this.cache.serverStats.autoConnect = serverStats.autoConnect;

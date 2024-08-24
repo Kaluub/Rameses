@@ -13,24 +13,24 @@ const JOINER = "; ";
 const MAX_CHARACTER_COUNT = 1000;
 
 const serverChoices = [
-    { name: "all of NA", value: "local" },
-    { name: "all of EU", value: "remote" },
-    { name: "NA 1", value: "local:0" },
-    { name: "NA 2", value: "local:1" },
-    { name: "NA 3", value: "local:2" },
-    { name: "NA 4", value: "local:3" },
-    { name: "NA 5", value: "local:4" },
-    { name: "NA 6", value: "local:5" },
-    { name: "NA 7", value: "local:6" },
-    { name: "NA 8", value: "local:7" },
-    { name: "EU 1", value: "remote:0" },
-    { name: "EU 2", value: "remote:1" },
-    { name: "EU 3", value: "remote:2" },
-    { name: "EU 4", value: "remote:3" },
-    { name: "EU 5", value: "remote:4" },
-    { name: "EU 6", value: "remote:5" },
-    { name: "EU 7", value: "remote:6" },
-    { name: "EU 8", value: "remote:7" }
+    { name: "all of NA", value: "na" },
+    { name: "all of EU", value: "eu" },
+    { name: "NA 1", value: "na:0" },
+    { name: "NA 2", value: "na:1" },
+    { name: "NA 3", value: "na:2" },
+    { name: "NA 4", value: "na:3" },
+    { name: "NA 5", value: "na:4" },
+    { name: "NA 6", value: "na:5" },
+    { name: "NA 7", value: "na:6" },
+    { name: "NA 8", value: "na:7" },
+    { name: "EU 1", value: "eu:0" },
+    { name: "EU 2", value: "eu:1" },
+    { name: "EU 3", value: "eu:2" },
+    { name: "EU 4", value: "eu:3" },
+    { name: "EU 5", value: "eu:4" },
+    { name: "EU 6", value: "eu:5" },
+    { name: "EU 7", value: "eu:6" },
+    { name: "EU 8", value: "eu:7" }
 ]
 
 class OnlinePlayersInteraction extends DefaultInteraction {
@@ -58,34 +58,39 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         if (specificServer) {
             const data = specificServer.split(":");
             const location = data[0];
-            const index = parseInt(data[1]);
+            const index = data[1];
 
             if (!location) return Locale.text(interaction, "INVALID_SERVER");
-            if (!["local", "remote"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
+            if (!["na", "eu"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
 
             const serverStats = await interaction.client.evadesAPI.getServerStats();
 
-            if (isNaN(index)) {
-                const servers = location === "local" ? serverStats.localServers : serverStats.remoteServers;
+            if (index === undefined) {
+                const servers = location === "na" ? serverStats.na : serverStats.eu;
                 onlinePlayers = [];
-                for (const server of servers) {
+                console.log(servers);
+                for (const server of Object.values(servers)) {
                     onlinePlayers.push(...server.online);
                 }
             }
 
-            else if (location === "local") {
-                if (!serverStats.localServers[index]) return Locale.text(interaction, "INVALID_SERVER");
-                onlinePlayers = serverStats.localServers[index].online;
+            else if (location === "na") {
+                if (!serverStats.na[index]) return Locale.text(interaction, "INVALID_SERVER");
+                onlinePlayers = serverStats.na[index].online;
             }
 
-            else if (location === "remote") {
-                if (!serverStats.remoteServers[index]) return Locale.text(interaction, "INVALID_SERVER");
-                onlinePlayers = serverStats.remoteServers[index].online;
+            else if (location === "eu") {
+                if (!serverStats.eu[index]) return Locale.text(interaction, "INVALID_SERVER");
+                onlinePlayers = serverStats.eu[index].online;
             }
         }
 
-        if (!onlinePlayers) onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
-        if (!onlinePlayers) return Locale.text(interaction, "EVADES_ERROR");
+        if (!onlinePlayers) {
+            onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
+        }
+        if (!onlinePlayers) {
+            return Locale.text(interaction, "EVADES_ERROR");
+        }
 
         const userData = await DiscordUserData.getByID(interaction.user.id);
 
