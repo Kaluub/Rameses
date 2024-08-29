@@ -109,5 +109,6 @@
     "ACCOUNT_AGE": "Date de création",
     "CURRENT_BODY": "Selection de corps",
     "COLLECTION": "Collection",
-    "MISSING_EMOJI_PERMISSIONS": "*Le rôle @everyone besoin la permission 'Use External Emojis' dans cette salon.*"
+    "MISSING_EMOJI_PERMISSIONS": "*Le rôle @everyone besoin la permission 'Use External Emojis' dans cette salon.*",
+    "FRIEND_LIST": "Votre amis:"
 }

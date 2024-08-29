@@ -90,7 +90,7 @@ class FriendInteraction extends DefaultInteraction {
                 const sortedFriends = userData.friends.sort((f1, f2) => f1 - f2);
 
                 const embed = new EmbedBuilder()
-                    .setTitle("FRIEND_LIST")
+                    .setTitle(Locale.text(interaction, "FRIEND_LIST"))
                     .setColor("#a5b1d3")
                     .setTimestamp();
                 

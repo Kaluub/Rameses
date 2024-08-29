@@ -109,5 +109,6 @@
     "ACCOUNT_AGE": "Account age",
     "CURRENT_BODY": "Current body selection",
     "COLLECTION": "Collection",
-    "MISSING_EMOJI_PERMISSIONS": "*The @everyone role in the server requires the 'Use External Emojis' permission in this channel.*"
+    "MISSING_EMOJI_PERMISSIONS": "*The @everyone role in the server requires the 'Use External Emojis' permission in this channel.*",
+    "FRIEND_LIST": "Friend list:"
 }
