@@ -74,12 +74,22 @@ class TournamentAddInteraction extends DefaultInteraction {
         }
 
         if (interaction.isModalSubmit()) {
-            if (!interaction.guild) return Locale.text(interaction, "GUILD_ONLY");
+            if (!interaction.guild) {
+                return Locale.text(interaction, "GUILD_ONLY");
+            }
+
+            await interaction.deferReply({ ephemeral: true });
             const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-            if (!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
+            if (!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) {
+                return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
+            }
+
             const args = interaction.customId.split("/");
             const tournament = await TournamentData.getByID(args[1]);
-            if (!tournament) return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+            if (!tournament) {
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+            }
+
             if (Date.now() > tournament.created + tournament.duration) {
                 // Remove button or something later
                 return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER") };
@@ -88,6 +98,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             let player = interaction.fields.getTextInputValue("player").trim().normalize();
             let area = interaction.fields.getTextInputValue("area").toLowerCase().trim().normalize();
             let time = interaction.fields.getTextInputValue("time").trim().normalize();
+
             if (!player || !area || !time) {
                 return { ephemeral: true, content: Locale.text(interaction, "INVALID_VALUES") };
             }
@@ -95,6 +106,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             if (player.length > 64) {
                 return { ephemeral: true, content: Locale.text(interaction, "USERNAME_LONG") };
             }
+
             if (tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) {
                 return { ephemeral: true, content: Locale.text(interaction, "ATTEMPTS_USED", Utils.sanitizeUsername(player)) };
             }
@@ -148,7 +160,9 @@ class TournamentAddInteraction extends DefaultInteraction {
                 return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_FULL") };
             }
 
-            tournament.leaderboard.push({ player, area, time: time.trim(), timeSeconds, spectator: interaction.user.id });
+            const formattedTime = Utils.formatSecondsToMinutes(timeSeconds);
+
+            tournament.leaderboard.push({ player, area, time: formattedTime, timeSeconds, spectator: interaction.user.id });
             await tournament.save();
 
             const channel = interaction.client.channels.cache.get(args[2]);

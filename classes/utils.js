@@ -28,15 +28,20 @@ class Utils {
             usersRuns[lowerName].list.push(run);
         }
     
-        // Sum
-        if (tournament.type == "sum") sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.total, e2.total));
-        // Best
-        else sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.best, e2.best));
+        if (tournament.type == "sum") {
+            // Sum
+            sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.total(), e2.total()));
+        } else {
+            // Best
+            sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.best(), e2.best()));
+        }
     
         for (const run of sortedArray) {
             position += 1;
             const runString = "\n\n" + run.getString(tournament, position);
-            if ((tournamentString + runString).length > 1997 && !full) break;
+            if ((tournamentString + runString).length > 1997 && !full) {
+                break;
+            }
             tournamentString += runString;
         }
         tournamentString += "\n```";
@@ -70,6 +75,12 @@ class Utils {
         const minutes = Math.floor(seconds / 60) - years * 365 * 24 * 60 - days * 24 * 60 - hours * 60;
         const remainingSeconds = seconds % 60;
         return `${years > 0 ? `${years}y ` : ""}${days > 0 ? `${days}d ` : ""}${hours > 0 ? `${hours}h ` : ""}${minutes > 0 ? `${minutes}m ` : ""}${remainingSeconds > 0 ? `${remainingSeconds}s` : ""}`;
+    }
+
+    static formatSecondsToMinutes(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds < 10 ? "0": ""}${remainingSeconds}`;
     }
     
     static readJSON(path) {
