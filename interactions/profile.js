@@ -58,21 +58,21 @@ function getAccessoryName(name) {
     return nameArray.join(" ");
 }
 
-class PlayerInfoInteraction extends DefaultInteraction {
-    static name = "player-info";
+class ProfileInteraction extends DefaultInteraction {
+    static name = "profile";
     static applicationCommand = new SlashCommandBuilder()
-        .setName(PlayerInfoInteraction.name)
-        .setDescription("Get certain details from a player")
+        .setName(ProfileInteraction.name)
+        .setDescription("View the profile of a player.")
         .addStringOption(
             new SlashCommandStringOption()
                 .setName("username")
-                .setDescription("The username of the player")
+                .setDescription("The username of the player.")
                 .setAutocomplete(true)
                 .setRequired(true)
         )
 
     constructor() {
-        super(PlayerInfoInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
+        super(ProfileInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
         this.defer = true;
     }
 
@@ -140,4 +140,4 @@ class PlayerInfoInteraction extends DefaultInteraction {
     }
 }
 
-export default PlayerInfoInteraction;
+export default ProfileInteraction;

@@ -90,6 +90,13 @@ class HallOfFameData extends CachedData {
     }
 }
 
+class QuestData extends CachedData {
+    constructor() {
+        super();
+        this.data = {};
+    }
+}
+
 class ChangelogData {
     constructor() {
         this.entries = [];
@@ -104,6 +111,7 @@ class EvadesAPI {
         this.onlinePlayersCacheTime = 10000;
         this.serverStatsCacheTime = 10000;
         this.hallOfFameCacheTime = 60000;
+        this.questCacheTime = 20000;
         this.requestTimeout = 5000; // Timeout if no response in 5 seconds.
         this.resetCache();
         updateLastSeen(this);
@@ -118,6 +126,7 @@ class EvadesAPI {
             onlinePlayers: new OnlinePlayersData(),
             serverStats: new ServerStatsData(),
             hallOfFame: new HallOfFameData(),
+            quest: new QuestData(),
             changelog: new ChangelogData(),
         }
     }
@@ -198,6 +207,16 @@ class EvadesAPI {
             this.cache.hallOfFame.fetched = Date.now();
         }
         return this.cache.hallOfFame.entries;
+    }
+
+    async getCurrentQuest(force = false) {
+        if (force || this.cache.quest.isOutdated(this.questCacheTime)) {
+            const quest = await this.get("quests/current");
+            if (!quest) return null;
+            this.cache.quest.data = quest;
+            this.cache.quest.fetched = Date.now();
+        }
+        return this.cache.quest.data;
     }
 
     async getRuns(filters) {

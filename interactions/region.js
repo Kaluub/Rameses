@@ -11,7 +11,7 @@ class RegionInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const search = interaction.options.getFocused();
-        const regions = EvadesData.regions
+        const regions = Object.keys(EvadesData.regions)
             .filter(map => map.toLowerCase().includes(search.toLowerCase()))
             .slice(0, 25)
 

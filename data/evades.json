@@ -1,0 +1,300 @@
+{
+    "developers": [
+        "MiceLee",
+        "Stovoy",
+        "Mrnibbles",
+        "DDBus",
+        "PotaroNuke",
+        "Lime",
+        "Jäckäl",
+        "Amasterdevster"
+    ],
+    "headMods": [
+        "extirpater",
+        "Exoriz",
+        "Jackal"
+    ],
+    "seniorMods": [
+        "Darklight",
+        "Raqzv",
+        "Kaluub",
+        "Amasterclasher"
+    ],
+    "mods": [
+        "Gianni",
+        "Vikenti",
+        "Mel",
+        "Hodge",
+        "Zade",
+        "PotatoNuke",
+        "eagle45",
+        "Angel🌸",
+        "Ram",
+        "AniFonG",
+        "MeguclOwUn",
+        "waterfowlgen",
+        "RadicalLarry",
+        "Br1h",
+        "зефирка",
+        "⚝Simba⚝",
+        "TREN",
+        "hotox",
+        "Артомесик"
+    ],
+    "juniorMods": [],
+    "heroes": [
+        "Magmax",
+        "Rime",
+        "Morfe",
+        "Aurora",
+        "Necro",
+        "Brute",
+        "Nexus",
+        "Shade",
+        "Euclid",
+        "Chrono",
+        "Reaper",
+        "Rameses",
+        "Jolt",
+        "Ghoul",
+        "Cent",
+        "Jotunn",
+        "Candy",
+        "Mirage",
+        "Boldrock",
+        "Glob",
+        "Magno",
+        "Ignis",
+        "Stella",
+        "Viola",
+        "Mortuus",
+        "Cybot",
+        "Echelon",
+        "Demona",
+        "Stheno",
+        "Factorb"
+    ],
+    "regions": {
+        "Central Core": {
+            "color": "#425a6d"
+        },
+        "Central Core Hard": {
+            "color": "#425a6d"
+        },
+        "Catastrophic Core": {
+            "color": "#425a6d"
+        },
+        "Vicious Valley": {
+            "color": "#4d6b40"
+        },
+        "Vicious Valley Hard": {
+            "color": "#37512c"
+        },
+        "Elite Expanse": {
+            "color": "#2a3b4f"
+        },
+        "Elite Expanse Hard": {
+            "color": "#2a3b4f"
+        },
+        "Wacky Wonderland": {
+            "color": "#870080"
+        },
+        "Wacky Wonderland Hard": {
+            "color": "#870080"
+        },
+        "Switch Station": {
+            "color": "#425a6d"
+        },
+        "Glacial Gorge": {
+            "color": "#005668"
+        },
+        "Glacial Gorge Hard": {
+            "color": "#003c54"
+        },
+        "Dangerous District": {
+            "color": "#680000"
+        },
+        "Dangerous District Hard": {
+            "color": "#400303"
+        },
+        "Peculiar Pyramid": {
+            "color": "#666600"
+        },
+        "Peculiar Pyramid Hard": {
+            "color": "#666600"
+        },
+        "Monumental Migration": {
+            "color": "#470066"
+        },
+        "Monumental Migration Hard": {
+            "color": "#29003b"
+        },
+        "Humongous Hollow": {
+            "color": "#663900"
+        },
+        "Humongous Hollow Hard": {
+            "color": "#522e00"
+        },
+        "Transforming Turbidity": {
+            "color": "#425a6d"
+        },
+        "Quiet Quarry": {
+            "color": "#425a6d"
+        },
+        "Quiet Quarry Hard": {
+            "color": "#425a6d"
+        },
+        "Haunted Halls": {
+            "color": "#664b00"
+        },
+        "Stellar Square": {
+            "color": "#969275"
+        },
+        "Frozen Fjord": {
+            "color": "#27494f"
+        },
+        "Frozen Fjord Hard": {
+            "color": "#27494f"
+        },
+        "Ominous Occult": {
+            "color": "#63838e"
+        },
+        "Ominous Occult Hard": {
+            "color": "#63838e"
+        },
+        "Restless Ridge": {
+            "color": "#a88b64"
+        },
+        "Restless Ridge Hard": {
+            "color": "#a88b64"
+        },
+        "Toxic Territory": {
+            "color": "#5c5c5c"
+        },
+        "Toxic Territory Hard": {
+            "color": "#5c5c5c"
+        },
+        "Magnetic Monopole": {
+            "color": "#bf00ff"
+        },
+        "Magnetic Monopole Hard": {
+            "color": "#bf00ff"
+        },
+        "Assorted Alcove": {
+            "color": "#694605"
+        },
+        "Assorted Alcove Hard": {
+            "color": "#694605"
+        },
+        "Burning Bunker": {
+            "color": "#cc0000"
+        },
+        "Burning Bunker Hard": {
+            "color": "#cc0000"
+        },
+        "Grand Garden": {
+            "color": "#6a9c49"
+        },
+        "Grand Garden Hard": {
+            "color": "#6a9c49"
+        },
+        "Endless Echo": {
+            "color": "#4168c4"
+        },
+        "Endless Echo Hard": {
+            "color": "#4168c4"
+        },
+        "Mysterious Mansion": {
+            "color": "#9c0ec7"
+        },
+        "Coupled Corridors": {
+            "color": "#bbaa55"
+        },
+        "Cyber Castle": {
+            "color": "#21bad9"
+        },
+        "Cyber Castle Hard": {
+            "color": "#1594ad"
+        },
+        "Research Lab": {
+            "color": "#21bad9"
+        },
+        "Shifting Sands": {
+            "color": "#c88241"
+        },
+        "Infinite Inferno": {
+            "color": "#9b0606"
+        },
+        "Dusty Depths": {
+            "color": "#825b37"
+        },
+        "Withering Wasteland": {
+            "color": "#c45945"
+        }
+    },
+    "regionsExtended": [
+        "Central Core",
+        "Vicious Valley",
+        "Elite Expanse",
+        "Wacky Wonderland",
+        "Glacial Gorge",
+        "Dangerous District",
+        [
+            "Peculiar Pyramid (Inner/Outer)",
+            "Peculiar Pyramid Perimeter"
+        ],
+        "Monumental Migration (120)",
+        "Humongous Hollow",
+        "Haunted Halls",
+        "Quiet Quarry",
+        "Quiet Quarry Hard",
+        "Frozen Fjord",
+        "Restless Ridge",
+        "Toxic Territory",
+        [
+            "Magnetic Monopole (28)",
+            "Magnetic Monopole Dipole"
+        ],
+        "Burning Bunker",
+        "Central Core Hard",
+        "Vicious Valley Hard",
+        "Glacial Gorge Hard",
+        "Frozen Fjord Hard",
+        "Toxic Territory Hard",
+        [
+            "Magnetic Monopole Hard (28)",
+            "Magnetic Monopole Hard Dipole"
+        ],
+        "Burning Bunker Hard",
+        "Elite Expanse Hard",
+        "Restless Ridge Hard",
+        [
+            "Peculiar Perimeter Hard (Inner/Outer)",
+            "Peculiar Perimeter Hard Perimeter"
+        ],
+        "Grand Garden",
+        "Grand Garden Hard",
+        "Ominous Occult",
+        "Ominous Occult Hard",
+        "Endless Echo",
+        [
+            "Mysterious Mansion Garden",
+            "Mysterious Mansion Liminal Alley",
+            "Mysterious Mansion Dungeon",
+            "Mysterious Mansion Attic"
+        ],
+        "Dangerous District Hard",
+        "Cyber Castle",
+        "Cyber Castle Hard",
+        "Catastrophic Core",
+        "Endless Echo Hard",
+        "Humongous Hollow Hard",
+        "Shifting Sands",
+        "Infinite Inferno",
+        [
+            "Coupled Corridors North",
+            "Coupled Corridors South"
+        ],
+        "Withering Wasteland"
+    ]
+}

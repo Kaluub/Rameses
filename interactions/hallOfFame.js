@@ -37,7 +37,7 @@ class HallOfFameInteraction extends DefaultInteraction {
             .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : Locale.text(interaction, "LEADERBOARD_EMPTY"))
             .setFooter({ text: Locale.text(interaction, "HALL_OF_FAME_FOOTER", [ranking, totalVP]) })
         
-            return { embeds: [embed] }
+        return { embeds: [embed] }
     }
 }
 

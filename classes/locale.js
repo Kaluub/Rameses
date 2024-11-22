@@ -4,8 +4,8 @@ class Locale {
     static defaultLocale = "en-GB";
 
     static map = {
-        "en-GB": Utils.readJSON("locales/en-GB.json"),
-        "fr": Utils.readJSON("locales/fr.json")
+        "en-GB": Utils.readJSON("data/locale/en-GB.json"),
+        "fr": Utils.readJSON("data/locale/fr.json")
     }
 
     static text(interaction, key, args = null) {
@@ -17,12 +17,8 @@ class Locale {
         if (!text) {
             return `Locale key error: ${key}`;
         }
-        if (args.length) {
-            let i = 0;
-            for (const arg of args) {
-                text = text.replaceAll(`{${i}}`, arg);
-                i += 1;
-            }
+        for (let i = 0; i < args.length; i += 1) {
+            text = text.replaceAll(`{${i}}`, args[i]);
         }
         return text;
     }
