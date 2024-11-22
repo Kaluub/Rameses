@@ -110,5 +110,8 @@
     "CURRENT_BODY": "Selection de corps",
     "COLLECTION": "Collection",
     "MISSING_EMOJI_PERMISSIONS": "*Le rôle @everyone besoin la permission 'Use External Emojis' dans cette salon.*",
-    "FRIEND_LIST": "Votre amis:"
+    "FRIEND_LIST": "Votre amis:",
+    "QUEST_TITLE": "Quest",
+    "QUEST_DESCRIPTION": "Region: **{0}**\nParticipants: {1}/{2} ({3}%).",
+    "QUEST_FOOTER": "Pour la semaine {0}"
 }
