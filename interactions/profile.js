@@ -77,7 +77,7 @@ class ProfileInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        const username = this.getStringArgument(interaction, "username", 1);
+        const username = decodeURI(this.getStringArgument(interaction, "username", 1));
         if (!username)
             return Locale.text(interaction, "COMMAND_ERROR");
         
@@ -107,6 +107,7 @@ class ProfileInteraction extends DefaultInteraction {
             .setDescription(
                 `**${Locale.text(interaction, "CAREER_VP")}**: ${playerDetails.stats["highest_area_achieved_counter"]} ${Locale.text(interaction, "VICTORY_POINTS")}${account.careerVP ? ` (#${higherVP}, top ${(higherVP / await AccountData.count() * 100).toFixed(5)}%)` : ""}${playerDetails.stats["highest_area_achieved_counter"] != playerDetails.summedCareerVP ? `\n**${Locale.text(interaction, "REAL_CAREER_VP")}**: ${playerDetails.summedCareerVP} ${Locale.text(interaction, "VICTORY_POINTS")}` : ""}
 **${Locale.text(interaction, "WEEKLY_VP")}**: ${playerDetails.stats["highest_area_achieved_resettable_counter"] > 0 ? playerDetails.stats["highest_area_achieved_resettable_counter"] + ` ${Locale.text(interaction, "VICTORY_POINTS")}` : Locale.text(interaction, "NONE")}
+**${Locale.text(interaction, "QUEST_POINT_TOTAL")}**: ${playerDetails.stats["quest_points"] > 0 ? playerDetails.stats["quest_points"] + ` ${Locale.text(interaction, "QUEST_POINTS")}` : Locale.text(interaction, "NONE")}
 **${Locale.text(interaction, "TIME_PLAYED")}**: ${account.playTime ? `${Utils.formatSeconds(account.playTime)} (#${higherPlaytime}, top ${(higherPlaytime / await AccountData.count({ "playTime": { "$gte": 0 } }) * 100).toFixed(5)}%)` : Locale.text(interaction, "NEVER")}
 **${Locale.text(interaction, "ACCOUNT_AGE")}**: <t:${Math.floor(playerDetails.createdAt)}> (<t:${Math.floor(playerDetails.createdAt)}:R>)
 **${Locale.text(interaction, "LAST_SEEN")}**: ${onlinePlayers.some(name => name.toLowerCase() == username.toLowerCase()) ? Locale.text(interaction, "ONLINE_NOW") : account.lastSeen ? `<t:${account.lastSeen}> (<t:${account.lastSeen}:R>)` : Locale.text(interaction, "NEVER")}
@@ -121,7 +122,7 @@ class ProfileInteraction extends DefaultInteraction {
     ? Locale.text(interaction, "MISSING_EMOJI_PERMISSIONS")
     : getHatEmojis(playerDetails.accessories.collection)
     : getHatEmojis(playerDetails.accessories.collection)}`
-        )
+            ); // There's no fixing this
 
         const activityButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Secondary)

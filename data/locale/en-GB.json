@@ -113,5 +113,7 @@
     "FRIEND_LIST": "Friend list:",
     "QUEST_TITLE": "Current Quest",
     "QUEST_DESCRIPTION": "Region: **{0}**\nCompletion: {1}/{2} ({3}%).",
-    "QUEST_FOOTER": "For week {0}"
+    "QUEST_FOOTER": "For week {0}",
+    "QUEST_POINT_TOTAL": "Quest Points",
+    "QUEST_POINTS": "quest points"
 }
