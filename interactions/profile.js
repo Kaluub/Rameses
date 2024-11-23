@@ -101,7 +101,7 @@ class ProfileInteraction extends DefaultInteraction {
         
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "PLAYER_DETAILS_TITLE", [Utils.sanitizeUsername(account?.displayName ?? username)]))
-            .setURL(encodeURI("https://evades.io/profile/" + account?.displayName ?? username))
+            .setURL(encodeURI("https://evades.io/profile/" + username))
             .setColor("#884422")
             .setTimestamp()
             .setDescription(
@@ -126,12 +126,12 @@ class ProfileInteraction extends DefaultInteraction {
 
         const activityButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Secondary)
-            .setCustomId("activity/" + account?.displayName ?? username)
+            .setCustomId("activity/" + username)
             .setLabel(Locale.text(interaction, "ACTIVITY"))
         
         const profilePageButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Link)
-            .setURL(encodeURI("https://evades.io/profile/" + account?.displayName ?? username))
+            .setURL(encodeURI("https://evades.io/profile/" + username))
             .setLabel(Locale.text(interaction, "ACCOUNT_PAGE"))
             
         const row = new ActionRowBuilder()
