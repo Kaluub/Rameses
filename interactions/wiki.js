@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { WikiPageData } from "../classes/data.js";
 import ButtonLinks from "../classes/buttonLinks.js";
 
@@ -8,6 +8,8 @@ class WikiInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(WikiInteraction.name)
         .setDescription("View an in-depth encyclopedia regarding Evades!")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("page")

@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { AccountData } from "../classes/data.js";
 import Utils from "../classes/utils.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 
 class ActivityInteraction extends DefaultInteraction {
@@ -9,6 +9,8 @@ class ActivityInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(ActivityInteraction.name)
         .setDescription("Get certain details from a player")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addStringOption(
             new SlashCommandStringOption()
                 .setName("username")

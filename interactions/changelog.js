@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 
 class ChangelogInteraction extends DefaultInteraction {
@@ -7,6 +7,8 @@ class ChangelogInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(ChangelogInteraction.name)
         .setDescription("Check the in-game changelog from Discord.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addStringOption(
             new SlashCommandStringOption()
                 .setName("changelog")

@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import Utils from "../classes/utils.js";
 import { DiscordUserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
@@ -38,6 +38,8 @@ class OnlinePlayersInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(OnlinePlayersInteraction.name)
         .setDescription("See the currently online players")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addStringOption(
             new SlashCommandStringOption()
                 .setName("server")

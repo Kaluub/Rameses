@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 import Utils from "../classes/utils.js";
 
@@ -8,6 +8,8 @@ class HallOfFameInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(HallOfFameInteraction.name)
         .setDescription("Check the hall of fame")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
 
     constructor() {
         super(HallOfFameInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);

@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { AccountData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import Utils from "../classes/utils.js";
@@ -9,6 +9,8 @@ class LeaderboardInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(LeaderboardInteraction.name)
         .setDescription("Leaderboard commands.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("vp")

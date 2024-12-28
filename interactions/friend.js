@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder } from "discord.js";
 import { DiscordUserData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 
@@ -8,6 +8,8 @@ class FriendInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(FriendInteraction.name)
         .setDescription("Friend management. Hard, I know.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("add")

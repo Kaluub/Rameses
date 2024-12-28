@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder, SlashCommandIntegerOption } from "discord.js";
 import Locale from "../classes/locale.js";
 import EvadesData from "../classes/evadesData.js";
 import Utils from "../classes/utils.js";
@@ -9,6 +9,8 @@ class RandomInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(RandomInteraction.name)
         .setDescription("Pulls a random region & some heroes for you.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addIntegerOption(
             new SlashCommandIntegerOption()
                 .setName("heroes")

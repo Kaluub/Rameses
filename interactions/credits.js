@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder } from "discord.js";
 import Locale from "../classes/locale.js";
 import Config from "../classes/config.js";
 
@@ -8,6 +8,8 @@ class CreditsInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(CreditsInteraction.name)
         .setDescription("We've reached the end, Van. Let's go home.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
 
     constructor() {
         super(CreditsInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);

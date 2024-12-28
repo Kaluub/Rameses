@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, InteractionContextType, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import Config from "../classes/config.js";
 import { DiscordGuildData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
@@ -9,7 +9,8 @@ class TournamentInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(TournamentInteraction.name)
         .setDescription("Tournament related commands.")
-        .setDMPermission(false)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+        .setContexts(InteractionContextType.Guild)
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
                 .setName("create")

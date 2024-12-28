@@ -1,7 +1,7 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
 import { AccountData } from "../classes/data.js";
 import Utils from "../classes/utils.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, PermissionsBitField, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionContextType, InteractionType, PermissionsBitField, SlashCommandBuilder, SlashCommandStringOption } from "discord.js";
 import Locale from "../classes/locale.js";
 
 const emojiHats = {
@@ -63,6 +63,8 @@ class ProfileInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(ProfileInteraction.name)
         .setDescription("View the profile of a player.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addStringOption(
             new SlashCommandStringOption()
                 .setName("username")

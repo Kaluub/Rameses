@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { InteractionType, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandRoleOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "discord.js";
+import { ApplicationIntegrationType, InteractionContextType, InteractionType, PermissionsBitField, SlashCommandBooleanOption, SlashCommandBuilder, SlashCommandRoleOption, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder } from "discord.js";
 import { DiscordGuildData } from "../classes/data.js";
 import Utils from "../classes/utils.js";
 import Locale from "../classes/locale.js";
@@ -9,7 +9,8 @@ class ConfigureInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(ConfigureInteraction.name)
         .setDescription("Configure some guild-related settings here.")
-        .setDMPermission(false)
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
+        .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild)
         .addSubcommandGroup(
             new SlashCommandSubcommandGroupBuilder()

@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyle, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder } from "discord.js";
 import { AccountData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 import Utils from "../classes/utils.js";
@@ -9,6 +9,8 @@ class SeenInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(SeenInteraction.name)
         .setDescription("Check who has been online recently.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
 
     constructor() {
         super(SeenInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);

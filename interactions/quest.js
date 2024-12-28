@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { EmbedBuilder, InteractionType, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, EmbedBuilder, InteractionContextType, InteractionType, SlashCommandBuilder } from "discord.js";
 import EvadesData from "../classes/evadesData.js";
 import Locale from "../classes/locale.js";
 
@@ -9,6 +9,8 @@ class QuestInteraction extends DefaultInteraction {
     static applicationCommand = new SlashCommandBuilder()
         .setName(QuestInteraction.name)
         .setDescription("View the current quest.")
+        .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
+        .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
 
     constructor() {
         super(QuestInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
