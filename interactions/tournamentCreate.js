@@ -28,7 +28,7 @@ class TournamentCreateInteraction extends DefaultInteraction {
         const maxAttempts = parseInt(interaction.fields.getTextInputValue("attempts")) || 3;
         const duration = parseInt(interaction.fields.getTextInputValue("duration")) || 7;
 
-        let type = interaction.fields.getTextInputValue("type") || "best"; // "best", "sum"
+        let type = interaction.fields.getTextInputValue("type").toLowerCase() || "best"; // "best", "sum"
         if (!["best", "sum"].includes(type)) {
             type = "best";
         }
@@ -38,6 +38,10 @@ class TournamentCreateInteraction extends DefaultInteraction {
                 new ButtonBuilder()
                     .setCustomId("tournament-add")
                     .setLabel("Add run")
+                    .setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder()
+                    .setCustomId("tournament-manage")
+                    .setLabel("Manage")
                     .setStyle(ButtonStyle.Secondary)
             )
 

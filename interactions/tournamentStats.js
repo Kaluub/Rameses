@@ -25,7 +25,7 @@ class TournamentStatsInteraction extends DefaultInteraction {
         }
         spectators.sort((spec1, spec2) => spec2 - spec1);
         let string =
-            `Tournament stats:
+`Tournament stats:
 Created: <t:${Math.floor(tournament.created / 1000)}>
 Runs: ${tournament.leaderboard.length} runs
 Top spectators:`;

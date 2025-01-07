@@ -23,8 +23,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             guildData.tournamentSpectatorRole,
             guildData.tournamentOrganizerRole,
             ...Config.TOURNAMENT_SPECTATOR_ROLES,
-            ...Config.TOURNAMENT_ORGANIZER_ROLES,
-            ...Config.MODERATOR_ROLES)) {
+            ...Config.TOURNAMENT_ORGANIZER_ROLES)) {
             return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
         }
 
@@ -34,7 +33,6 @@ class TournamentAddInteraction extends DefaultInteraction {
                 return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
             }
             if (Date.now() > tournament.created + tournament.duration) {
-                interaction.message.edit({})
                 return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER") };
             }
             const modal = new ModalBuilder()
@@ -74,17 +72,9 @@ class TournamentAddInteraction extends DefaultInteraction {
         }
 
         if (interaction.isModalSubmit()) {
-            if (!interaction.guild) {
-                return Locale.text(interaction, "GUILD_ONLY");
-            }
-
             await interaction.deferReply({ ephemeral: true });
-            const guildData = await DiscordGuildData.getByID(interaction.guild.id);
-            if (!interaction.member.roles.cache.hasAny(guildData.tournamentSpectatorRole, guildData.tournamentOrganizerRole, ...Config.TOURNAMENT_SPECTATOR_ROLES, ...Config.TOURNAMENT_ORGANIZER_ROLES)) {
-                return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
-            }
-
             const args = interaction.customId.split("/");
+
             const tournament = await TournamentData.getByID(args[1]);
             if (!tournament) {
                 return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
@@ -102,7 +92,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             if (!player || !area || !time) {
                 return { ephemeral: true, content: Locale.text(interaction, "INVALID_VALUES") };
             }
-            
+
             if (player.length > 64) {
                 return { ephemeral: true, content: Locale.text(interaction, "USERNAME_LONG") };
             }
@@ -110,7 +100,7 @@ class TournamentAddInteraction extends DefaultInteraction {
             if (tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) {
                 return { ephemeral: true, content: Locale.text(interaction, "ATTEMPTS_USED", Utils.sanitizeUsername(player)) };
             }
-            
+
             const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(player);
             if (!playerDetails && guildData.forceAccountExistence) {
                 return { ephemeral: true, content: Locale.text(interaction, "PLAYER_NOT_FOUND") };
