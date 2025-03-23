@@ -31,7 +31,6 @@
         "Angel🌸",
         "Ram",
         "AniFonG",
-        "MeguclOwUn",
         "waterfowlgen",
         "RadicalLarry",
         "Br1h",
@@ -41,13 +40,13 @@
         "hotox",
         "yeetyeet47",
         "greeny",
-        "nosok"
-    ],
-    "juniorMods": [
-        "yIzaac😎👌",
+        "nosok",
         "🌌☾ᏉᎬᎶᎪ☽⭐",
         "Akzow",
         "Tsuba"
+    ],
+    "juniorMods": [
+        "yIzaac😎👌"
     ],
     "heroes": [
         "Magmax",
@@ -79,7 +78,8 @@
         "Echelon",
         "Demona",
         "Stheno",
-        "Factorb"
+        "Factorb",
+        "Leono"
     ],
     "regions": {
         "Central Core": {
@@ -237,6 +237,9 @@
         },
         "Withering Wasteland": {
             "color": "#c45945"
+        },
+        "Terrifying Temple": {
+            "color": "#e15776"
         }
     },
     "regionsExtended": [
@@ -302,6 +305,8 @@
             "Coupled Corridors North",
             "Coupled Corridors South"
         ],
-        "Withering Wasteland"
+        "Withering Wasteland",
+        "Terrifying Temple",
+        "Research Lab"
     ]
 }
