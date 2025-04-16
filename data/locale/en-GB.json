@@ -115,5 +115,6 @@
     "QUEST_DESCRIPTION": "Region: **{0}**\nCompletion: {1}/{2} ({3}%).",
     "QUEST_FOOTER": "For week {0}",
     "QUEST_POINT_TOTAL": "Quest points",
-    "QUEST_POINTS": "QP"
+    "QUEST_POINTS": "QP",
+    "EMPTY": "Empty"
 }

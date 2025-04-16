@@ -122,8 +122,8 @@ class ProfileInteraction extends DefaultInteraction {
 **${Locale.text(interaction, "COLLECTION")}**: ${interaction.guild
     ? !interaction.channel.permissionsFor(interaction.guild.roles.everyone).has(PermissionsBitField.Flags.UseExternalEmojis)
     ? Locale.text(interaction, "MISSING_EMOJI_PERMISSIONS")
-    : getHatEmojis(playerDetails.accessories.collection)
-    : getHatEmojis(playerDetails.accessories.collection)}`
+    : getHatEmojis(playerDetails.accessories.collection) || Locale.text(interaction, "EMPTY")
+    : getHatEmojis(playerDetails.accessories.collection) || Locale.text(interaction, "EMPTY")}`
             ); // There's no fixing this
 
         const activityButton = new ButtonBuilder()

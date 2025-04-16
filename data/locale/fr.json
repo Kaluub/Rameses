@@ -115,5 +115,6 @@
     "QUEST_DESCRIPTION": "Region: **{0}**\nParticipants: {1}/{2} ({3}%).",
     "QUEST_FOOTER": "Pour la semaine {0}",
     "QUEST_POINT_TOTAL": "Points des quêtes",
-    "QUEST_POINTS": "PQ"
+    "QUEST_POINTS": "PQ",
+    "EMPTY": "Rien"
 }
