@@ -13,8 +13,6 @@ database = client.Rameses
 bad_accounts = database.accounts.find({"careerVP": None})
 to_remove = []
 
-print(f"Null VP accounts: {len(bad_accounts)}")
-
 for account_record in bad_accounts:
     if "username" not in account_record:
         print("FATAL: NO USERNAME")
