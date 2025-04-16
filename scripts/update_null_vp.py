@@ -12,7 +12,10 @@ database = client.Rameses
 bad_accounts = database.accounts.find({"careerVP": None})
 
 for account_record in bad_accounts:
-    api_data = requests.get(f"https://evades.io/api/account/{urllib.parse.quote(account_record['username'])}")
+    if "username" not in account_record:
+        print("FATAL: NO USERNAME")
+        print(f"FAIL: {account_record}")
+    api_data = requests.get(f"https://evades.io/api/account/{urllib.parse.quote(account_record.get('displayName', None) or account_record['username'])}")
     if not api_data.ok:
         print(f"FAIL: {account_record}")
         continue
