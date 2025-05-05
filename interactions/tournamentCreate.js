@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, MessageFlags } from "discord.js";
 import Utils from "../classes/utils.js";
 import Config from "../classes/config.js";
 import { DiscordGuildData, TournamentData } from "../classes/data.js";
@@ -50,7 +50,7 @@ class TournamentCreateInteraction extends DefaultInteraction {
             const message = await interaction.channel.send({ content: Utils.tournamentFormatter(tournament), components: [row] });
             tournament.id = message.id;
             await tournament.save();
-            return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_CREATED") }
+            return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TOURNAMENT_CREATED") }
         } catch (e) {
             return Locale.text(interaction, "TOURNAMENT_CANNOT_SEND_MESSAGE");
         }

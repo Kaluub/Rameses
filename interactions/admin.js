@@ -40,6 +40,11 @@ class AdminInteraction extends DefaultInteraction {
                         .setRequired(false)
                 )
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("tests")
+                .setDescription("Run tests")
+        )
 
     constructor() {
         super(AdminInteraction.name, [InteractionType.ApplicationCommand]);
@@ -48,7 +53,7 @@ class AdminInteraction extends DefaultInteraction {
     async execute(interaction) {
         const subcommand = this.getSubcommand(interaction);
 
-        if (subcommand == "check") {
+        if (subcommand === "check") {
             const username = interaction.options.getString("username", false);
             if (!username) return "No user found.";
             const account = await AccountData.getByUsername(username, false);
@@ -56,7 +61,7 @@ class AdminInteraction extends DefaultInteraction {
             return `Stored data:\n\`\`\`json\n${JSON.stringify(account, null, 4)}\n\`\`\``;
         }
 
-        if (subcommand == "stats") {
+        if (subcommand === "stats") {
             return "Stats:\n" +
                 `Bot uptime: ${Utils.formatSeconds(interaction.client.uptime / 1000)}\n` +
                 `Guilds cached: ${interaction.client.guilds.cache.size}\n` +
@@ -65,7 +70,7 @@ class AdminInteraction extends DefaultInteraction {
                 `Stored accounts: ${await AccountData.count()}`;
         }
 
-        if (subcommand == "interactions") {
+        if (subcommand === "interactions") {
             const guildId = interaction.options.getString("guild", false);
             if (guildId) {
                 const guild = await interaction.client.guilds.fetch(guildId);
@@ -78,6 +83,12 @@ class AdminInteraction extends DefaultInteraction {
             
             interaction.client.updateInteractions();
             return "All interactions will be updated.";
+        }
+
+        if (subcommand === "tests") {
+            await interaction.reply("Running tests.");
+            interaction.client.runTests(interaction);
+            return;
         }
 
         return "How did we get here?";

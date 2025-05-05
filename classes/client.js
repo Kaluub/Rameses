@@ -21,6 +21,10 @@ class DiscordClient extends Client {
         await this.interactionHandler.setApplicationCommands(this);
         console.log("Application commands set.");
     }
+
+    async runTests(interaction) {
+        this.interactionHandler.runTests(interaction);
+    }
 }
 
 export default DiscordClient;

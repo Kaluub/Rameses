@@ -24,13 +24,17 @@ class HallOfFameInteraction extends DefaultInteraction {
         let totalVP = 0;
         for (const hallOfFameEntry of hallOfFameEntries) {
             ranking += 1;
-            if (ranking < 31)
+            if (ranking < 31) {
                 hallOfFamePlayersString += `\n${ranking <= 3 ? "🥇" : ranking <= 10 ? "🥈" : ranking <= 30 ? "🥉" : ""} ${ranking}. ${Utils.sanitizeUsername(hallOfFameEntry[0])} (${hallOfFameEntry[1]} ${Locale.text(interaction, "VICTORY_POINTS")})`;
+            } else {
+                break;
+            }
             totalVP += parseInt(hallOfFameEntry[1]);
         };
 
-        if (hallOfFamePlayersString.length > 1900)
+        if (hallOfFamePlayersString.length > 1900) {
             hallOfFamePlayersString = hallOfFamePlayersString.substring(0, 1900) + "...";
+        }
         
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "HALL_OF_FAME"))

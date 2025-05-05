@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ApplicationCommandType, Collection, ContextMenuCommandBuilder, InteractionType } from "discord.js";
+import { ApplicationCommandType, Collection, ContextMenuCommandBuilder, InteractionType, MessageFlags } from "discord.js";
 import { TournamentData } from "../classes/data.js";
 import Locale from "../classes/locale.js";
 
@@ -17,7 +17,7 @@ class TournamentStatsInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const tournament = await TournamentData.getByID(interaction.targetMessage.id);
-        if (!tournament) return { ephemeral: true, content: Locale.text(interaction, "NOT_A_TOURNAMENT") };
+        if (!tournament) return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "NOT_A_TOURNAMENT") };
         let spectators = new Collection();
         for (const run of tournament.leaderboard) {
             let value = spectators.get(run.spectator) ?? 0;
@@ -34,7 +34,7 @@ Top spectators:`;
             string += `\n${(await interaction.client.users.fetch(spectator)).tag} spectated ${runs} runs`
         }
 
-        return { ephemeral: true, content: string };
+        return { flags: MessageFlags.Ephemeral, content: string };
     }
 }
 

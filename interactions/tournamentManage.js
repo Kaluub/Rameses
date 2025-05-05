@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ButtonBuilder, ButtonStyle } from "discord.js";
+import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
 import Utils from "../classes/utils.js";
 import Config from "../classes/config.js";
 import { DiscordGuildData, TournamentData } from "../classes/data.js";
@@ -22,14 +22,14 @@ class TournamentManageInteraction extends DefaultInteraction {
         if (!interaction.member.roles.cache.hasAny(
             guildData.tournamentOrganizerRole,
             ...Config.TOURNAMENT_ORGANIZER_ROLES)) {
-            return { content: Locale.text(interaction, "TOURNAMENT_ORGANIZERS_ONLY"), ephemeral: true };
+            return { content: Locale.text(interaction, "TOURNAMENT_ORGANIZERS_ONLY"), flags: MessageFlags.Ephemeral };
         }
 
         if (interaction.isMessageComponent() && interaction.customId === TournamentManageInteraction.name) {
             // Base interface
             const tournament = await TournamentData.getByID(interaction.message.id);
             if (!tournament) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             const row = new ActionRowBuilder()
                 .addComponents(
@@ -38,7 +38,7 @@ class TournamentManageInteraction extends DefaultInteraction {
                         .setLabel("Remove runs from a username")
                         .setStyle(ButtonStyle.Danger)
                 )
-            return { content: "Tournament Organizer Tools", ephemeral: true, components: [row] };
+            return { content: "Tournament Organizer Tools", flags: MessageFlags.Ephemeral, components: [row] };
         } else if (interaction.isMessageComponent()) {
             const args = interaction.customId.split("/");
             if (args[1] === "remove") {
@@ -60,31 +60,31 @@ class TournamentManageInteraction extends DefaultInteraction {
                 await interaction.showModal(modal);
             }
         } else if (interaction.isModalSubmit()) {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
             const args = interaction.customId.split("/");
             const tournament = await TournamentData.getByID(args[2]);
             if (!tournament) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
 
             const username = interaction.fields.getTextInputValue("username").trim().normalize();
             const removedRuns = tournament.leaderboard.filter(entry => entry.player === username);
             if (removedRuns.length <= 0) {
-                return { content: `No runs from "${username}" are present.`, ephemeral: true };
+                return { content: `No runs from "${username}" are present.`, flags: MessageFlags.Ephemeral };
             }
             tournament.leaderboard = tournament.leaderboard.filter(entry => entry.player !== username);
             await tournament.save();
 
             const channel = interaction.client.channels.cache.get(args[3]);
             if (!channel) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             const message = await channel.messages.fetch(tournament.id);
             if (!message) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             if (!message.editable) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             await message.edit({ content: Utils.tournamentFormatter(tournament) });
             let result =
@@ -93,7 +93,7 @@ List of removed runs:`;
             for (const run of removedRuns) {
                 result += `\n- ${run.area} in ${run.time} (spectated by <@${run.spectator}>)`
             }
-            return { content: result, ephemeral: true };
+            return { content: result, flags: MessageFlags.Ephemeral };
         }
     }
 }

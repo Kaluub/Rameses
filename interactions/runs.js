@@ -26,6 +26,28 @@ class RunsInteraction extends DefaultInteraction {
         )
         .addIntegerOption(
             new SlashCommandIntegerOption()
+                .setName("area-index")
+                .setDescription("The area index to filter for")
+                .setMinValue(0)
+                .setRequired(false)
+        )
+        .addStringOption(
+            new SlashCommandStringOption()
+                .setName("hero")
+                .setDescription("The hero to filter for")
+                .setAutocomplete(true)
+                .setRequired(false)
+        )
+        .addIntegerOption(
+            new SlashCommandIntegerOption()
+                .setName("interactions")
+                .setDescription("The amount of interactions to filter for")
+                .setMinValue(0)
+                .setAutocomplete(true)
+                .setRequired(false)
+        )
+        .addIntegerOption(
+            new SlashCommandIntegerOption()
                 .setName("page")
                 .setDescription("The page number to filter for")
                 .setMinValue(1)
@@ -43,6 +65,9 @@ class RunsInteraction extends DefaultInteraction {
         let username = this.getStringArgument(interaction, "username", 1);
         let region = this.getStringArgument(interaction, "region", 2);
         let offset = this.getIntegerArgument(interaction, "page", 3);
+        let areaIndex = this.getIntegerArgument(interaction, "area-index", 4);
+        let interactions = this.getIntegerArgument(interaction, "interactions", 5);
+        let hero = this.getStringArgument(interaction, "hero", 6);
 
         if (username === "X")
             username = undefined;
@@ -50,8 +75,14 @@ class RunsInteraction extends DefaultInteraction {
             region = undefined;
         if (isNaN(offset))
             offset = 1;
+        if (isNaN(areaIndex))
+            areaIndex = undefined;
+        if (isNaN(interaction))
+            interactions = undefined;
+        if (hero === "X")
+            hero = undefined;
 
-        let runs = await interaction.client.evadesAPI.getRuns({ username, region, offset: (offset - 1) * this.runsPerPage })
+        let runs = await interaction.client.evadesAPI.getRuns({ username, region, area_index: areaIndex, interactions, hero, offset: (offset - 1) * this.runsPerPage })
         if (!runs)
             return Locale.text(interaction, "EVADES_ERROR");
         
@@ -64,7 +95,7 @@ class RunsInteraction extends DefaultInteraction {
         
         for (const run of runs) {
             embed.addFields({
-                name: `${Utils.sanitizeUsername(run.username)}${run.interactions.length ? ` with ${run.interactions.join(' & ')}` : ""} as ${run.hero}`,
+                name: `${Utils.sanitizeUsername(run.username)}${run.interactions.length ? ` with ${run.interactions.map(name => Utils.sanitizeUsername(name)).join(' & ')}` : ""} as ${run.hero}`,
                 value: `completed **${run.region_name} ${run.area_index}** in ${Math.floor(run.survival_time / 60)}m ${run.survival_time % 60}s (<t:${run.created_at}:R>)`
             })
         }
@@ -73,13 +104,13 @@ class RunsInteraction extends DefaultInteraction {
             embed.setDescription(Locale.text(interaction, "NO_RUNS_FOUND"))
 
         const newerButton = new ButtonBuilder()
-            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset - 1}`)
+            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset - 1}/${areaIndex ?? "X"}/${interactions ?? "X"}/${hero ?? "X"}`)
             .setDisabled((offset - 1) < 1 || runs.length === 0)
             .setStyle(ButtonStyle.Primary)
             .setLabel(Locale.text(interaction, "NEWER"))
         
         const olderButton = new ButtonBuilder()
-            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset + 1}`)
+            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset + 1}/${areaIndex ?? "X"}/${interactions ?? "X"}/${hero ?? "X"}`)
             .setDisabled(runs.length !== this.runsPerPage)
             .setStyle(ButtonStyle.Primary)
             .setLabel(Locale.text(interaction, "OLDER"))

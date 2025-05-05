@@ -1,4 +1,4 @@
-import { Collection, CommandInteraction } from "discord.js";
+import { Collection, CommandInteraction, MessageFlags } from "discord.js";
 import { readdirSync } from "fs";
 import Locale from "./locale.js";
 import { CommandLog } from "./data.js";
@@ -48,11 +48,12 @@ class InteractionHandler {
         if (interaction.isAutocomplete()) {
             return;
         }
+        const flags = interactionHandler.ephemeral ? MessageFlags.Ephemeral : 0;
         try {
             if (interactionHandler.updateIfComponent && interaction.isMessageComponent()) {
-                await interaction.deferUpdate({ ephemeral: interactionHandler.ephemeral ? true : false });
+                await interaction.deferUpdate({flags});
             } else {
-                await interaction.deferReply({ ephemeral: interactionHandler.ephemeral ? true : false });
+                await interaction.deferReply({flags});
             }
         } catch {
             return;
@@ -68,7 +69,7 @@ class InteractionHandler {
             interactionHandler = this.interactionHandler.interactions.get(interaction.options.getFocused(true).name);
         }
         if (!interactionHandler) {
-            return await interaction.reply({ content: Locale.text(interaction, "COMMAND_ERROR_NOT_FOUND"), ephemeral: true });
+            return await interaction.reply({ content: Locale.text(interaction, "COMMAND_ERROR_NOT_FOUND"), flags: MessageFlags.Ephemeral });
         }
         if (interactionHandler.defer) {
             await this.interactionHandler.handleDefer(interaction, interactionHandler);
@@ -102,6 +103,12 @@ class InteractionHandler {
         else if (interaction.isContextMenuCommand()) {
             new CommandLog(interaction.commandName, interaction.guildId, interaction.user.id)
                 .insert();
+        }
+    }
+
+    async runTests(interaction) {
+        for (const interactionHandler of this.interactions.values()) {
+            await interactionHandler.tests(interaction);
         }
     }
 }

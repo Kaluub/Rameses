@@ -224,7 +224,7 @@ class EvadesAPI {
         const filterStore = [];
         for (const name in filters) {
             const value = filters[name];
-            if (!name || !value) continue;
+            if (!name || value === undefined) continue;
             if (value === "X") continue;
             filterStore.push(`${name}=${value}`);
         }

@@ -37,6 +37,15 @@ class DefaultInteraction {
     async execute(interaction) {
         return Locale.text(interaction, "DEFAULT_COMMAND");
     }
+
+    /**
+     * @abstract
+     * @param {import("discord.js").BaseInteraction} interaction
+     */
+    async tests(interaction) {
+        // TODO: Is there a decent way to have some sort of command testing interface?
+        return;
+    }
 }
 
 export default DefaultInteraction;

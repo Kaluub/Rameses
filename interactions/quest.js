@@ -18,7 +18,6 @@ class QuestInteraction extends DefaultInteraction {
     }
 
     async execute(interaction) {
-        // return await this.testRegionColors(interaction);
         const quest = await interaction.client.evadesAPI.getCurrentQuest();
         if (!quest) {
             return Locale.text(interaction, "EVADES_ERROR");
@@ -27,13 +26,12 @@ class QuestInteraction extends DefaultInteraction {
         return this.render(interaction, quest);
     }
 
-    async testRegionColors(interaction) {
+    async tests(interaction) {
         const embeds = [];
         for (const region in EvadesData.regions) {
             const quest = {region_name: region, completions: 0, completions_required: 0, week_number: 0};
             embeds.push(this.render(interaction, quest).embeds[0]);
         }
-        await interaction.editReply("Quest Test");
         for (let i = 0; i < embeds.length; i += 10) {
             await interaction.followUp({embeds: embeds.slice(i, i+9)});
         }
@@ -41,12 +39,11 @@ class QuestInteraction extends DefaultInteraction {
 
     render(interaction, quest) {
         const percentage = Math.min(100, quest.completions / (quest.completions_required || 1) * 100).toFixed(2);
-        
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "QUEST_TITLE"))
             .setColor(EvadesData.regions[quest.region_name]?.color ?? "#AAFFAA")
             .setDescription(Locale.text(interaction, "QUEST_DESCRIPTION", [quest.region_name, quest.completions, quest.completions_required, percentage]))
-            .setFooter({text: Locale.text(interaction, "QUEST_FOOTER", [quest.week_number + 1])})
+            .setFooter({text: Locale.text(interaction, "QUEST_FOOTER", [quest.week_number])})
             .setTimestamp();
         
         return { embeds: [embed] };

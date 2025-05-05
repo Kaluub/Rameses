@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, InteractionType, MessageFlags, ModalBuilder, SlashCommandBuilder, SlashCommandStringOption, SlashCommandSubcommandBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { WikiPageData } from "../classes/data.js";
 import Config from "../classes/config.js";
 import ButtonLinks from "../classes/buttonLinks.js";
@@ -49,7 +49,7 @@ class WikiAdminInteraction extends DefaultInteraction {
         if (interaction.isChatInputCommand()) {
             const subcommand = interaction.options.getSubcommand(false);
             if (subcommand == "create") {
-                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", flags: MessageFlags.Ephemeral };
                 const modal = new ModalBuilder()
                     .setCustomId("wikiadmin/create")
                     .setTitle("Create a new page:")
@@ -95,11 +95,11 @@ class WikiAdminInteraction extends DefaultInteraction {
                 await interaction.showModal(modal);
             }
             if (subcommand == "edit") {
-                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", flags: MessageFlags.Ephemeral };
                 const pageIdentifier = interaction.options.getString("wiki-page", false);
-                if (!pageIdentifier) return { content: "Please provide a page title!", ephemeral: true };
+                if (!pageIdentifier) return { content: "Please provide a page title!", flags: MessageFlags.Ephemeral };
                 const page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
-                if (!page) return { content: "The page was not found!", ephemeral: true };
+                if (!page) return { content: "The page was not found!", flags: MessageFlags.Ephemeral };
                 const modal = new ModalBuilder()
                     .setCustomId("wikiadmin/edit/" + page.uuid)
                     .setTitle("Edit an existing page:")
@@ -149,27 +149,27 @@ class WikiAdminInteraction extends DefaultInteraction {
                 await interaction.showModal(modal);
             }
             if (subcommand == "remove") {
-                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", flags: MessageFlags.Ephemeral };
                 const pageIdentifier = interaction.options.getString("wiki-page", false);
-                if (!pageIdentifier) return { content: "Please provide a page title!", ephemeral: true };
+                if (!pageIdentifier) return { content: "Please provide a page title!", flags: MessageFlags.Ephemeral };
                 let page = await WikiPageData.getByUUID(pageIdentifier) ?? await WikiPageData.getByTitle(pageIdentifier);
-                if (!page) return { content: "The page was not found!", ephemeral: true };
+                if (!page) return { content: "The page was not found!", flags: MessageFlags.Ephemeral };
                 page.private = true;
                 await page.save();
-                return { content: "The page was privated.", ephemeral: true };
+                return { content: "The page was privated.", flags: MessageFlags.Ephemeral };
             }
             return "How did we get here?";
         } else if (interaction.isModalSubmit()) {
             const subcommand = interaction.customId.split("/")[1];
             if (subcommand == "create") {
-                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", flags: MessageFlags.Ephemeral };
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
                 const imageURL = interaction.fields.getTextInputValue("image") ?? null;
                 const buttonLinks = interaction.fields.getTextInputValue("button-links") ?? null;
                 
                 if (await WikiPageData.getByTitle(title))
-                    return { content: "There is already a page with this title! Save your content!\n\n" + content, ephemeral: true };
+                    return { content: "There is already a page with this title! Save your content!\n\n" + content, flags: MessageFlags.Ephemeral };
                 
                 const wikiPage = new WikiPageData({ title, content, imageURL, authors: [interaction.user.id] });
 
@@ -185,10 +185,10 @@ class WikiAdminInteraction extends DefaultInteraction {
                             .setStyle(ButtonStyle.Primary)
                             .setLabel("View page")
                     )
-                return { content: "Page created successfully!", ephemeral: true, components: [actionRow] };
+                return { content: "Page created successfully!", flags: MessageFlags.Ephemeral, components: [actionRow] };
             }
             if (subcommand == "edit") {
-                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", ephemeral: true };
+                if (!interaction.member.roles.cache.hasAny(...Config.WIKI_ADMIN_ROLES)) return { content: "You are not authorized to do this!", flags: MessageFlags.Ephemeral };
                 const uuid = interaction.customId.split("/")[2];
                 const title = interaction.fields.getTextInputValue("title");
                 const content = interaction.fields.getTextInputValue("content");
@@ -219,7 +219,7 @@ class WikiAdminInteraction extends DefaultInteraction {
                             .setStyle(ButtonStyle.Primary)
                             .setLabel("View page")
                     )
-                return { content: "Page updated successfully!", ephemeral: true, components: [actionRow] };
+                return { content: "Page updated successfully!", flags: MessageFlags.Ephemeral, components: [actionRow] };
             }
         }
     }

@@ -1,5 +1,5 @@
 import DefaultInteraction from "../classes/defaultInteraction.js";
-import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { InteractionType, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, MessageFlags } from "discord.js";
 import Utils from "../classes/utils.js";
 import Config from "../classes/config.js";
 import { DiscordGuildData, TournamentData } from "../classes/data.js";
@@ -24,16 +24,16 @@ class TournamentAddInteraction extends DefaultInteraction {
             guildData.tournamentOrganizerRole,
             ...Config.TOURNAMENT_SPECTATOR_ROLES,
             ...Config.TOURNAMENT_ORGANIZER_ROLES)) {
-            return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), ephemeral: true };
+            return { content: Locale.text(interaction, "TOURNAMENT_SPECTATORS_ONLY"), flags: MessageFlags.Ephemeral };
         }
 
         if (interaction.isMessageComponent()) {
             const tournament = await TournamentData.getByID(interaction.message.id);
             if (!tournament) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             if (Date.now() > tournament.created + tournament.duration) {
-                return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TOURNAMENT_OVER") };
             }
             const modal = new ModalBuilder()
                 .setCustomId(`tournament-add/${tournament.id}/${interaction.channel.id}`)
@@ -72,17 +72,17 @@ class TournamentAddInteraction extends DefaultInteraction {
         }
 
         if (interaction.isModalSubmit()) {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
             const args = interaction.customId.split("/");
 
             const tournament = await TournamentData.getByID(args[1]);
             if (!tournament) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
 
             if (Date.now() > tournament.created + tournament.duration) {
                 // Remove button or something later
-                return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_OVER") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TOURNAMENT_OVER") };
             }
 
             let player = interaction.fields.getTextInputValue("player").trim().normalize();
@@ -90,38 +90,38 @@ class TournamentAddInteraction extends DefaultInteraction {
             let time = interaction.fields.getTextInputValue("time").trim().normalize();
 
             if (!player || !area || !time) {
-                return { ephemeral: true, content: Locale.text(interaction, "INVALID_VALUES") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "INVALID_VALUES") };
             }
 
             if (player.length > 64) {
-                return { ephemeral: true, content: Locale.text(interaction, "USERNAME_LONG") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "USERNAME_LONG") };
             }
 
             if (tournament.leaderboard.filter(r => player.toLowerCase() == r.player.toLowerCase()).length >= tournament.maxAttempts) {
-                return { ephemeral: true, content: Locale.text(interaction, "ATTEMPTS_USED", Utils.sanitizeUsername(player)) };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "ATTEMPTS_USED", Utils.sanitizeUsername(player)) };
             }
 
             const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(player);
             if (!playerDetails && guildData.forceAccountExistence) {
-                return { ephemeral: true, content: Locale.text(interaction, "PLAYER_NOT_FOUND") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "PLAYER_NOT_FOUND") };
             }
 
             if (area.startsWith("area ")) {
                 const aNumber = parseInt(area.split(" ")[1])
                 if (isNaN(aNumber)) {
-                    return { ephemeral: true, content: Locale.text(interaction, "AREA_IS_NAN") };
+                    return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "AREA_IS_NAN") };
                 }
                 if (aNumber < 1) {
-                    return { ephemeral: true, content: Locale.text(interaction, "AREA_IS_TOO_LOW") };
+                    return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "AREA_IS_TOO_LOW") };
                 }
             }
             if (!area.startsWith("area ") && area != "Victory!") {
                 const aNumber = parseInt(area);
                 if (!aNumber) {
-                    return { ephemeral: true, content: Locale.text(interaction, "AREA_IS_NAN") };
+                    return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "AREA_IS_NAN") };
                 }
                 if (aNumber < 1) {
-                    return { ephemeral: true, content: Locale.text(interaction, "AREA_IS_TOO_LOW") };
+                    return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "AREA_IS_TOO_LOW") };
                 }
                 area = `Area ${parseInt(area)}`;
             }
@@ -133,21 +133,21 @@ class TournamentAddInteraction extends DefaultInteraction {
             let timeSeconds = 0;
             if (timeSegments.length == 2) {
                 if (timeSegments[1] > 59) {
-                    return { ephemeral: true, content: Locale.text(interaction, "TIME_FORMAT_ERROR") };
+                    return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TIME_FORMAT_ERROR") };
                 }
                 timeSeconds += parseInt(timeSegments[0]) * 60 + parseInt(timeSegments[1]);
             } else {
-                return { ephemeral: true, content: Locale.text(interaction, "TIME_FORMAT_ERROR") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TIME_FORMAT_ERROR") };
             }
             if (isNaN(timeSeconds)) {
-                return { ephemeral: true, content: Locale.text(interaction, "TIME_FORMAT_ERROR") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TIME_FORMAT_ERROR") };
             }
             if (timeSeconds < 0) {
-                return { ephemeral: true, content: Locale.text(interaction, "NEGATIVE_TIME") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "NEGATIVE_TIME") };
             }
 
             if (tournament.leaderboard.length >= 10000) {
-                return { ephemeral: true, content: Locale.text(interaction, "TOURNAMENT_FULL") };
+                return { flags: MessageFlags.Ephemeral, content: Locale.text(interaction, "TOURNAMENT_FULL") };
             }
 
             const formattedTime = Utils.formatSecondsToMinutes(timeSeconds);
@@ -157,17 +157,17 @@ class TournamentAddInteraction extends DefaultInteraction {
 
             const channel = interaction.client.channels.cache.get(args[2]);
             if (!channel) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             const message = await channel.messages.fetch(tournament.id);
             if (!message) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             if (!message.editable) {
-                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), ephemeral: true };
+                return { content: Locale.text(interaction, "TOURNAMENT_ERROR"), flags: MessageFlags.Ephemeral };
             }
             await message.edit({ content: Utils.tournamentFormatter(tournament) });
-            return { content: Locale.text(interaction, "TOURNAMENT_RUN_ADDED"), ephemeral: true };
+            return { content: Locale.text(interaction, "TOURNAMENT_RUN_ADDED"), flags: MessageFlags.Ephemeral };
         }
     }
 }
