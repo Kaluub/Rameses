@@ -77,7 +77,7 @@ class RunsInteraction extends DefaultInteraction {
             offset = 1;
         if (isNaN(areaIndex))
             areaIndex = undefined;
-        if (isNaN(interaction))
+        if (isNaN(interactions))
             interactions = undefined;
         if (hero === "X")
             hero = undefined;
