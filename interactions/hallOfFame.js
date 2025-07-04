@@ -21,7 +21,6 @@ class HallOfFameInteraction extends DefaultInteraction {
         if (!hallOfFameEntries) return Locale.text(interaction, "EVADES_ERROR");
         let hallOfFamePlayersString = Locale.text(interaction, "LEADERBOARD");
         let ranking = 0;
-        let totalVP = 0;
         for (const hallOfFameEntry of hallOfFameEntries) {
             ranking += 1;
             if (ranking < 31) {
@@ -29,19 +28,20 @@ class HallOfFameInteraction extends DefaultInteraction {
             } else {
                 break;
             }
-            totalVP += parseInt(hallOfFameEntry[1]);
         };
 
+        
         if (hallOfFamePlayersString.length > 1900) {
             hallOfFamePlayersString = hallOfFamePlayersString.substring(0, 1900) + "...";
         }
         
+        const totalVP = hallOfFameEntries.reduce((prev, cur) => prev + parseInt(cur[1]), 0);
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "HALL_OF_FAME"))
             .setColor("#FFD700")
             .setTimestamp()
             .setDescription(hallOfFameEntries.length ? hallOfFamePlayersString : Locale.text(interaction, "LEADERBOARD_EMPTY"))
-            .setFooter({ text: Locale.text(interaction, "HALL_OF_FAME_FOOTER", [ranking, totalVP]) })
+            .setFooter({ text: Locale.text(interaction, "HALL_OF_FAME_FOOTER", [hallOfFameEntries.length, totalVP]) })
         
         return { embeds: [embed] }
     }
