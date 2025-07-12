@@ -164,7 +164,11 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         if (!(onlineFriends.length || onlineStaff.length || onlineRegistered.length || onlineGuests.length))
             embed.addFields({ name: Locale.text(interaction, "ONLINE_PLAYERS"), value: Locale.text(interaction, "NOBODY_ONLINE") });
 
-        return { embeds: [embed] }
+        let content = undefined;
+        if (interaction.isMessageComponent()) {
+            content = interaction.user.toString();
+        }
+        return { content, embeds: [embed] };
     }
 }
 
