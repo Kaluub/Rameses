@@ -116,5 +116,6 @@
     "QUEST_FOOTER": "Pour la semaine {0}",
     "QUEST_POINT_TOTAL": "Points des quêtes",
     "QUEST_POINTS": "PQ",
-    "EMPTY": "Rien"
+    "EMPTY": "Rien",
+    "SERVERS_HEADER": "### **Liste des serveurs:**\nVous pouvez utiliser les boutons pour plus de détails."
 }

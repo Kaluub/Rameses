@@ -116,5 +116,6 @@
     "QUEST_FOOTER": "For week {0}",
     "QUEST_POINT_TOTAL": "Quest points",
     "QUEST_POINTS": "QP",
-    "EMPTY": "Empty"
+    "EMPTY": "Empty",
+    "SERVERS_HEADER": "### **Evades server list:**\nUse the buttons to see online players in each server."
 }

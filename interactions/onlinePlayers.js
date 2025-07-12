@@ -55,7 +55,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         let onlinePlayers;
-        const specificServer = interaction?.options?.getString("server");
+        const specificServer = this.getStringArgument(interaction, "server", 1);
 
         if (specificServer) {
             const data = specificServer.split(":");
@@ -66,6 +66,10 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             if (!["na", "eu"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
 
             const serverStats = await interaction.client.evadesAPI.getServerStats();
+
+            if (!serverStats) {
+                return Locale.text(interaction, "EVADES_ERROR");
+            }
 
             if (index === undefined) {
                 const servers = location === "na" ? serverStats.na : serverStats.eu;
