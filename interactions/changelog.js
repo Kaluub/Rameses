@@ -6,7 +6,8 @@ class ChangelogInteraction extends DefaultInteraction {
     static name = "changelog";
     static applicationCommand = new SlashCommandBuilder()
         .setName(ChangelogInteraction.name)
-        .setDescription("Check the in-game changelog from Discord.")
+        .setDescription(Locale.defaultText("INTERACTION_CHANGELOG_DESC"))
+        .setDescriptionLocalizations(Locale.getLocaleMap("INTERACTION_CHANGELOG_DESC"))
         .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
         .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addStringOption(

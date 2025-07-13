@@ -13,14 +13,22 @@ class Locale {
         if (args === null) {
             args = [];
         }
-        let text = Locale.map[interaction?.locale]?.[key] ?? Locale.map[Locale.defaultLocale]?.[key]
-        if (!text) {
-            return `Locale key error: ${key}`;
-        }
+        let text = Locale.map[interaction?.locale]?.[key]
+            ?? Locale.map[Locale.defaultLocale]?.[key]
+            ?? `Locale key error: ${key}`;
         for (let i = 0; i < args.length; i += 1) {
             text = text.replaceAll(`{${i}}`, args[i]);
         }
         return text;
+    }
+
+    static defaultText(key) {
+        return Locale.map[Locale.defaultLocale]?.[key]
+            ?? `Locale key error: ${key}`;
+    }
+
+    static getLocaleMap(key) {
+        return Object.fromEntries(Object.keys(Locale.map).map(locale => [locale, Locale.map[locale]?.[key] ?? Locale.map[Locale.defaultLocale]?.[key] ?? `Locale key error: ${key}`]));
     }
 }
 

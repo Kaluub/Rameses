@@ -8,7 +8,8 @@ class ActivityInteraction extends DefaultInteraction {
     static name = "activity";
     static applicationCommand = new SlashCommandBuilder()
         .setName(ActivityInteraction.name)
-        .setDescription("Get certain details from a player")
+        .setDescription(Locale.defaultText("INTERACTION_ACTIVITY_DESC"))
+        .setDescriptionLocalizations(Locale.getLocaleMap("INTERACTION_ACTIVITY_DESC"))
         .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
         .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
         .addStringOption(

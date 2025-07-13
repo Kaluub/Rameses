@@ -117,5 +117,9 @@
     "QUEST_POINT_TOTAL": "Points des quêtes",
     "QUEST_POINTS": "PQ",
     "EMPTY": "Rien",
-    "SERVERS_HEADER": "### **Liste des serveurs:**\nVous pouvez utiliser les boutons pour plus de détails."
+    "SERVERS_HEADER": "### **Liste des serveurs:**\nVous pouvez utiliser les boutons pour plus de détails.",
+    "INTERACTION_ACTIVITY_DESC": "Voix l'activité d'un joueur.",
+    "INTERACTION_CHANGELOG_DESC": "Voix les notes de mise à jour.",
+    "INTERACTION_CONFIGURE_DESC": "Configurer les paramètres de votre serveur.",
+    "INTERACTION_CREDITS_DESC": "C'est terminé, Van. Bonsoir."
 }

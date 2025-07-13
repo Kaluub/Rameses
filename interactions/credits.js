@@ -7,7 +7,8 @@ class CreditsInteraction extends DefaultInteraction {
     static name = "credits";
     static applicationCommand = new SlashCommandBuilder()
         .setName(CreditsInteraction.name)
-        .setDescription("We've reached the end, Van. Let's go home.")
+        .setDescription(Locale.defaultText("INTERACTION_CREDITS_DESC"))
+        .setDescriptionLocalizations(Locale.getLocaleMap("INTERACTION_CREDITS_DESC"))
         .setIntegrationTypes(ApplicationIntegrationType.GuildInstall, ApplicationIntegrationType.UserInstall)
         .setContexts(InteractionContextType.Guild, InteractionContextType.BotDM, InteractionContextType.PrivateChannel)
 

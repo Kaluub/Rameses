@@ -117,5 +117,9 @@
     "QUEST_POINT_TOTAL": "Quest points",
     "QUEST_POINTS": "QP",
     "EMPTY": "Empty",
-    "SERVERS_HEADER": "### **Evades server list:**\nUse the buttons to see online players in each server."
+    "SERVERS_HEADER": "### **Evades server list:**\nUse the buttons to see online players in each server.",
+    "INTERACTION_ACTIVITY_DESC": "View activity details for a player.",
+    "INTERACTION_CHANGELOG_DESC": "Check the in-game changelog from Discord.",
+    "INTERACTION_CONFIGURE_DESC": "Configure guild-related settings here.",
+    "INTERACTION_CREDITS_DESC": "We've reached the end, Van. Let's go home."
 }

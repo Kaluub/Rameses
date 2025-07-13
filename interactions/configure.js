@@ -8,7 +8,8 @@ class ConfigureInteraction extends DefaultInteraction {
     static name = "configure";
     static applicationCommand = new SlashCommandBuilder()
         .setName(ConfigureInteraction.name)
-        .setDescription("Configure some guild-related settings here.")
+        .setDescription(Locale.defaultText("INTERACTION_CONFIGURE_DESC"))
+        .setDescriptionLocalizations(Locale.getLocaleMap("INTERACTION_CONFIGURE_DESC"))
         .setIntegrationTypes(ApplicationIntegrationType.GuildInstall)
         .setContexts(InteractionContextType.Guild)
         .setDefaultMemberPermissions(PermissionsBitField.Flags.ManageGuild)
