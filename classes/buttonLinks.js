@@ -10,10 +10,13 @@ class ButtonLinks {
     async parseFromString() {
         this.links = [];
         const separated = this.text.split("\n");
+        const seen = new Set();
         for (const label of separated) {
             const page = await WikiPageData.getByTitle(label);
-            if (!page)
+            if (!page || seen.has(page.uuid)) {
                 continue;
+            }
+            seen.add(page.uuid);
             this.links.push({ "label": label, "uuid": page.uuid });
         }
         return this.links;
