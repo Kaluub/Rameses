@@ -169,7 +169,7 @@ class WikiAdminInteraction extends DefaultInteraction {
 
                 page.private = true;
                 await page.save();
-                return "The page was removed.";
+                return `The page \`${page.title}\` was removed.`;
             }
             return "How did we get here?";
         } else if (interaction.isModalSubmit()) {
