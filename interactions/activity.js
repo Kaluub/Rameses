@@ -73,7 +73,7 @@ class ActivityInteraction extends DefaultInteraction {
         
         const playerInfoButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Secondary)
-            .setCustomId("player-info/" + account?.displayName ?? username)
+            .setCustomId("profile/" + account?.displayName ?? username)
             .setLabel(Locale.text(interaction, "PLAYER_INFO"))
         
         const profilePageButton = new ButtonBuilder()
