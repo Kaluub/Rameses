@@ -12,27 +12,6 @@ function sortUsernamesAlphabetically(username1, username2) {
 const JOINER = "; ";
 const MAX_CHARACTER_COUNT = 1000;
 
-const serverChoices = [
-    { name: "all of NA", value: "na" },
-    { name: "all of EU", value: "eu" },
-    { name: "NA 1", value: "na:0" },
-    { name: "NA 2", value: "na:1" },
-    { name: "NA 3", value: "na:2" },
-    { name: "NA 4", value: "na:3" },
-    { name: "NA 5", value: "na:4" },
-    { name: "NA 6", value: "na:5" },
-    { name: "NA 7", value: "na:6" },
-    { name: "NA 8", value: "na:7" },
-    { name: "EU 1", value: "eu:0" },
-    { name: "EU 2", value: "eu:1" },
-    { name: "EU 3", value: "eu:2" },
-    { name: "EU 4", value: "eu:3" },
-    { name: "EU 5", value: "eu:4" },
-    { name: "EU 6", value: "eu:5" },
-    { name: "EU 7", value: "eu:6" },
-    { name: "EU 8", value: "eu:7" }
-]
-
 class OnlinePlayersInteraction extends DefaultInteraction {
     static name = "online-players";
     static applicationCommand = new SlashCommandBuilder()
@@ -45,7 +24,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
                 .setName("server")
                 .setDescription("The server to fetch the players from.")
                 .setRequired(false)
-                .setChoices(...serverChoices)
+                .setAutocomplete(true)
         )
 
     constructor() {
@@ -56,6 +35,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
     async execute(interaction) {
         let onlinePlayers;
         const specificServer = this.getStringArgument(interaction, "server", 1);
+        let serverName = null;
 
         if (specificServer) {
             const data = specificServer.split(":");
@@ -77,17 +57,16 @@ class OnlinePlayersInteraction extends DefaultInteraction {
                 for (const server of Object.values(servers)) {
                     onlinePlayers.push(...server.online);
                 }
-            }
-
-            else if (location === "na") {
+                serverName = `all of ${location.toUpperCase()}`;
+            } else if (location === "na") {
                 if (!serverStats.na[index]) return Locale.text(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.na[index].online;
-            }
-
-            else if (location === "eu") {
+            } else if (location === "eu") {
                 if (!serverStats.eu[index]) return Locale.text(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.eu[index].online;
             }
+
+            serverName ??= `${location.toUpperCase()} ${parseInt(index) + 1}`;
         }
 
         if (!onlinePlayers) {
@@ -143,7 +122,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
         const embed = new EmbedBuilder()
             .setTitle(
                 specificServer ?
-                    Locale.text(interaction, "PLAYERS_ONLINE_IN_SERVER", [serverChoices.find(choice => choice.value == specificServer)?.name]) :
+                    Locale.text(interaction, "PLAYERS_ONLINE_IN_SERVER", [serverName]) :
                     Locale.text(interaction, "PLAYERS_ONLINE")
             )
             .setColor("#11aa33")

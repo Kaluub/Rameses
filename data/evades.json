@@ -26,7 +26,6 @@
         "Mel",
         "Hodge",
         "Zade",
-        "PotatoNuke",
         "eagle45",
         "Angel🌸",
         "Ram",
@@ -37,7 +36,6 @@
         "зефирка",
         "⚝Simba⚝",
         "TREN",
-        "hotox",
         "yeetyeet47",
         "nosok",
         "🌌☾ᏉᎬᎶᎪ☽⭐",
@@ -45,7 +43,6 @@
         "Tsuba"
     ],
     "juniorMods": [
-        "yIzaac😎👌",
         "gok4rt",
         "Саня кинг",
         "JoniJoni",
@@ -84,7 +81,8 @@
         "Demona",
         "Stheno",
         "Factorb",
-        "Leono"
+        "Leono",
+        "Veydris"
     ],
     "regions": {
         "Central Core": {
@@ -245,6 +243,9 @@
         },
         "Terrifying Temple": {
             "color": "#e15776"
+        },
+        "Ancient Abyss": {
+            "color": "#622e82"
         }
     },
     "regionsExtended": [
@@ -256,11 +257,14 @@
         "Dangerous District",
         [
             "Peculiar Pyramid (Inner/Outer)",
-            "Peculiar Pyramid Perimeter"
+            "Peculiar Pyramid: Perimeter"
         ],
-        "Monumental Migration (120)",
+        "Monumental Migration",
         "Humongous Hollow",
-        "Haunted Halls",
+        [
+            "Haunted Halls",
+            "Haunted Halls: Deep Woods"
+        ],
         "Quiet Quarry",
         "Quiet Quarry Hard",
         "Frozen Fjord",
@@ -268,7 +272,7 @@
         "Toxic Territory",
         [
             "Magnetic Monopole (28)",
-            "Magnetic Monopole Dipole"
+            "Magnetic Monopole: Dipole"
         ],
         "Burning Bunker",
         "Central Core Hard",
@@ -278,14 +282,14 @@
         "Toxic Territory Hard",
         [
             "Magnetic Monopole Hard (28)",
-            "Magnetic Monopole Hard Dipole"
+            "Magnetic Monopole Hard: Dipole"
         ],
         "Burning Bunker Hard",
         "Elite Expanse Hard",
         "Restless Ridge Hard",
         [
             "Peculiar Perimeter Hard (Inner/Outer)",
-            "Peculiar Perimeter Hard Perimeter"
+            "Peculiar Perimeter Hard: Perimeter"
         ],
         "Grand Garden",
         "Grand Garden Hard",
@@ -293,10 +297,10 @@
         "Ominous Occult Hard",
         "Endless Echo",
         [
-            "Mysterious Mansion Garden",
-            "Mysterious Mansion Liminal Alley",
-            "Mysterious Mansion Dungeon",
-            "Mysterious Mansion Attic"
+            "Mysterious Mansion: Garden",
+            "Mysterious Mansion: Liminal Alley",
+            "Mysterious Mansion: Dungeon",
+            "Mysterious Mansion: Attic"
         ],
         "Dangerous District Hard",
         "Cyber Castle",
@@ -307,11 +311,15 @@
         "Shifting Sands",
         "Infinite Inferno",
         [
-            "Coupled Corridors North",
-            "Coupled Corridors South"
+            "Coupled Corridors: North",
+            "Coupled Corridors: South"
         ],
         "Withering Wasteland",
         "Terrifying Temple",
-        "Research Lab"
+        "Research Lab",
+        [
+            "Ancient Abyss",
+            "Vast Void"
+        ]
     ]
 }

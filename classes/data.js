@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 import Utils from "./utils.js";
 import Config from "./config.js";
 
-const connectionURL = `mongodb://${Config.MONGO_USERNAME && Config.MONGO_PASSWORD ? `${Config.MONGO_USERNAME}:${Config.MONGO_PASSWORD}@`: ""}127.0.0.1:27017`;
+const connectionURL = `mongodb://${Config.MONGO_USERNAME && Config.MONGO_PASSWORD ? `${Config.MONGO_USERNAME}:${Config.MONGO_PASSWORD}@`: ""}${Config.MONGO_HOSTNAME}:27017`;
 const mongoClient = new MongoClient(connectionURL);
 await mongoClient.connect().catch(err => { throw "Database error!\n" + err });
 const database = mongoClient.db("Rameses");

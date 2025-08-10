@@ -52,7 +52,6 @@ class ServersInteraction extends DefaultInteraction {
             container.addActionRowComponents(actionRows);
         }
 
-        container.addSeparatorComponents(s => s.setDivider(true));
         container.addTextDisplayComponents(t => t.setContent("-# " + Locale.text(interaction, "PLAYERS_ONLINE_COUNT", [serverStats.connected])));
 
         return { flags: MessageFlags.IsComponentsV2, components: [container] };
