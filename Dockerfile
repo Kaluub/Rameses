@@ -5,8 +5,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-COPY .env ./
-COPY app.js ./
-COPY classes ./
-COPY data ./
-COPY interactions ./
+COPY .env .
+COPY app.js .
+COPY classes ./classes
+COPY data ./data
+COPY interactions ./interactions

@@ -12,12 +12,6 @@ services:
     restart: unless-stopped
     depends_on:
       - mongo
-    volumes:
-      - ./.env:/app/.env
-      - ./app.js:/app/app.js
-      - ./classes:/app/classes
-      - ./data:/app/data
-      - ./interactions:/app/interactions
     command: ["node", "app.js"]
 
 volumes:
