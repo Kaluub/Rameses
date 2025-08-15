@@ -6,7 +6,4 @@ COPY package*.json ./
 RUN npm ci
 
 COPY .env .
-COPY app.js .
-COPY classes ./classes
-COPY data ./data
-COPY interactions ./interactions
+COPY src .
