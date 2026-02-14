@@ -97,8 +97,9 @@ class QuestData extends CachedData {
     }
 }
 
-class ChangelogData {
+class ChangelogData extends CachedData {
     constructor() {
+        super();
         this.entries = [];
     }
 }
@@ -107,11 +108,12 @@ class EvadesAPI {
     constructor() {
         this.fetchURL = "https://evades.io/api/"
         this.cache = null;
-        this.playerDetailsCacheTime = 300000;
+        this.playerDetailsCacheTime = 30000;
         this.onlinePlayersCacheTime = 10000;
         this.serverStatsCacheTime = 10000;
-        this.hallOfFameCacheTime = 60000;
+        this.hallOfFameCacheTime = 30000;
         this.questCacheTime = 20000;
+        this.changelogCacheTime = 60000;
         this.requestTimeout = 5000; // Timeout if no response in 5 seconds.
         this.resetCache();
         updateLastSeen(this);
@@ -235,15 +237,15 @@ class EvadesAPI {
     }
 
     async getChangelog(force = false) {
-        if (force || this.cache.changelog === null) {
-            // We don't fetch the changelog unless the server restarts.
+        if (force || this.cache.changelog.isOutdated(this.changelogCacheTime)) {
             const changelog = await this.get("game/changelog");
             if (!changelog) {
                 return null;
             }
-            this.cache.changelog = changelog;
+            this.cache.changelog.entries = changelog;
+            this.cache.changelog.fetched = Date.now();
         }
-        return this.cache.changelog;
+        return this.cache.changelog.entries;
     }
 }
 

@@ -52,7 +52,7 @@ class ChangelogInteraction extends DefaultInteraction {
 
             let string = `**__${changelog[changelogNumber].header}__**:`;
             for (const segment of changelog[changelogNumber].changes) {
-                const toAdd = `\n• ${segment.content}\n`;
+                const toAdd = `\n• ${segment.content.replaceAll('](/', '](https://evades.io/')}\n`;
                 if ((string + toAdd).length > 1995) {
                     // Prevent long changelogs from getting over the limit.
                     string += `\n...`;

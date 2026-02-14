@@ -246,3 +246,12 @@ class CommandLog {
 }
 
 export { AccountData, TournamentData, WikiPageData, DiscordUserData, DiscordGuildData, CommandLog };
+
+export async function closeDatabase() {
+    try {
+        await mongoClient.close();
+        console.log("MongoDB connection closed.");
+    } catch (err) {
+        console.error("Error closing MongoDB:", err);
+    }
+}
