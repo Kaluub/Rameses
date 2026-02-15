@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 class Config {
     static TOKEN = Config.required(process.env.TOKEN, "TOKEN");
     static MONGO_USERNAME = process.env.MONGO_USERNAME;

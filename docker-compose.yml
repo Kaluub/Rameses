@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mongo
-    command: ["node", "app.js"]
+    command: ["node", "--env-file=.env", "app.js"]
 
 volumes:
   mongo-data:
