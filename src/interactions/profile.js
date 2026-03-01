@@ -129,17 +129,22 @@ class ProfileInteraction extends DefaultInteraction {
         const activityButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Secondary)
             .setCustomId("activity/" + username)
-            .setLabel(Locale.text(interaction, "ACTIVITY"))
+            .setLabel(Locale.text(interaction, "ACTIVITY"));
         
         const profilePageButton = new ButtonBuilder()
             .setStyle(ButtonStyle.Link)
             .setURL(encodeURI("https://evades.io/profile/" + username))
-            .setLabel(Locale.text(interaction, "ACCOUNT_PAGE"))
+            .setLabel(Locale.text(interaction, "ACCOUNT_PAGE"));
             
         const row = new ActionRowBuilder()
-            .addComponents(activityButton, profilePageButton)
+            .addComponents(activityButton, profilePageButton);
+        
+        let content = undefined;
+        if (interaction.isMessageComponent()) {
+            content = interaction.user.toString();
+        }
 
-        return { embeds: [embed], components: [row] }
+        return { content, embeds: [embed], components: [row] }
     }
 }
 
