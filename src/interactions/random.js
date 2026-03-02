@@ -44,7 +44,9 @@ class RandomInteraction extends DefaultInteraction {
         const row = new ActionRowBuilder()
             .setComponents(rerollButton)
 
-        if (interaction.isMessageComponent()) return await interaction.update({ embeds: [embed], components: [row] });
+        if (interaction.isMessageComponent()) {
+            return await interaction.update({ embeds: [embed], components: [row] });
+        }
         return { embeds: [embed], components: [row] }
     }
 }

@@ -46,6 +46,14 @@ class DefaultInteraction {
         // TODO: Is there a decent way to have some sort of command testing interface?
         return;
     }
+
+    formatContent(interaction, key, args) {
+        const content = Locale.text(interaction, key, args);
+        if (interaction.isMessageComponent()) {
+            return `${interaction.user.toString()}\n${content}`;
+        }
+        return content;
+    }
 }
 
 export default DefaultInteraction;

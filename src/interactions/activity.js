@@ -42,13 +42,18 @@ class ActivityInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const username = this.getStringArgument(interaction, "username", 1);
-        if (!username)
-            return Locale.text(interaction, "COMMAND_ERROR");
+        if (!username) {
+            return this.formatContent(interaction, "COMMAND_ERROR");
+        }
 
         const account = await AccountData.getByUsername(username, false);
 
-        if (!account) return Locale.text(interaction, "PLAYER_NOT_FOUND");
-        if (!account.playTime) return Locale.text(interaction, "PLAYER_INACTIVE", [Utils.sanitizeUsername(account.displayName ?? account.username)]);
+        if (!account) {
+            return this.formatContent(interaction, "PLAYER_NOT_FOUND");
+        }
+        if (!account.playTime) {
+            return this.formatContent(interaction, "PLAYER_INACTIVE", [Utils.sanitizeUsername(account.displayName ?? account.username)]);
+        }
 
         // Customize the graph for fun (perhaps create generic graph function later if needed)
         const barValue = interaction.options?.getString("graph-icon") || "▒";

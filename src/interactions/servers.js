@@ -18,7 +18,7 @@ class ServersInteraction extends DefaultInteraction {
     async execute(interaction) {
         const serverStats = await interaction.client.evadesAPI.getServerStats();
         if (serverStats === null) {
-            return Locale.text(interaction, "EVADES_ERROR");
+            return this.formatContent(interaction, "EVADES_ERROR");
         }
 
         const container = new ContainerBuilder()

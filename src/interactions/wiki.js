@@ -54,6 +54,10 @@ class WikiInteraction extends DefaultInteraction {
                 result.components = links.parseFromArray();
             }
 
+            if (interaction.isMessageComponent()) {
+                result.content = `${interaction.user.toString()}`;
+            }
+
             return result;
         }
 

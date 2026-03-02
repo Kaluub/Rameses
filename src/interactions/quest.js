@@ -20,7 +20,7 @@ class QuestInteraction extends DefaultInteraction {
     async execute(interaction) {
         const quest = await interaction.client.evadesAPI.getCurrentQuest();
         if (!quest) {
-            return Locale.text(interaction, "EVADES_ERROR");
+            return this.formatContent(interaction, "EVADES_ERROR");
         }
 
         return this.render(interaction, quest);

@@ -23,11 +23,12 @@ class SeenInteraction extends DefaultInteraction {
         const offset = Math.max(this.getIntegerArgument(interaction, "offset", 2), 0) || 0;
         const accounts = await AccountData.getRecentlyOnline(limit, offset).toArray();
         
-        if (!accounts.length)
-            return Locale.text(interaction, "NO_MATCHES");
+        if (!accounts.length) {
+            return this.formatContent(interaction, "NO_MATCHES");
+        }
         
         let string = Locale.text(interaction, "SEEN");
-        let i = 0 + offset;
+        let i = offset;
         
         for (const account of accounts) {
             i += 1;
@@ -57,7 +58,9 @@ class SeenInteraction extends DefaultInteraction {
         const row = new ActionRowBuilder()
             .addComponents(previousButton, nextButton)
 
-        if (interaction.isMessageComponent()) return await interaction.editReply({ embeds: [embed], components: [row] });
+        if (interaction.isMessageComponent()) {
+            return await interaction.editReply({ embeds: [embed], components: [row] });
+        }
         return { embeds: [embed], components: [row] };
     }
 }

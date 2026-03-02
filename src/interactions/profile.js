@@ -80,14 +80,14 @@ class ProfileInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const username = decodeURI(this.getStringArgument(interaction, "username", 1));
-        if (!username)
-            return Locale.text(interaction, "COMMAND_ERROR");
+        if (!username) 
+            return this.formatContent(interaction, "COMMAND_ERROR");
         
         const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(username);
         const onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers() ?? [];
         
         if (!playerDetails)
-            return Locale.text(interaction, "PLAYER_NOT_FOUND");
+            return this.formatContent(interaction, "PLAYER_NOT_FOUND");
         
         const account = await AccountData.getByUsername(username, true, false);
 

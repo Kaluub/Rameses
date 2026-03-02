@@ -42,13 +42,15 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             const location = data[0];
             const index = data[1];
 
-            if (!location) return Locale.text(interaction, "INVALID_SERVER");
-            if (!["na", "eu"].includes(location)) return Locale.text(interaction, "INVALID_SERVER");
+            if (!location) {
+                return this.formatContent(interaction, "INVALID_SERVER");
+            }
+            if (!["na", "eu"].includes(location)) return this.formatContent(interaction, "INVALID_SERVER");
 
             const serverStats = await interaction.client.evadesAPI.getServerStats();
 
             if (!serverStats) {
-                return Locale.text(interaction, "EVADES_ERROR");
+                return this.formatContent(interaction, "EVADES_ERROR");
             }
 
             if (index === undefined) {
@@ -59,10 +61,10 @@ class OnlinePlayersInteraction extends DefaultInteraction {
                 }
                 serverName = `all of ${location.toUpperCase()}`;
             } else if (location === "na") {
-                if (!serverStats.na[index]) return Locale.text(interaction, "INVALID_SERVER");
+                if (!serverStats.na[index]) return this.formatContent(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.na[index].online;
             } else if (location === "eu") {
-                if (!serverStats.eu[index]) return Locale.text(interaction, "INVALID_SERVER");
+                if (!serverStats.eu[index]) return this.formatContent(interaction, "INVALID_SERVER");
                 onlinePlayers = serverStats.eu[index].online;
             }
 
@@ -73,7 +75,7 @@ class OnlinePlayersInteraction extends DefaultInteraction {
             onlinePlayers = await interaction.client.evadesAPI.getOnlinePlayers();
         }
         if (!onlinePlayers) {
-            return Locale.text(interaction, "EVADES_ERROR");
+            return this.formatContent(interaction, "EVADES_ERROR");
         }
 
         const userData = await DiscordUserData.getByID(interaction.user.id);
