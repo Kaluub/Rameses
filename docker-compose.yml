@@ -5,6 +5,9 @@ services:
     restart: unless-stopped
     volumes:
       - mongo-data:/data/db
+    # Redirected to 27000 since server has local MongoDB instance
+    ports:
+      - "27000:27017"
 
   rameses:
     build: .
