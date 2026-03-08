@@ -47,7 +47,8 @@ class AccountData {
 
     static findMatchingUsernames(username, maxDocuments = 25) {
         if (!username.length) return accounts.aggregate([{ $sample: { size: maxDocuments } }]);
-        const regexp = new RegExp(username.toLowerCase());
+        const escapedUsername = username.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regexp = new RegExp(escapedUsername, 'i');
         return accounts.find({ username: regexp }).limit(maxDocuments);
     }
 
@@ -108,7 +109,9 @@ class AccountData {
                 }
             });
         }
-        accounts.bulkWrite(operations);
+        if (operations.length) {
+            accounts.bulkWrite(operations);
+        }
     }
 
     static async loadTopVP() {
