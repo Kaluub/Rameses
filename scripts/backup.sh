@@ -2,14 +2,15 @@
 set -e
 
 DATE=$(date +"%Y-%m-%d")
-HOUR=$(date +"%H-%M")
+HOUR=$(date +"%H")
+MINUTE=$(date +"%M")
 DAY=$(date +"%u")
 
 TMP_DIR="/tmp/rameses-backup"
-HOURLY_FILE="$TMP_DIR/$DATE-$HOUR.gz"
+HOURLY_FILE="$TMP_DIR/$DATE-$HOUR-$MINUTE.gz"
 WEEKLY_FILE="$TMP_DIR/$DATE.gz"
 
-echo "Starting backup for $DATE-$HOUR"
+echo "Starting backup for $DATE-$HOUR-$MINUTE"
 mkdir -p $TMP_DIR
 
 echo "Running mongodump..."
