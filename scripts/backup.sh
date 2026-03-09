@@ -7,6 +7,7 @@ MINUTE=$(date +"%M")
 DAY=$(date +"%u")
 
 TMP_DIR="/tmp/rameses-backup"
+CONTAINER="rameses-mongo"
 HOURLY_FILE="$TMP_DIR/$DATE-$HOUR-$MINUTE.gz"
 WEEKLY_FILE="$TMP_DIR/$DATE.gz"
 
@@ -14,10 +15,10 @@ echo "Starting backup for $DATE-$HOUR-$MINUTE"
 mkdir -p $TMP_DIR
 
 echo "Running mongodump..."
-mongodump \
-  --uri="mongodb://localhost:27000" \
-  --archive=$HOURLY_FILE \
-  --gzip
+docker exec "$CONTAINER" mongodump \
+  --uri="mongodb://localhost:27017" \
+  --archive \
+  --gzip > "$HOURLY_FILE"
 
 echo "Uploading hourly backup..."
 rclone copy $HOURLY_FILE b2:rameses/backups/$DATE/
