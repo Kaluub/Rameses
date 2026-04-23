@@ -268,7 +268,9 @@ async function updateLastSeen(evadesAPI) {
 async function updateCareerVP(evadesAPI) {
     // We know that only players in the hall of fame can have an outdated career VP.
     const hallOfFame = await evadesAPI.getHallOfFame();
-    AccountData.bulkUpdateHallOfFame(hallOfFame);
+    if (hallOfFame) {
+        AccountData.bulkUpdateHallOfFame(hallOfFame);
+    }
 }
 
 export default EvadesAPI;
