@@ -11,15 +11,15 @@ class Utils {
                 timeSeconds: 0,
                 time: "0:00",
             });
-    
+
             return "```asciidoc\n= Leaderboard =\n\n" + fakeRun.getString(tournament, 0) + "\n```";
         }
-    
+
         let tournamentString = "```asciidoc\n= Leaderboard =";
         let position = 0;
         let sortedArray = [];
         const usersRuns = {};
-    
+
         for (const run of tournament.leaderboard) {
             const lowerName = run.player.toLowerCase();
             if (!usersRuns[lowerName]) {
@@ -27,7 +27,7 @@ class Utils {
             }
             usersRuns[lowerName].list.push(run);
         }
-    
+
         if (tournament.type == "sum") {
             // Sum
             sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.total(), e2.total()));
@@ -35,7 +35,7 @@ class Utils {
             // Best
             sortedArray = Object.values(usersRuns).sort((e1, e2) => TournamentPlayerRunData.sortElements(e1.best(), e2.best()));
         }
-    
+
         for (const run of sortedArray) {
             position += 1;
             const runString = "\n\n" + run.getString(tournament, position);
@@ -47,7 +47,7 @@ class Utils {
         tournamentString += "\n```";
         return tournamentString;
     }
-    
+
     static hasPermission(interaction, permission, user = null) {
         if (!interaction) return false;
         if (!interaction.guild) return true;
@@ -55,7 +55,7 @@ class Utils {
         if (interaction.channel.permissionsFor(user).has(permission)) return true;
         return false;
     }
-    
+
     static sanitizeUsername(username) {
         return username
             .replaceAll("_", "\\_")
@@ -63,11 +63,11 @@ class Utils {
             .replaceAll("|", "\\|")
             .replaceAll("`", "\\`")
     }
-    
+
     static timeSecondsToTime(t) {
         return `${Math.floor(t / 60)}:${t % 60 < 10 ? "0" : ""}${t % 60}`;
     }
-    
+
     static formatSeconds(seconds) {
         const years = Math.floor(seconds / (60 * 60 * 24 * 365));
         const days = Math.floor(seconds / (60 * 60 * 24)) - years * 365;
@@ -80,13 +80,24 @@ class Utils {
     static formatSecondsToMinutes(seconds) {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds < 10 ? "0": ""}${remainingSeconds}`;
+        return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
     }
-    
+
     static readJSON(path) {
         return JSON.parse(readFileSync(path));
     }
-    
+
+    static randomElementsFormatter(regions) {
+        return regions
+            .filter(region => region.isInGame)
+            .map(region => {
+                if (region.routes.length > 0) {
+                    return region.routes.map(route => route.name);
+                }
+                return region.name;
+            });
+    }
+
     static randomElements(array, amount) {
         const picked = [];
         while (picked.length < amount) {

@@ -11,13 +11,14 @@ class RegionInteraction extends DefaultInteraction {
 
     async execute(interaction) {
         const search = interaction.options.getFocused();
-        const regions = Object.keys(EvadesData.regions)
-            .filter(map => map.toLowerCase().includes(search.toLowerCase()))
+        const regions = EvadesData.regions
+            .filter(map => map.name.toLowerCase().includes(search.toLowerCase()))
             .slice(0, 25)
 
         const response = [];
         for (const region of regions) {
-            response.push({ name: region, value: region });
+            if (!region.isInGame) continue;
+            response.push({ name: region.name, value: region.name });
         }
         
         await interaction.respond(response);

@@ -86,242 +86,483 @@
         "Leono",
         "Veydris"
     ],
-    "regions": {
-        "Central Core": {
-            "color": "#425a6d"
+    "regions": [
+        {
+            "name": "Central Core",
+            "color": "#425a6d",
+            "abbr": "CC",
+            "routes": [],
+            "isInGame": true
         },
-        "Central Core Hard": {
-            "color": "#425a6d"
+        {
+            "name": "Vicious Valley",
+            "color": "#4d6b40",
+            "abbr": "VV",
+            "routes": [],
+            "isInGame": true
         },
-        "Catastrophic Core": {
-            "color": "#425a6d"
+        {
+            "name": "Elite Expanse",
+            "color": "#2a3b4f",
+            "abbr": "EE",
+            "routes": [],
+            "isInGame": true
         },
-        "Vicious Valley": {
-            "color": "#4d6b40"
+        {
+            "name": "Wacky Wonderland",
+            "color": "#870080",
+            "abbr": "WW",
+            "routes": [],
+            "isInGame": true
         },
-        "Vicious Valley Hard": {
-            "color": "#37512c"
+        {
+            "name": "Glacial Gorge",
+            "color": "#005668",
+            "abbr": "GG",
+            "routes": [],
+            "isInGame": true
         },
-        "Elite Expanse": {
-            "color": "#2a3b4f"
+        {
+            "name": "Dangerous District",
+            "color": "#680000",
+            "abbr": "DD",
+            "routes": [],
+            "isInGame": true
         },
-        "Elite Expanse Hard": {
-            "color": "#2a3b4f"
+        {
+            "name": "Peculiar Pyramid",
+            "color": "#666600",
+            "abbr": "PP",
+            "routes": [
+                {
+                    "name": "Peculiar Pyramid Inner",
+                    "abbr": "PPI"
+                },
+                {
+                    "name": "Peculiar Pyramid Perimeter",
+                    "abbr": "PPP"
+                }
+            ],
+            "isInGame": true
         },
-        "Wacky Wonderland": {
-            "color": "#870080"
+        {
+            "name": "Monumental Migration",
+            "color": "#470066",
+            "abbr": "MM",
+            "routes": [],
+            "isInGame": true
         },
-        "Wacky Wonderland Hard": {
-            "color": "#870080"
+        {
+            "name": "Humongous Hollow",
+            "color": "#663900",
+            "abbr": "HH",
+            "routes": [],
+            "isInGame": true
         },
-        "Switch Station": {
-            "color": "#425a6d"
+        {
+            "name": "Haunted Halls",
+            "color": "#664b00",
+            "abbr": "HaHa",
+            "routes": [
+                {
+                    "name": "Haunted Halls",
+                    "abbr": "HaHa"
+                },
+                {
+                    "name": "Haunted Halls: Deep Woods",
+                    "abbr": "HaHa25"
+                }
+            ],
+            "isInGame": true
         },
-        "Glacial Gorge": {
-            "color": "#005668"
+        {
+            "name": "Quiet Quarry",
+            "color": "#425a6d",
+            "abbr": "QQ",
+            "routes": [],
+            "isInGame": true
         },
-        "Glacial Gorge Hard": {
-            "color": "#003c54"
+        {
+            "name": "Quiet Quarry Hard",
+            "color": "#425a6d",
+            "abbr": "QQH",
+            "routes": [],
+            "isInGame": true
         },
-        "Dangerous District": {
-            "color": "#680000"
+        {
+            "name": "Frozen Fjord",
+            "color": "#27494f",
+            "abbr": "FF",
+            "routes": [],
+            "isInGame": true
         },
-        "Dangerous District Hard": {
-            "color": "#400303"
+        {
+            "name": "Restless Ridge",
+            "color": "#a88b64",
+            "abbr": "RR",
+            "routes": [],
+            "isInGame": true
         },
-        "Peculiar Pyramid": {
-            "color": "#666600"
+        {
+            "name": "Toxic Territory",
+            "color": "#5c5c5c",
+            "abbr": "TT",
+            "routes": [],
+            "isInGame": true
         },
-        "Peculiar Pyramid Hard": {
-            "color": "#666600"
+        {
+            "name": "Magnetic Monopole",
+            "color": "#bf00ff",
+            "abbr": "MM2",
+            "routes": [
+                {
+                    "name": "Magnetic Monopole (28)",
+                    "abbr": "MM2"
+                },
+                {
+                    "name": "Magnetic Monopole: Dipole",
+                    "abbr": "MMD"
+                }
+            ],
+            "isInGame": true
         },
-        "Monumental Migration": {
-            "color": "#470066"
+        {
+            "name": "Burning Bunker",
+            "color": "#cc0000",
+            "abbr": "BB",
+            "routes": [],
+            "isInGame": true
         },
-        "Monumental Migration Hard": {
-            "color": "#29003b"
+        {
+            "name": "Central Core Hard",
+            "color": "#425a6d",
+            "abbr": "CCH",
+            "routes": [],
+            "isInGame": true
         },
-        "Humongous Hollow": {
-            "color": "#663900"
+        {
+            "name": "Vicious Valley Hard",
+            "color": "#37512c",
+            "abbr": "VVH",
+            "routes": [],
+            "isInGame": true
         },
-        "Humongous Hollow Hard": {
-            "color": "#522e00"
+        {
+            "name": "Glacial Gorge Hard",
+            "color": "#003c54",
+            "abbr": "GGH",
+            "routes": [],
+            "isInGame": true
         },
-        "Transforming Turbidity": {
-            "color": "#425a6d"
+        {
+            "name": "Frozen Fjord Hard",
+            "color": "#27494f",
+            "abbr": "FFH",
+            "routes": [],
+            "isInGame": true
         },
-        "Quiet Quarry": {
-            "color": "#425a6d"
+        {
+            "name": "Toxic Territory Hard",
+            "color": "#5c5c5c",
+            "abbr": "TTH",
+            "routes": [],
+            "isInGame": true
         },
-        "Quiet Quarry Hard": {
-            "color": "#425a6d"
+        {
+            "name": "Magnetic Monopole Hard",
+            "color": "#bf00ff",
+            "abbr": "MM2H",
+            "routes": [
+                {
+                    "name": "Magnetic Monopole Hard (28)",
+                    "abbr": "MM2H"
+                },
+                {
+                    "name": "Magnetic Monopole: Dipole Hard",
+                    "abbr": "MMDH"
+                }
+            ],
+            "isInGame": true
         },
-        "Haunted Halls": {
-            "color": "#664b00"
+        {
+            "name": "Burning Bunker Hard",
+            "color": "#cc0000",
+            "abbr": "BBH",
+            "routes": [],
+            "isInGame": true
         },
-        "Stellar Square": {
-            "color": "#969275"
+        {
+            "name": "Elite Expanse Hard",
+            "color": "#2a3b4f",
+            "abbr": "EEH",
+            "routes": [],
+            "isInGame": true
         },
-        "Frozen Fjord": {
-            "color": "#27494f"
+        {
+            "name": "Restless Ridge Hard",
+            "color": "#a88b64",
+            "abbr": "RRH",
+            "routes": [],
+            "isInGame": true
         },
-        "Frozen Fjord Hard": {
-            "color": "#27494f"
+        {
+            "name": "Peculiar Pyramid Hard",
+            "color": "#666600",
+            "abbr": "PPH",
+            "routes": [
+                {
+                    "name": "Peculiar Pyramid Inner Hard",
+                    "abbr": "PPIH"
+                },
+                {
+                    "name": "Peculiar Pyramid Perimeter Hard",
+                    "abbr": "PPPH"
+                }
+            ],
+            "isInGame": true
         },
-        "Ominous Occult": {
-            "color": "#63838e"
+        {
+            "name": "Grand Garden",
+            "color": "#6a9c49",
+            "abbr": "GG2",
+            "routes": [],
+            "isInGame": true
         },
-        "Ominous Occult Hard": {
-            "color": "#63838e"
+        {
+            "name": "Grand Garden Hard",
+            "color": "#6a9c49",
+            "abbr": "GG2H",
+            "routes": [],
+            "isInGame": true
         },
-        "Restless Ridge": {
-            "color": "#a88b64"
+        {
+            "name": "Ominous Occult",
+            "color": "#63838e",
+            "abbr": "OO",
+            "routes": [],
+            "isInGame": true
         },
-        "Restless Ridge Hard": {
-            "color": "#a88b64"
+        {
+            "name": "Ominous Occult Hard",
+            "color": "#63838e",
+            "abbr": "OOH",
+            "routes": [],
+            "isInGame": true
         },
-        "Toxic Territory": {
-            "color": "#5c5c5c"
+        {
+            "name": "Endless Echo",
+            "color": "#4168c4",
+            "abbr": "EE2",
+            "routes": [],
+            "isInGame": true
         },
-        "Toxic Territory Hard": {
-            "color": "#5c5c5c"
+        {
+            "name": "Mysterious Mansion",
+            "color": "#9c0ec7",
+            "abbr": "MM3",
+            "routes": [
+                {
+                    "name": "Mysterious Mansion Hedge",
+                    "abbr": "MMH"
+                },
+                {
+                    "name": "Mysterious Mansion Liminal",
+                    "abbr": "MML"
+                },
+                {
+                    "name": "Mysterious Mansion Cryptic",
+                    "abbr": "MMC"
+                },
+                {
+                    "name": "Mysterious Mansion Attic",
+                    "abbr": "MMA"
+                }
+            ],
+            "isInGame": true
         },
-        "Magnetic Monopole": {
-            "color": "#bf00ff"
+        {
+            "name": "Dangerous District Hard",
+            "color": "#400303",
+            "abbr": "DDH",
+            "routes": [],
+            "isInGame": true
         },
-        "Magnetic Monopole Hard": {
-            "color": "#bf00ff"
+        {
+            "name": "Cyber Castle",
+            "color": "#21bad9",
+            "abbr": "CyCa",
+            "routes": [],
+            "isInGame": true
         },
-        "Assorted Alcove": {
-            "color": "#694605"
+        {
+            "name": "Cyber Castle Hard",
+            "color": "#1594ad",
+            "abbr": "CyCaH",
+            "routes": [],
+            "isInGame": true
         },
-        "Assorted Alcove Hard": {
-            "color": "#694605"
+        {
+            "name": "Catastrophic Core",
+            "color": "#425a6d",
+            "abbr": "CaCo",
+            "routes": [],
+            "isInGame": true
         },
-        "Burning Bunker": {
-            "color": "#cc0000"
+        {
+            "name": "Endless Echo Hard",
+            "color": "#4168c4",
+            "abbr": "EE2H",
+            "routes": [],
+            "isInGame": true
         },
-        "Burning Bunker Hard": {
-            "color": "#cc0000"
+        {
+            "name": "Humongous Hollow Hard",
+            "color": "#522e00",
+            "abbr": "HHH",
+            "routes": [],
+            "isInGame": true
         },
-        "Grand Garden": {
-            "color": "#6a9c49"
+        {
+            "name": "Shifting Sands",
+            "color": "#c88241",
+            "abbr": "SS",
+            "routes": [],
+            "isInGame": true
         },
-        "Grand Garden Hard": {
-            "color": "#6a9c49"
+        {
+            "name": "Infinite Inferno",
+            "color": "#9b0606",
+            "abbr": "II",
+            "routes": [],
+            "isInGame": true
         },
-        "Endless Echo": {
-            "color": "#4168c4"
+        {
+            "name": "Coupled Corridors",
+            "color": "#bbaa55",
+            "abbr": "CoCo",
+            "routes": [
+                {
+                    "name": "Coupled Corridors: North",
+                    "abbr": "CoCoN"
+                },
+                {
+                    "name": "Coupled Corridors: South",
+                    "abbr": "CoCoS"
+                }
+            ],
+            "isInGame": true
         },
-        "Endless Echo Hard": {
-            "color": "#4168c4"
+        {
+            "name": "Withering Wasteland",
+            "color": "#c45945",
+            "abbr": "WW2",
+            "routes": [],
+            "isInGame": true
         },
-        "Mysterious Mansion": {
-            "color": "#9c0ec7"
+        {
+            "name": "Terrifying Temple",
+            "color": "#e15776",
+            "abbr": "TT2",
+            "routes": [],
+            "isInGame": true
         },
-        "Coupled Corridors": {
-            "color": "#bbaa55"
+        {
+            "name": "Research Lab",
+            "color": "#21bad9",
+            "abbr": "RL",
+            "routes": [],
+            "isInGame": true
         },
-        "Cyber Castle": {
-            "color": "#21bad9"
+        {
+            "name": "Ancient Abyss",
+            "color": "#622e82",
+            "abbr": "AnAb",
+            "routes": [],
+            "isInGame": true
         },
-        "Cyber Castle Hard": {
-            "color": "#1594ad"
+        {
+            "name": "Vast Void",
+            "color": "#FFFFFF",
+            "abbr": "VV50",
+            "routes": [],
+            "isInGame": true
         },
-        "Research Lab": {
-            "color": "#21bad9"
+        {
+            "name": "Pristine Purgatory",
+            "color": "#FFFFFF",
+            "abbr": "PP20",
+            "routes": [],
+            "isInGame": true
         },
-        "Shifting Sands": {
-            "color": "#c88241"
+        {
+            "name": "Wacky Wonderland Hard",
+            "color": "#870080",
+            "abbr": "WWH",
+            "routes": [],
+            "isInGame": true
         },
-        "Infinite Inferno": {
-            "color": "#9b0606"
+        {
+            "name": "Switch Station",
+            "color": "#425a6d",
+            "abbr": "SwSt",
+            "routes": [],
+            "isInGame": false
         },
-        "Dusty Depths": {
-            "color": "#825b37"
+        {
+            "name": "Monumental Migration Hard",
+            "color": "#29003b",
+            "abbr": "MMH",
+            "routes": [],
+            "isInGame": false
         },
-        "Withering Wasteland": {
-            "color": "#c45945"
+        {
+            "name": "Transforming Turbidity",
+            "color": "#425a6d",
+            "abbr": "TrTu",
+            "routes": [],
+            "isInGame": false
         },
-        "Terrifying Temple": {
-            "color": "#e15776"
+        {
+            "name": "Stellar Square",
+            "color": "#969275",
+            "abbr": "StSq",
+            "routes": [],
+            "isInGame": true
         },
-        "Ancient Abyss": {
-            "color": "#622e82"
+        {
+            "name": "Assorted Alcove",
+            "color": "#694605",
+            "abbr": "AA",
+            "routes": [],
+            "isInGame": false
+        },
+        {
+            "name": "Assorted Alcove Hard",
+            "color": "#694605",
+            "abbr": "AAH",
+            "routes": [],
+            "isInGame": false
+        },
+        {
+            "name": "Dusty Depths",
+            "color": "#825b37",
+            "abbr": "DD2",
+            "routes": [],
+            "isInGame": true
+        },
+        {
+            "name": "Sparkling Shrine",
+            "color": "#FFFFFF",
+            "abbr": "SS2",
+            "routes": [],
+            "isInGame": true
+        },
+        {
+            "name": "Sparkling Shrine Hard",
+            "color": "#FFFFFF",
+            "abbr": "SS2H",
+            "routes": [],
+            "isInGame": true
         }
-    },
-    "regionsExtended": [
-        "Central Core",
-        "Vicious Valley",
-        "Elite Expanse",
-        "Wacky Wonderland",
-        "Glacial Gorge",
-        "Dangerous District",
-        [
-            "Peculiar Pyramid (Inner/Outer)",
-            "Peculiar Pyramid: Perimeter"
-        ],
-        "Monumental Migration",
-        "Humongous Hollow",
-        [
-            "Haunted Halls",
-            "Haunted Halls: Deep Woods"
-        ],
-        "Quiet Quarry",
-        "Quiet Quarry Hard",
-        "Frozen Fjord",
-        "Restless Ridge",
-        "Toxic Territory",
-        [
-            "Magnetic Monopole (28)",
-            "Magnetic Monopole: Dipole"
-        ],
-        "Burning Bunker",
-        "Central Core Hard",
-        "Vicious Valley Hard",
-        "Glacial Gorge Hard",
-        "Frozen Fjord Hard",
-        "Toxic Territory Hard",
-        [
-            "Magnetic Monopole Hard (28)",
-            "Magnetic Monopole Hard: Dipole"
-        ],
-        "Burning Bunker Hard",
-        "Elite Expanse Hard",
-        "Restless Ridge Hard",
-        [
-            "Peculiar Perimeter Hard (Inner/Outer)",
-            "Peculiar Perimeter Hard: Perimeter"
-        ],
-        "Grand Garden",
-        "Grand Garden Hard",
-        "Ominous Occult",
-        "Ominous Occult Hard",
-        "Endless Echo",
-        [
-            "Mysterious Mansion: Garden",
-            "Mysterious Mansion: Liminal Alley",
-            "Mysterious Mansion: Dungeon",
-            "Mysterious Mansion: Attic"
-        ],
-        "Dangerous District Hard",
-        "Cyber Castle",
-        "Cyber Castle Hard",
-        "Catastrophic Core",
-        "Endless Echo Hard",
-        "Humongous Hollow Hard",
-        "Shifting Sands",
-        "Infinite Inferno",
-        [
-            "Coupled Corridors: North",
-            "Coupled Corridors: South"
-        ],
-        "Withering Wasteland",
-        "Terrifying Temple",
-        "Research Lab",
-        [
-            "Ancient Abyss",
-            "Vast Void"
-        ]
     ]
 }
