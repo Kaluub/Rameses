@@ -28,7 +28,7 @@ class RandomInteraction extends DefaultInteraction {
         const amountOfHeroes = this.getIntegerArgument(interaction, "heroes", 1) || 1;
 
         const heroes = Utils.randomElements(EvadesData.heroes, amountOfHeroes);
-        const region = Utils.randomElements(EvadesData.regionsExtended, 1)[0];
+        const region = Utils.randomElements(Utils.randomElementsFormatter(EvadesData.regions), 1);
 
         const embed = new EmbedBuilder()
             .setTitle(Locale.text(interaction, "RANDOM_TITLE"))
