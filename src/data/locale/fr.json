@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "Ce n'est pas un tournoi.",
     "CHANGELOG_UNAVAILABLE": "Les notes de mise à jour ne sont pas disponibles!",
     "CREDITS_TITLE": "Crédits:",
-    "CREDITS": "Programmation: DepressionOwU, Kaluub\nTraductions en Français: Invi, Kaluub\nContributeurs du wiki: Invi, Piger, Raqzv\nIcône de robot: Aldople\n\nMerci beaucoup a tout ceux qui aidait avec l'expérimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
+    "CREDITS": "Programmation: DepressionOwU, Kaluub, Br1h\nTraductions en Français: Invi, Kaluub, Magmaxonly\nContributeurs du wiki: Invi, Piger, Raqzv\nIcône de robot: Aldople\n\nMerci beaucoup a tout ceux qui aidait avec l'expérimentation et pour résoudre les problèmes!\nSi vous êtes interessé de produire ou maintenir des traductions, S.V.P. parlez avec nous!",
     "NEWER": "Jeune",
     "OLDER": "Agée",
     "TIME_PLAYED": "Temps de jeu",
@@ -121,5 +121,9 @@
     "INTERACTION_ACTIVITY_DESC": "Voix l'activité d'un joueur.",
     "INTERACTION_CHANGELOG_DESC": "Voix les notes de mise à jour.",
     "INTERACTION_CONFIGURE_DESC": "Configurer les paramètres de votre serveur.",
-    "INTERACTION_CREDITS_DESC": "C'est terminé, Van. Bonsoir."
+    "INTERACTION_CREDITS_DESC": "C'est terminé, Van. Bonsoir.",
+    "HIGHSCORES_SPEEDRUN_DESC": "Voir les temps les plus rapides pour une région donnée.",
+    "HIGHSCORES_INVALID_REGION": "Cette région n'a pas de speedrun !",
+    "HIGHSCORES_INVALID_PLAYER_COUNT": "Les speedruns n'ont pas ce nombre de joueurs !",
+    "REGION_SPEEDRUNS": "{0} {1} speedruns :"
 }
