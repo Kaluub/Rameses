@@ -149,7 +149,16 @@
             "name": "Monumental Migration",
             "color": "#470066",
             "abbr": "MM",
-            "routes": [],
+            "routes": [
+                {
+                    "name": "Monumental Migration 120",
+                    "abbr": "MM"
+                },
+                {
+                    "name": "Monumental Migration 480",
+                    "abbr": "MM480"
+                }
+            ],
             "isInGame": true
         },
         {
@@ -413,7 +422,7 @@
             "color": "#4168c4",
             "abbr": "EE2H",
             "routes": [],
-            "isInGame": true
+            "isInGame": false
         },
         {
             "name": "Humongous Hollow Hard",

@@ -2,16 +2,7 @@ import { Collection } from "discord.js";
 import fetch from "node-fetch";
 import Config from "./config.js";
 import { AccountData } from "./data.js";
-
-class CachedData {
-    constructor() {
-        this.fetched = 0;
-    }
-
-    isOutdated(cacheLifetime) {
-        return this.fetched + cacheLifetime < Date.now();
-    }
-}
+import { CachedData } from "./utils.js";
 
 class PlayerManager {
     constructor() {

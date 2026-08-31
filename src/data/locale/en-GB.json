@@ -80,7 +80,7 @@
     "NOT_A_TOURNAMENT": "This isn't a tournament message!",
     "CHANGELOG_UNAVAILABLE": "The changelog is not available!",
     "CREDITS_TITLE": "Credits:",
-    "CREDITS": "Programming: DepressionOwU, Kaluub\nFrench translations: Invi, Kaluub\nWiki contributors: Invi, Piger, Raqzv\nBot profile picture: Aldople\n\nSpecial thanks to all who've helped with testing & finding issues!\nIf you're interested in providing a translation for your language, feel free to reach out!",
+    "CREDITS": "Programming: DepressionOwU, Kaluub, Br1h\nFrench translations: Invi, Kaluub, Magmaxonly\nWiki contributors: Invi, Piger, Raqzv\nBot profile picture: Aldople\n\nSpecial thanks to all who've helped with testing & finding issues!\nIf you're interested in providing a translation for your language, feel free to reach out!",
     "NEWER": "Newer",
     "OLDER": "Older",
     "TIME_PLAYED": "Time played",
@@ -121,5 +121,9 @@
     "INTERACTION_ACTIVITY_DESC": "View activity details for a player.",
     "INTERACTION_CHANGELOG_DESC": "Check the in-game changelog from Discord.",
     "INTERACTION_CONFIGURE_DESC": "Configure guild-related settings here.",
-    "INTERACTION_CREDITS_DESC": "We've reached the end, Van. Let's go home."
+    "INTERACTION_CREDITS_DESC": "We've reached the end, Van. Let's go home.",
+    "HIGHSCORES_SPEEDRUN_DESC": "View the fastest times on a certain region.",
+    "HIGHSCORES_INVALID_REGION": "That region doesn't have a speedrun!",
+    "HIGHSCORES_INVALID_PLAYER_COUNT": "Speedruns do not have that amount of players!",
+    "REGION_SPEEDRUNS": "{0} {1} speedruns:"
 }

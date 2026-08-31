@@ -1,12 +1,15 @@
 import { Client, IntentsBitField } from "discord.js";
 import Config from "./config.js";
 import EvadesAPI from "./evadesAPI.js";
+import HighScoresAPI from "./highScoresAPI.js";
 import InteractionHandler from "./interactionHandler.js";
+
 
 class DiscordClient extends Client {
     constructor() {
         super({ intents: [IntentsBitField.Flags.Guilds] });
         this.evadesAPI = new EvadesAPI();
+        this.highScoresAPI = new HighScoresAPI();
         this.interactionHandler = new InteractionHandler();
         this.on("interactionCreate", this.interactionHandler.handleInteraction);
     }

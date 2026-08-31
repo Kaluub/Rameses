@@ -1,6 +1,16 @@
 import { readFileSync } from "fs";
 import TournamentPlayerRunData from "./tournamentRun.js";
 
+export class CachedData {
+    constructor() {
+        this.fetched = 0;
+    }
+
+    isOutdated(cacheLifetime) {
+        return this.fetched + cacheLifetime < Date.now();
+    }
+}
+
 class Utils {
     static tournamentFormatter(tournament, full = false) {
         if (tournament.leaderboard?.length <= 0) {
@@ -68,6 +78,11 @@ class Utils {
         return `${Math.floor(t / 60)}:${t % 60 < 10 ? "0" : ""}${t % 60}`;
     }
 
+    static parseSheetTimeToSeconds(timeStr) {
+        const [minutes, seconds] = timeStr.split(".").map(Number);
+        return (minutes * 60) + seconds;
+    }
+
     static formatSeconds(seconds) {
         const years = Math.floor(seconds / (60 * 60 * 24 * 365));
         const days = Math.floor(seconds / (60 * 60 * 24)) - years * 365;
@@ -91,9 +106,9 @@ class Utils {
         return regions
             .filter(region => region.isInGame)
             .map(region => {
-                if (region.routes.length > 0) {
+                if (region.routes.length > 0)
                     return region.routes.map(route => route.name);
-                }
+
                 return region.name;
             });
     }
