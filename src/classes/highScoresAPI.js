@@ -129,9 +129,10 @@ class HighScoresAPI {
 
         try {
             const timeoutId = setTimeout(() => { controller.abort() }, this.requestTimeout);
-            if (Config.DEBUG) {
+            
+            if (Config.DEBUG)
                 console.log(`> Fetched endpoint: ${encodeURI(this.fetchURL + range)}`);
-            }
+
             const data = await fetch(url, { signal: controller.signal }).catch();
             clearTimeout(timeoutId);
             if (!data?.ok) return null;

@@ -14,12 +14,11 @@ class RouteInteraction extends DefaultInteraction {
         const regionName = interaction.options.getString("region");
 
         const region = EvadesData.regions.find(
-            r => r.isInGame && r.name === regionName
+            map => map.isInGame && map.name === regionName
         );
 
-        if (!region) {
+        if (!region)
             return interaction.respond([]); // region not picked/valid yet
-        }
 
         const response = region.routes
             .filter(route => route.name.toLowerCase().includes(search))
