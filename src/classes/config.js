@@ -15,7 +15,7 @@ class Config {
     static REPOSITORY_LINK = process.env.REPOSITORY_LINK ?? "https://github.com/Kaluub/Rameses/";
     static SERVER_INVITE = process.env.SERVER_INVITE ?? "https://discord.gg/j7fPN2xqBp";
 
-    static CHROMIUM_EXECUTABLE = process.env.CHROMIUM_EXECUTABLE ?? undefined;
+    static GOOGLE_API_KEY = process.env.GOOGLE_API_KEY ?? null;
 
     static required(arg, name) {
         if (!arg) {
