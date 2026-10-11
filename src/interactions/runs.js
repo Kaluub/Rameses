@@ -3,6 +3,11 @@ import { ActionRowBuilder, ApplicationIntegrationType, ButtonBuilder, ButtonStyl
 import Locale from "../classes/locale.js";
 import Utils from "../classes/utils.js";
 
+const relicDefs = [
+    {name: "Dark Crystal", flag: "obtained_crystal", emoji: "♦"},
+    {name: "Ghost Amulet", flag: "obtained_amulet", emoji: "⏣"}
+]
+
 class RunsInteraction extends DefaultInteraction {
     static name = "runs";
     static applicationCommand = new SlashCommandBuilder()
@@ -53,6 +58,18 @@ class RunsInteraction extends DefaultInteraction {
                 .setMinValue(1)
                 .setRequired(false)
         )
+        .addStringOption(
+            new SlashCommandStringOption()
+                .setName("relics")
+                .setDescription("The relics to filter for")
+                .setChoices(Array.of(
+                    {name: "All", value: relicDefs.map(r => r.flag).join(",")},
+                    ...relicDefs.map(r => {
+                        return {name: r.name, value: r.flag}
+                    })
+                ))
+                .setRequired(false)
+        )
 
     constructor() {
         super(RunsInteraction.name, [InteractionType.ApplicationCommand, InteractionType.MessageComponent]);
@@ -68,6 +85,7 @@ class RunsInteraction extends DefaultInteraction {
         let areaIndex = this.getIntegerArgument(interaction, "area-index", 4);
         let interactions = this.getIntegerArgument(interaction, "interactions", 5);
         let hero = this.getStringArgument(interaction, "hero", 6);
+        let relics = this.getStringArgument(interaction, "relics", 7);
 
         if (username === "X")
             username = undefined;
@@ -81,8 +99,10 @@ class RunsInteraction extends DefaultInteraction {
             interactions = undefined;
         if (hero === "X")
             hero = undefined;
+        if (relics === "X")
+            relics = undefined;
 
-        let runs = await interaction.client.evadesAPI.getRuns({ username, region, area_index: areaIndex, interactions, hero, offset: (offset - 1) * this.runsPerPage })
+        let runs = await interaction.client.evadesAPI.getRuns({ username, region, area_index: areaIndex, interactions, hero, flags: relics, offset: (offset - 1) * this.runsPerPage })
         if (!runs)
             return Locale.text(interaction, "EVADES_ERROR");
         
@@ -94,8 +114,9 @@ class RunsInteraction extends DefaultInteraction {
             .setTimestamp()
         
         for (const run of runs) {
+            const relicText = relicDefs.filter(r => run.flags.includes(r.flag)).map(r => ` ${r.emoji}`).join("");
             embed.addFields({
-                name: `${Utils.sanitizeUsername(run.username)}${run.interactions.length ? ` with ${run.interactions.map(name => Utils.sanitizeUsername(name)).join(' & ')}` : ""} as ${run.hero}`,
+                name: `${Utils.sanitizeUsername(run.username)}${run.interactions.length ? ` with ${run.interactions.map(name => Utils.sanitizeUsername(name)).join(' & ')}` : ""} as ${run.hero}${relicText}`,
                 value: `completed **${run.region_name} ${run.area_index}** in ${Math.floor(run.survival_time / 60)}m ${run.survival_time % 60}s (<t:${run.created_at}:R>)`
             })
         }
@@ -104,13 +125,13 @@ class RunsInteraction extends DefaultInteraction {
             embed.setDescription(Locale.text(interaction, "NO_RUNS_FOUND"))
 
         const newerButton = new ButtonBuilder()
-            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset - 1}/${areaIndex ?? "X"}/${interactions ?? "X"}/${hero ?? "X"}`)
+            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset - 1}/${areaIndex ?? "X"}/${interactions ?? "X"}/${hero ?? "X"}/${relics ?? "X"}`)
             .setDisabled((offset - 1) < 1 || runs.length === 0)
             .setStyle(ButtonStyle.Primary)
             .setLabel(Locale.text(interaction, "NEWER"))
         
         const olderButton = new ButtonBuilder()
-            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset + 1}/${areaIndex ?? "X"}/${interactions ?? "X"}/${hero ?? "X"}`)
+            .setCustomId(`runs/${username ?? "X"}/${region ?? "X"}/${offset + 1}/${areaIndex ?? "X"}/${interactions ?? "X"}/${hero ?? "X"}/${relics ?? "X"}`)
             .setDisabled(runs.length !== this.runsPerPage)
             .setStyle(ButtonStyle.Primary)
             .setLabel(Locale.text(interaction, "OLDER"))
