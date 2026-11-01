@@ -42,6 +42,29 @@ class AdminInteraction extends DefaultInteraction {
         )
         .addSubcommand(
             new SlashCommandSubcommandBuilder()
+                .setName("merge")
+                .setDescription("Merge two account records into one")
+                .addStringOption(
+                    new SlashCommandStringOption()
+                        .setName("primary")
+                        .setDescription("The first username to merge")
+                        .setRequired(true)
+                )
+                .addStringOption(
+                    new SlashCommandStringOption()
+                        .setName("secondary")
+                        .setDescription("The second username to merge and clear")
+                        .setRequired(true)
+                )
+                .addStringOption(
+                    new SlashCommandStringOption()
+                        .setName("username")
+                        .setDescription("The merged account username")
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
                 .setName("tests")
                 .setDescription("Run tests")
         )
@@ -83,6 +106,58 @@ class AdminInteraction extends DefaultInteraction {
             
             interaction.client.updateInteractions();
             return "All interactions will be updated.";
+        }
+
+        if (subcommand === "merge") {
+            const primaryUsername = interaction.options.getString("primary", true);
+            const secondaryUsername = interaction.options.getString("secondary", true);
+            const mergedUsernameInput = interaction.options.getString("username", true);
+
+            if (!mergedUsernameInput.length) {
+                return "The merged username cannot be empty.";
+            }
+
+            const primaryLower = primaryUsername.toLowerCase();
+            const secondaryLower = secondaryUsername.toLowerCase();
+
+            if (primaryLower === secondaryLower) {
+                return "Primary and secondary usernames must be different.";
+            }
+
+            const primaryAccount = await AccountData.getByUsername(primaryUsername, false, false);
+            if (!primaryAccount) {
+                return "Primary account was not found.";
+            }
+
+            const secondaryAccount = await AccountData.getByUsername(secondaryUsername, false, false);
+            if (!secondaryAccount) {
+                return "Secondary account was not found.";
+            }
+
+            const mergedActivity = { ...(primaryAccount.activity ?? {}) };
+            for (const [hour, value] of Object.entries(secondaryAccount.activity ?? {})) {
+                mergedActivity[hour] = (mergedActivity[hour] ?? 0) + value;
+            }
+
+            const playerDetails = await interaction.client.evadesAPI.getPlayerDetails(mergedUsernameInput);
+            if (!playerDetails) {
+                return `Failed to fetch profile of ${mergedUsernameInput}.`;
+            }
+
+            const mergedAccount = new AccountData({
+                username: playerDetails.username.toLowerCase(),
+                displayName: playerDetails.username,
+                careerVP: playerDetails.stats["highest_area_achieved_counter"],
+                lastSeen: Math.max(primaryAccount.lastSeen ?? 0, secondaryAccount.lastSeen ?? 0) || null,
+                playTime: (primaryAccount.playTime ?? 0) + (secondaryAccount.playTime ?? 0),
+                activity: mergedActivity
+            });
+
+            await AccountData.deleteByUsername(primaryUsername);
+            await AccountData.deleteByUsername(secondaryUsername);
+            await mergedAccount.save();
+
+            return `Merged ${primaryUsername} and ${secondaryUsername} into ${mergedUsernameInput}.`;
         }
 
         if (subcommand === "tests") {

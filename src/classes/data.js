@@ -41,6 +41,10 @@ class AccountData {
         return await accounts.countDocuments(filter);
     }
 
+    static async deleteByUsername(username) {
+        return await accounts.deleteOne({ username: username.toLowerCase() });
+    }
+
     static find(filter, options) {
         return accounts.find(filter, options);
     }

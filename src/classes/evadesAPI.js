@@ -21,6 +21,7 @@ class PlayerManager {
 class PlayerDetailsData extends CachedData {
     constructor(data) {
         super();
+        this.username = data.username;
         this.stats = data?.stats ?? {};
         this.accessories = data?.accessories ?? {};
         this.createdAt = data?.created_at ?? Date.now() / 1000;
